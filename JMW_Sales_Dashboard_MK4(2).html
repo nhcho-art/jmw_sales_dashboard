@@ -130,7 +130,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .gi-pct-big span{font-size:18px;font-weight:500;color:rgba(255,255,255,.45);}
 .gi-gap-note{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;text-align:right;font-family:'JetBrains Mono',monospace;}
 
-/* 구간 라벨 - 트랙 바깥 위에 배치 */
+/* 구간 라벨 */
 .gi-gauge-area{margin-bottom:8px;}
 .gi-zone-labels{position:relative;height:32px;margin-bottom:2px;}
 .gi-zone-pin{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;bottom:0;}
@@ -142,7 +142,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .gi-track{height:26px;border-radius:13px;overflow:hidden;position:relative;background:rgba(255,255,255,.07);}
 .gi-fill{height:100%;border-radius:13px;background:linear-gradient(90deg,#1D4ED8 0%,#2563EB 25%,#06B6D4 45%,#10B981 60%,#84CC16 72%,#FACC15 82%,#F97316 90%,#EF4444 100%);transition:width 1.3s cubic-bezier(.4,0,.2,1);position:relative;}
 .gi-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:4px;background:rgba(255,255,255,.85);border-radius:2px;box-shadow:0 0 12px rgba(255,255,255,.6);}
-/* 구간선 - 트랙 위에 */
 .gi-divider{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.35);pointer-events:none;}
 
 /* 하단 눈금 */
@@ -244,7 +243,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
   <!-- PAGE 0: 전체 실적 요약 -->
   <div class="pg on" id="p0">
-
     <div class="g2">
       <!-- 당월 -->
       <div class="perf-card">
@@ -281,7 +279,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div class="perf-card">
         <div class="perf-hd">
           <div class="perf-hd-title">📆 상반기 목표 대비 실적현황 <span class="badge badge-teal">2026년 1~6월</span></div>
-          <div class="perf-hd-sub">목표 21,974억 기준 · G.I BAR 연동</div>
+          <div class="perf-hd-sub" id="p0-h1-sub">목표 21,974억 기준 · G.I BAR 연동</div>
         </div>
         <div class="perf-body">
           <div class="kpi3">
@@ -307,16 +305,14 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div class="gi-top">
         <div class="gi-top-left">
           <div class="gi-title">📊 G.I BAR — 상반기 진척률</div>
-          <div class="gi-sub">상반기 목표 21,974,128,497원 · 구간별 달성시 보상 지급</div>
+          <div class="gi-sub" id="gi-sub">상반기 목표 21,974,128,497원 · 구간별 달성시 보상 지급</div>
         </div>
         <div>
           <div class="gi-pct-big" id="gi-pct">—<span>%</span></div>
           <div class="gi-gap-note" id="gi-gap">—</div>
         </div>
       </div>
-
       <div class="gi-gauge-area">
-        <!-- 구간 라벨 - 트랙 위에 별도 배치 -->
         <div class="gi-zone-labels">
           <div class="gi-zone-pin" style="left:85%">
             <span class="z-pct" style="color:rgba(250,204,21,.95)">85%</span>
@@ -334,8 +330,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <span class="z-arrow" style="color:rgba(255,255,255,.35)">▼</span>
           </div>
         </div>
-
-        <!-- 트랙 -->
         <div style="position:relative;">
           <div class="gi-track">
             <div class="gi-fill" id="gi-fill" style="width:0%"></div>
@@ -343,8 +337,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <div class="gi-divider" style="left:90%"></div>
           </div>
         </div>
-
-        <!-- 하단 눈금 -->
         <div style="position:relative;height:16px;margin-top:4px;">
           <span class="gi-scale-txt" style="left:0%;transform:none;">0%</span>
           <span class="gi-scale-txt" style="left:25%">25%</span>
@@ -371,7 +363,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div style="position:relative;height:280px"><canvas id="ch-yoy-main"></canvas></div>
       </div>
     </div>
-
   </div><!-- /p0 -->
 
   <!-- PAGE 1: 팀별 실적 -->
@@ -413,7 +404,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div style="position:relative;height:400px"><canvas id="ch-sales"></canvas></div>
       </div></div>
     </div>
-    <!-- 해외영업팀 (데이터 있을 때만 표시) -->
     <div id="overseas-wrap" style="display:none;margin-bottom:18px;">
       <div class="card"><div class="card-inner">
         <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🌏 해외영업팀 채널 TOP 15</div>
@@ -497,7 +487,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="top-sales"></tbody></table>
       </div></div>
     </div>
-    <!-- 해외영업팀 TOP10 (데이터 있을 때만 표시) -->
     <div id="overseas-top-wrap" style="display:none;margin-bottom:18px;">
       <div class="card"><div class="card-inner">
         <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🌏 해외영업팀 채널 TOP 10</div>
@@ -516,13 +505,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
 <script>
 // ════════════════════════════════════════════
-//  ★ Apps Script 배포 URL 입력
+//  ★ Apps Script 배포 URL
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDPGid3L7pOoFOBPyJSsoOIzg_UZiFl7u1YQQPq-0-ioZAPXegYAoKIGxdfqpq75e_zg/exec';
 //  ★ 자동 갱신 주기 (밀리초) — 10분 = 600000
 const AUTO_REFRESH_MS = 600000;
 // ════════════════════════════════════════════
 
-// 부서명 (모두 포함 — 해외영업팀 포함)
 const DEPT_COLORS = {
   'MD팀':        '#2563EB',
   '세일즈 전략팀': '#0D9488',
@@ -536,23 +524,24 @@ function deptBadge(d){
   return m[d]||'b-gray';
 }
 
-// 목표 시트 실제 수치
+// ★ 수정1: TGT 초기값 — 5월 목표 실제값(3,453,165,000)으로, 실적은 0으로
+//   매일 API에서 자동 갱신되므로 여기 숫자는 API 실패시 폴백값
 const TGT = {
   h1tgt: 21974128497,
-  h1act: 11770186896, // 오늘 업데이트된 상반기 누적 실적
+  h1act: 0,
   monthly: [
     {m:1, tgt:2518484217,  act:2438264985},
     {m:2, tgt:2633625784,  act:2629426277},
     {m:3, tgt:2756655335,  act:2715859066},
     {m:4, tgt:3096315144,  act:2690420688},
-    {m:5, tgt:3541714567,  act:1296215880}, // 오늘(5/13) 업데이트
+    {m:5, tgt:3453165000,  act:0}, // ★ 수정: 실제 목표값, 실적은 API에서 채움
     {m:6, tgt:7427333450,  act:0},
   ],
 };
 
 let D26=[],D25=[];
 let charts={};
-let currentPeriod='year'; // 기간 필터 상태 (기본: 연간)
+let currentPeriod='year';
 
 // ── 포맷 ──
 const f억=v=>{
@@ -579,14 +568,12 @@ function setPeriod(p,btn){
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('period-label').textContent=PERIOD_LABELS[p];
-  // 기간별 tag 업데이트
   ['p1-period-tag','p2-period-tag','p3-period-tag','p5-period-tag'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.textContent=PERIOD_LABELS[p];
   });
   renderAll();
 }
 
-// 기간에 맞는 행 필터
 function filterByPeriod(rows, year=2026){
   const ms=PERIOD_MONTHS[currentPeriod]||[5];
   return rows.filter(r=>{
@@ -606,11 +593,11 @@ function banner(msg,type='blue'){
   if(type==='green')setTimeout(()=>b.style.display='none',3000);
 }
 
-// ── 데이터 로드 (자동갱신 포함) ──
+// ── 데이터 로드 ──
 let autoTimer=null;
 async function loadData(manual=false){
   if(!SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE'){
-    banner('⚙️ SCRIPT_URL을 HTML 파일의 SCRIPT_URL 변수에 Apps Script 배포 URL로 입력해주세요.','amber');
+    banner('⚙️ SCRIPT_URL을 입력해주세요.','amber');
     renderPage0(); return;
   }
   if(manual) banner('🔄 데이터 갱신 중...','blue');
@@ -620,26 +607,47 @@ async function loadData(manual=false){
     if(json.status==='ok'){
       D26=json.data.data2026||[];
       D25=json.data.data2025||[];
-      // 목표 시트에서 실제값 갱신
+
+      // ★ 수정2: target.monthly 갱신 — actual=0도 유효한 값으로 처리
       if(json.data.target?.monthly?.length>0){
         const tm=json.data.target.monthly;
         TGT.monthly=TGT.monthly.map(t=>{
           const found=tm.find(x=>x.month===t.m);
-          if(found){ return {...t, tgt:found.target||t.tgt, act:found.actual||t.act}; }
+          if(found){
+            return {
+              ...t,
+              tgt: found.target > 0 ? found.target : t.tgt,
+              act: found.actual >= 0 ? found.actual : t.act  // ★ 0도 유효한 실적
+            };
+          }
           return t;
         });
       }
-      if(json.data.target?.h1?.actual>0) TGT.h1act=json.data.target.h1.actual;
       if(json.data.target?.h1?.target>0) TGT.h1tgt=json.data.target.h1.target;
+
+      // ★ 수정3: dataCurrent(당월실적)로 5월 실적 갱신
+      if(json.data.dataCurrent?.length>0){
+        const now=new Date();
+        const curMonth=now.getMonth()+1; // 현재 월 (1~12)
+        const curSales=json.data.dataCurrent
+          .filter(r=>r.month===curMonth)
+          .reduce((s,r)=>s+(r.sales||0),0);
+        if(curSales>0){
+          const idx=TGT.monthly.findIndex(m=>m.m===curMonth);
+          if(idx>=0) TGT.monthly[idx].act=curSales;
+        }
+      }
+
+      // ★ 수정4: h1act를 monthly 합산으로 재계산 (항상 최신 반영)
+      TGT.h1act=TGT.monthly.reduce((s,m)=>s+(m.act||0),0);
 
       const now=new Date();
       document.getElementById('sb-updated').textContent='갱신: '+now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
       renderAll();
-      if(manual) banner(`✅ 갱신 완료 — 2026년 ${D26.length}건 · 2025년 ${D25.length}건`,'green');
+      if(manual) banner(`✅ 갱신 완료 — 2026년 ${D26.length}건 · 당월실적 ${json.data.dataCurrent?.length||0}건`,'green');
     } else { banner('❌ 로드 실패: '+json.message,'red'); renderPage0(); }
   } catch(e){ banner('❌ 연결 오류. SCRIPT_URL 확인 후 다시 시도해주세요.','red'); renderPage0(); }
 
-  // 자동 갱신 타이머 리셋
   if(autoTimer) clearTimeout(autoTimer);
   autoTimer=setTimeout(()=>loadData(false), AUTO_REFRESH_MS);
 }
@@ -651,47 +659,40 @@ function renderAll(){renderPage0();renderPage1();renderPage2();renderPage3();ren
 // ════════════════════════════════════════
 function renderPage0(){
   const h1tgt=TGT.h1tgt, h1act=TGT.h1act, h1rate=h1tgt>0?h1act/h1tgt:0;
-  const lastM=[...TGT.monthly].reverse().find(m=>m.act>0)||TGT.monthly[4];
+
+  // 당월: 현재 월 기준으로 자동 찾기
+  const now=new Date();
+  const curM=now.getMonth()+1;
+  const lastM=TGT.monthly.find(m=>m.m===curM)||TGT.monthly[4];
   const mAct=lastM.act, mTgt=lastM.tgt, mRate=mTgt>0?mAct/mTgt:0;
 
-  // ── 날짜 계산 ──────────────────────────────────────────────
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = lastM.m - 1; // 0-indexed
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  // 실질 마감일: 월말이 주말이면 그 전 금요일 (월말 주말만 제외)
-  let lastWorkDay = daysInMonth;
+  // 날짜 계산
+  const year=now.getFullYear();
+  const month=lastM.m-1;
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  let lastWorkDay=daysInMonth;
   while(true){
-    const dow = new Date(year, month, lastWorkDay).getDay(); // 0=일, 6=토
-    if(dow !== 0 && dow !== 6) break;
+    const dow=new Date(year,month,lastWorkDay).getDay();
+    if(dow!==0&&dow!==6) break;
     lastWorkDay--;
   }
-
-  // 경과일 / 잔여일: 달력 날짜 그대로 (주중 주말 포함, 마감일 기준)
-  const isCurrentMonth = (now.getFullYear()===year && now.getMonth()===month);
-  const todayDay = isCurrentMonth ? now.getDate() : lastWorkDay;
-  const remainDays = Math.max(lastWorkDay - todayDay, 0);
-
-  const daily = todayDay > 0 ? Math.round(mAct / todayDay) : 0;
-  const remain = Math.round(daily * remainDays);
-  const forecast = mAct + remain;
-  const simGap = forecast - mTgt;
-
-  // 표시용 정보 (월말 마감일 안내)
-  const weekendNote = lastWorkDay < daysInMonth
-    ? ` (월말 ${lastWorkDay+1}~${daysInMonth}일 주말 제외)`
-    : '';
-  const daysLabel = `${todayDay}일 경과 · 잔여 ${remainDays}일 · 마감 ${lastWorkDay}일${weekendNote}`;
-
+  const isCurrentMonth=(now.getFullYear()===year&&now.getMonth()===month);
+  const todayDay=isCurrentMonth?now.getDate():lastWorkDay;
+  const remainDays=Math.max(lastWorkDay-todayDay,0);
+  const daily=todayDay>0?Math.round(mAct/todayDay):0;
+  const remain=Math.round(daily*remainDays);
+  const forecast=mAct+remain;
+  const simGap=forecast-mTgt;
+  const weekendNote=lastWorkDay<daysInMonth?` (월말 ${lastWorkDay+1}~${daysInMonth}일 주말 제외)`:'';
+  const daysLabel=`${todayDay}일 경과 · 잔여 ${remainDays}일 · 마감 ${lastWorkDay}일${weekendNote}`;
 
   // 사이드바
-  setText('sb-monthly',f억(TGT.h1act));
+  setText('sb-monthly',f억(mAct));
   setText('sb-rate',(h1rate*100).toFixed(1)+'%');
   setText('p0-badge-m','2026년 '+lastM.m+'월');
-  setText('p0-m-days', daysLabel);
+  setText('p0-m-days',daysLabel);
 
-  // 당월
+  // 당월 KPI
   setText('p0-m-tgt',f억(mTgt));
   setText('p0-m-act',f억(mAct));
   document.getElementById('p0-m-rate').textContent=(mRate*100).toFixed(1);
@@ -705,6 +706,7 @@ function renderPage0(){
     setText('p0-m-bar-lbl',mPct>18?(mRate*100).toFixed(1)+'%':'');
   },200);
 
+  // 시뮬레이션
   setText('sim-tgt',f억(mTgt));setText('sim-act',f억(mAct));
   setText('sim-daily',f억(daily));setText('sim-remain',f억(remain));
   setText('sim-forecast',f억(forecast));
@@ -712,7 +714,7 @@ function renderPage0(){
   gEl.textContent=(simGap>=0?'+':'')+f억(simGap);
   gEl.className='sim-val '+(simGap>=0?'hl-green':'hl-red');
 
-  // 상반기
+  // 상반기 KPI
   setText('p0-h1-tgt',f억(h1tgt));
   setText('p0-h1-act',f억(h1act));
   setText('p0-h1-rate',(h1rate*100).toFixed(1));
@@ -747,12 +749,11 @@ function renderPage0(){
   document.getElementById('gi-pct').innerHTML=pct.toFixed(1)+'<span>%</span>';
   const gapAmt=h1tgt-h1act;
   setText('gi-gap',gapAmt>0?`100% 달성까지 ${f억(gapAmt)} 남음`:'🎉 상반기 목표 달성!');
-  // 막대 끝에 실적 금액 표시
+  setText('gi-sub',`상반기 목표 ${h1tgt.toLocaleString()}원 · 구간별 달성시 보상 지급`);
   const fillEl=document.getElementById('gi-fill');
   fillEl.innerHTML=`<span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;white-space:nowrap;">${f억(h1act)}</span>`;
   setTimeout(()=>{ fillEl.style.width=Math.min(pct,100)+'%'; },200);
 
-  // YoY 차트
   renderYoYMainChart();
 }
 
@@ -766,29 +767,25 @@ function renderYoYMainChart(){
     :0;
   const data26=months.map(get26), data25=months.map(get25);
 
-  // 막대마다 숫자 + 2026 막대 위에 YoY 증감율 표시
   const labelPlugin={
     id:'yoyLabel',
     afterDatasetsDraw(chart){
-      const{ctx,data,scales:{x,y}}=chart;
+      const{ctx,scales:{x,y}}=chart;
       ctx.save();
-      // 각 데이터셋 막대 위에 매출액 표시
       chart.data.datasets.forEach((ds,di)=>{
         const meta=chart.getDatasetMeta(di);
         meta.data.forEach((bar,i)=>{
           const v=ds.data[i];
           if(!v||v<=0) return;
-          const lbl=f억(v);
           ctx.fillStyle=di===0?'#DC2626':'#1D4ED8';
           ctx.font='bold 11px "JetBrains Mono",monospace';
           ctx.textAlign='center';
-          ctx.fillText(lbl, bar.x, bar.y-5);
+          ctx.fillText(f억(v),bar.x,bar.y-5);
         });
       });
-      // 2026 막대 위에 YoY 증감율 추가 표시
       const meta26=chart.getDatasetMeta(1);
       months.forEach((m,i)=>{
-        const a25=data25[i], a26=data26[i];
+        const a25=data25[i],a26=data26[i];
         if(a25<=0||a26<=0) return;
         const rate=(a26-a25)/a25;
         const sign=rate>=0?'+':'-';
@@ -798,7 +795,7 @@ function renderYoYMainChart(){
         ctx.fillStyle=col;
         ctx.font='bold 10px "JetBrains Mono",monospace';
         ctx.textAlign='center';
-        ctx.fillText(rStr, bar.x, bar.y-18);
+        ctx.fillText(rStr,bar.x,bar.y-18);
       });
       ctx.restore();
     }
@@ -833,7 +830,7 @@ function renderYoYMainChart(){
 }
 
 // ════════════════════════════════════════
-//  PAGE 1 — 팀별 (기간 필터 적용)
+//  PAGE 1
 // ════════════════════════════════════════
 function renderPage1(){
   const rows=filterByPeriod(D26,2026);
@@ -862,26 +859,25 @@ function renderPage1(){
   const depts=Object.keys(byDept).sort((a,b)=>byDept[b].sales-byDept[a].sales);
   destroyChart('ch-team');
   charts['ch-team']=new Chart(document.getElementById('ch-team'),{type:'bar',
-    data:{labels:months.map(m=>m+'월'),datasets:depts.map((dept,i)=>({label:dept,
+    data:{labels:months.map(m=>m+'월'),datasets:depts.map((dept)=>({label:dept,
       data:months.map(m=>rows.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&r.dept===dept).reduce((s,r)=>s+(r.sales||0),0)),
       backgroundColor:deptColor(dept)+'cc',borderRadius:4}))},
     plugins:[{id:'stackedLabel',afterDatasetsDraw(chart){
       const{ctx,scales:{x,y}}=chart;
       ctx.save();
-      // 각 월의 스택 합계를 맨 위 막대 위에 표시
       months.forEach((m,mi)=>{
-        const total=depts.reduce((s,dept)=>s+rows.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===mi+1&&r.dept===dept).reduce((ss,r)=>ss+(r.sales||0),0),0);
-        if(total<=0) return;
+        const t=depts.reduce((s,dept)=>s+rows.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===months[mi]&&r.dept===dept).reduce((ss,r)=>ss+(r.sales||0),0),0);
+        if(t<=0) return;
         const xPos=x.getPixelForValue(mi);
-        const yPos=y.getPixelForValue(total)-6;
+        const yPos=y.getPixelForValue(t)-6;
         ctx.fillStyle='#334155'; ctx.font='bold 11px "JetBrains Mono",monospace'; ctx.textAlign='center';
-        ctx.fillText(f억(total),xPos,yPos);
+        ctx.fillText(f억(t),xPos,yPos);
       });
       ctx.restore();
     }}],
     options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},
       plugins:{legend:{position:'bottom',labels:{font:{size:12},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}},
-      scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{stacked:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}})
+      scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{stacked:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}});
 
   const chMap={};
   rows.forEach(r=>{ const k=r.dept+'||'+r.channel; if(!chMap[k]) chMap[k]={dept:r.dept,channel:r.channel,sales:0}; chMap[k].sales+=(r.sales||0); });
@@ -895,16 +891,10 @@ function setTeamFilter(dept, btn){
     b.style.background='transparent'; b.style.color='var(--text2)'; b.style.borderColor='var(--border)';
   });
   btn.style.background='var(--blue)'; btn.style.color='#fff'; btn.style.borderColor='var(--blue)';
-
-  // 팀 컬럼 헤더: 특정 팀 선택 시 숨김
   const deptCol=document.getElementById('tbl-team-col-dept');
   if(deptCol) deptCol.style.display=dept==='all'?'':'none';
-
-  // 서브 텍스트
   const sub=document.getElementById('team-filter-sub');
   if(sub) sub.textContent=dept==='all'?'전체 팀 · 매출 내림차순':dept+' · 매출 내림차순';
-
-  // 현재 저장된 chMap 재사용해서 테이블만 다시 그리기
   if(window._teamChMap) renderTeamChannelTable(window._teamChMap, window._teamTotal);
 }
 
@@ -913,7 +903,6 @@ function renderTeamChannelTable(chMap, total){
   const dept=currentTeamFilter;
   let entries=Object.values(chMap).sort((a,b)=>b.sales-a.sales);
   if(dept!=='all'){
-    // 해외영업팀/해외영업실 통합
     if(dept==='해외영업팀'){
       entries=entries.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
     } else {
@@ -931,21 +920,20 @@ function renderTeamChannelTable(chMap, total){
 }
 
 // ════════════════════════════════════════
-//  PAGE 2 — 채널별 (기간 필터 적용)
+//  PAGE 2
 // ════════════════════════════════════════
 function renderPage2(){
   const rows=filterByPeriod(D26,2026);
   if(!rows.length) return;
 
-  // 막대 끝에 매출액 표시하는 공통 플러그인
   const hbarLabelPlugin={id:'hbarLabel',afterDatasetsDraw(chart){
-    const{ctx,scales:{x,y}}=chart;
+    const{ctx}=chart;
     ctx.save();
     chart.getDatasetMeta(0).data.forEach((bar,i)=>{
       const v=chart.data.datasets[0].data[i];
       if(!v||v<=0) return;
       ctx.fillStyle='#334155'; ctx.font='bold 11px "JetBrains Mono",monospace'; ctx.textAlign='left';
-      ctx.fillText(f억(v), bar.x+5, bar.y+4);
+      ctx.fillText(f억(v),bar.x+5,bar.y+4);
     });
     ctx.restore();
   }};
@@ -964,7 +952,6 @@ function renderPage2(){
   mkH('ch-md',   sortedGroupBy(rows.filter(r=>r.dept==='MD팀'),'channel').slice(0,15),'#2563EB');
   mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='세일즈 전략팀'),'channel').slice(0,15),'#0D9488');
 
-  // 해외영업팀 차트 (데이터 있을 때만 표시)
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasWrap=document.getElementById('overseas-wrap');
   if(overseasRows.length>0&&overseasWrap){
@@ -974,7 +961,6 @@ function renderPage2(){
     overseasWrap.style.display='none';
   }
 
-  // 전체 채널 목록: 영업지원팀만 제외, 해외영업팀 포함
   const allCh=sortedGroupBy(rows.filter(r=>r.dept!=='영업지원팀'),'channel'), tot=allCh.reduce((s,[,v])=>s+v,0);
   document.getElementById('tbl-channel').innerHTML=allCh.map(([ch,s],i)=>{
     const dept=rows.find(r=>r.channel===ch)?.dept||'';
@@ -985,12 +971,12 @@ function renderPage2(){
 }
 
 // ════════════════════════════════════════
-//  PAGE 3 — 품목별 (기간 필터 적용)
+//  PAGE 3
 // ════════════════════════════════════════
 function renderPage3(){
   const rows=filterByPeriod(D26,2026);
   if(!rows.length) return;
-  const grp=sku=>{ const s=(sku||'').toUpperCase(); if(s.startsWith('MS8')||s.startsWith('STL'))return '프리미엄 드라이기'; if(s.startsWith('MCS')||s.startsWith('MCF')||s.startsWith('MC'))return '에어샷/에어원'; if(s.startsWith('MS6')||s.startsWith('MS7'))return 'AIR JET'; if(s.startsWith('M5')||s.startsWith('M7')||s.startsWith('MF'))return '스탠다드'; if(s.startsWith('SDU')||s.startsWith('SC')||s.startsWith('CTS'))return '헤어케어'; if(s.startsWith('W')||s.startsWith('WC')||s.startsWith('WN'))return '고데기'; if(s.startsWith('JBD'))return '바디드라이어'; if(s.startsWith('SP')||s.startsWith('SP'))return '기획패키지'; if(s.startsWith('CCA')||s.startsWith('CMC')||s.startsWith('CCL'))return '케미컬/코스메틱'; return '기타'; };
+  const grp=sku=>{ const s=(sku||'').toUpperCase(); if(s.startsWith('MS8')||s.startsWith('STL'))return '프리미엄 드라이기'; if(s.startsWith('MCS')||s.startsWith('MCF')||s.startsWith('MC'))return '에어샷/에어원'; if(s.startsWith('MS6')||s.startsWith('MS7'))return 'AIR JET'; if(s.startsWith('M5')||s.startsWith('M7')||s.startsWith('MF'))return '스탠다드'; if(s.startsWith('SDU')||s.startsWith('SC')||s.startsWith('CTS'))return '헤어케어'; if(s.startsWith('W')||s.startsWith('WC')||s.startsWith('WN'))return '고데기'; if(s.startsWith('JBD'))return '바디드라이어'; if(s.startsWith('SP'))return '기획패키지'; if(s.startsWith('CCA')||s.startsWith('CMC')||s.startsWith('CCL'))return '케미컬/코스메틱'; return '기타'; };
   const sm={};
   rows.forEach(r=>{ if(!sm[r.sku]) sm[r.sku]={sku:r.sku,grp:grp(r.sku),qty:0,sales:0}; sm[r.sku].qty+=(r.qty||0); sm[r.sku].sales+=(r.sales||0); });
   const sa=Object.values(sm).sort((a,b)=>b.sales-a.sales);
@@ -1006,7 +992,7 @@ function renderPage3(){
       ctx.save();
       chart.getDatasetMeta(0).data.forEach((arc,i)=>{
         const v=ga[i][1];
-        if(v/tot<0.03) return; // 3% 미만 생략
+        if(v/tot<0.03) return;
         const pct=(v/tot*100).toFixed(1)+'%';
         const angle=(arc.startAngle+arc.endAngle)/2;
         const r=(arc.outerRadius+arc.innerRadius)/2;
@@ -1029,7 +1015,7 @@ function renderPage3(){
 }
 
 // ════════════════════════════════════════
-//  PAGE 4 — YoY
+//  PAGE 4
 // ════════════════════════════════════════
 function renderPage4(){
   const s26=m=>D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0);
@@ -1044,7 +1030,7 @@ function renderPage4(){
   setV('p4-rate',yr!==null?(yr>=0?'+':'')+fPct(Math.abs(yr)):'—',yr===null?'':yr>=0?'green':'red');
   destroyChart('ch-yoy');
   const yoyLabelPlugin={id:'yoyP4Label',afterDatasetsDraw(chart){
-    const{ctx,scales:{x,y}}=chart;
+    const{ctx}=chart;
     ctx.save();
     chart.data.datasets.forEach((ds,di)=>{
       chart.getDatasetMeta(di).data.forEach((bar,i)=>{
@@ -1055,7 +1041,6 @@ function renderPage4(){
         ctx.fillText(f억(v),bar.x,bar.y-5);
       });
     });
-    // 2026 막대에 YoY 증감율
     const m26=chart.getDatasetMeta(1);
     months.forEach((m,i)=>{
       const a25=s25(m),a26=s26(m);
@@ -1076,7 +1061,7 @@ function renderPage4(){
       {label:'2026 실적',data:months.map(s26),backgroundColor:months.map(m=>s26(m)>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:months.map(m=>s26(m)>0?'#2563EB':'#CBD5E1'),borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45}]},
     options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:36}},
       plugins:{legend:{position:'bottom',labels:{font:{size:12},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}})
+      scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}});
   const allCh=[...new Set([...D26,...D25].map(r=>r.channel))];
   const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
   document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
@@ -1094,7 +1079,7 @@ function renderPage4(){
 }
 
 // ════════════════════════════════════════
-//  PAGE 5 — TOP 10 (기간 필터 적용)
+//  PAGE 5
 // ════════════════════════════════════════
 function renderPage5(){
   const rows=filterByPeriod(D26,2026);
@@ -1106,7 +1091,6 @@ function renderPage5(){
   mk(rows.filter(r=>r.dept==='MD팀'),'top-md');
   mk(rows.filter(r=>r.dept==='세일즈 전략팀'),'top-sales');
 
-  // 해외영업팀 TOP10 (데이터 있을 때만 표시)
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasTop=document.getElementById('overseas-top-wrap');
   if(overseasRows.length>0&&overseasTop){
