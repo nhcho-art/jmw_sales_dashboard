@@ -509,12 +509,12 @@ let currentPeriod='year';
 const f억=v=>{
   if(v===null||v===undefined)return'—';
   const a=Math.abs(v),s=v<0?'-':'';
-  if(a>=1e8)return s+(a/1e8).toFixed(1)+'억';       // 1억 이상: 소수점 1자리
+  if(a>=1e8)return s+(a/1e8).toFixed(2)+'억';       // 1억 이상: 소수점 2자리 (13.97억)
   if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만'; // 1만 이상
   return v.toLocaleString();
 };
-// ★ 달성율: 소수점 1자리 (반올림으로 100% 오표시 방지)
-const fRate=v=>(!v&&v!==0)||isNaN(v)||!isFinite(v)?'—':(v*100).toFixed(1);
+// ★ 달성율: 소수점 2자리 (반올림 100% 오표시 방지)
+const fRate=v=>(!v&&v!==0)||isNaN(v)||!isFinite(v)?'—':(v*100).toFixed(2);
 const fPct=v=>fRate(v)+'%';
 const fNum=v=>Math.round(v||0).toLocaleString();
 
@@ -706,7 +706,7 @@ function renderPage0(){
     const r=m.tgt>0&&m.act>0?m.act/m.tgt:null;
     const bc=!r?'#94A3B8':r>=1?'#16A34A':r>=0.85?'#D97706':'#2563EB';
     // ★ 달성율 소수점 1자리 (반올림 100% 오표시 방지)
-    const rStr=r!==null?(r*100).toFixed(1)+'%':'—';
+    const rStr=r!==null?(r*100).toFixed(2)+'%':'—';
     return `<div class="mb-row">
       <span class="mb-lbl">${m.m}월</span>
       <div class="mb-track">
@@ -720,7 +720,7 @@ function renderPage0(){
 
   // G.I BAR
   const pct=h1rate*100;
-  document.getElementById('gi-pct').innerHTML=pct.toFixed(1)+'<span>%</span>';
+  document.getElementById('gi-pct').innerHTML=pct.toFixed(2)+'<span>%</span>';
   const gapAmt=h1tgt-h1act;
   setText('gi-gap',gapAmt>0?`100% 달성까지 ${f억(gapAmt)} 남음`:'🎉 상반기 목표 달성!');
   // ★ G.I BAR sub도 API 데이터로 동적 표시
@@ -767,7 +767,7 @@ function renderYoYMainChart(){
         if(a25<=0||a26<=0) return;
         const rate=(a26-a25)/a25;
         const sign=rate>=0?'+':'-';
-        const rStr=`(${sign}${Math.abs(rate*100).toFixed(1)}%)`;
+        const rStr=`(${sign}${Math.abs(rate*100).toFixed(2)}%)`;
         const col=rate>=0?'#16A34A':'#DC2626';
         const bar=meta26.data[i];
         ctx.fillStyle=col;
@@ -891,7 +891,7 @@ function renderTeamChannelTable(chMap, total){
       ${showDept?`<td><span class="bdg ${deptBadge(r.dept)}">${r.dept}</span></td>`:''}
       <td>${r.channel}</td>
       <td class="num">${f억(r.sales)}</td>
-      <td class="num">${(r.sales/total*100).toFixed(1)}%</td>
+      <td class="num">${(r.sales/total*100).toFixed(2)}%</td>
     </tr>`).join('');
 }
 
@@ -940,7 +940,7 @@ function renderPage2(){
     const dept=rows.find(r=>r.channel===ch)?.dept||'';
     return `<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td>
       <td>${ch}</td><td><span class="bdg ${deptBadge(dept)}">${dept}</span></td>
-      <td class="num">${f억(s)}</td><td class="num">${(s/tot*100).toFixed(1)}%</td></tr>`;
+      <td class="num">${f억(s)}</td><td class="num">${(s/tot*100).toFixed(2)}%</td></tr>`;
   }).join('');
 }
 
@@ -965,7 +965,7 @@ function renderPage3(){
       chart.getDatasetMeta(0).data.forEach((arc,i)=>{
         const v=ga[i][1];
         if(v/tot<0.03) return;
-        const pct=(v/tot*100).toFixed(1)+'%';
+        const pct=(v/tot*100).toFixed(2)+'%';
         const angle=(arc.startAngle+arc.endAngle)/2;
         const r=(arc.outerRadius+arc.innerRadius)/2;
         const x=arc.x+Math.cos(angle)*r;
@@ -983,7 +983,7 @@ function renderPage3(){
     <tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td>
     <td style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700">${x.sku}</td>
     <td><span class="bdg b-gray">${x.grp}</span></td>
-    <td class="num">${fNum(x.qty)}</td><td class="num">${f억(x.sales)}</td><td class="num">${(x.sales/tot*100).toFixed(1)}%</td></tr>`).join('');
+    <td class="num">${fNum(x.qty)}</td><td class="num">${f억(x.sales)}</td><td class="num">${(x.sales/tot*100).toFixed(2)}%</td></tr>`).join('');
 }
 
 // ════ PAGE 4 ════
@@ -1020,7 +1020,7 @@ function renderPage4(){
       const col=rate>=0?'#16A34A':'#DC2626';
       const bar=m26.data[i];
       ctx.fillStyle=col; ctx.font='bold 10px "JetBrains Mono",monospace'; ctx.textAlign='center';
-      ctx.fillText(`(${sign}${Math.abs(rate*100).toFixed(1)}%)`,bar.x,bar.y-18);
+      ctx.fillText(`(${sign}${Math.abs(rate*100).toFixed(2)}%)`,bar.x,bar.y-18);
     });
     ctx.restore();
   }};
@@ -1036,14 +1036,14 @@ function renderPage4(){
   const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
   document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
     const sign=x.rate>=0?'+':'-';
-    const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(1)}%`;
+    const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
     return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.min(x.s26/chY[0].s26*100,100).toFixed(1)}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
   }).join('');
   const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
   const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.rate-a.rate).slice(0,15);
   document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
     const sign=x.rate>=0?'+':'-';
-    const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(1)}%`;
+    const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
     return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.min(Math.abs(x.rate)*40,100).toFixed(1)}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
   }).join('');
 }
@@ -1054,7 +1054,7 @@ function renderPage5(){
   const mk=(filteredRows,id)=>{
     const ch=sortedGroupBy(filteredRows,'channel').slice(0,10);
     const t=ch.reduce((s,[,v])=>s+v,0);
-    document.getElementById(id).innerHTML=ch.map(([n,s],i)=>`<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td><td>${n}</td><td class="num">${f억(s)}</td><td class="num">${(s/t*100).toFixed(1)}%</td></tr>`).join('');
+    document.getElementById(id).innerHTML=ch.map(([n,s],i)=>`<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td><td>${n}</td><td class="num">${f억(s)}</td><td class="num">${(s/t*100).toFixed(2)}%</td></tr>`).join('');
   };
   mk(rows.filter(r=>r.dept==='MD팀'),'top-md');
   mk(rows.filter(r=>r.dept==='세일즈 전략팀'),'top-sales');
@@ -1073,7 +1073,7 @@ function renderPage5(){
   const grp=sku=>{ const s=(sku||'').toUpperCase(); if(s.startsWith('MS8')||s.startsWith('STL'))return '프리미엄'; if(s.startsWith('MCS')||s.startsWith('MCF')||s.startsWith('MC'))return '에어샷'; if(s.startsWith('MS6')||s.startsWith('MS7'))return 'AIR JET'; if(s.startsWith('M5')||s.startsWith('MF'))return '스탠다드'; if(s.startsWith('SDU')||s.startsWith('SC'))return '헤어케어'; if(s.startsWith('W'))return '고데기'; if(s.startsWith('JBD'))return '바디'; return '기타'; };
   const sa=Object.values(sm).sort((a,b)=>b.sales-a.sales).slice(0,10);
   const t=sa.reduce((s,x)=>s+x.sales,0);
-  document.getElementById('top-sku').innerHTML=sa.map((x,i)=>`<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700">${x.sku}</td><td><span class="bdg b-gray">${grp(x.sku)}</span></td><td class="num">${fNum(x.qty)}</td><td class="num">${f억(x.sales)}</td><td class="num">${(x.sales/t*100).toFixed(1)}%</td></tr>`).join('');
+  document.getElementById('top-sku').innerHTML=sa.map((x,i)=>`<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700">${x.sku}</td><td><span class="bdg b-gray">${grp(x.sku)}</span></td><td class="num">${fNum(x.qty)}</td><td class="num">${f억(x.sales)}</td><td class="num">${(x.sales/t*100).toFixed(2)}%</td></tr>`).join('');
 }
 
 // ── 유틸 ──
