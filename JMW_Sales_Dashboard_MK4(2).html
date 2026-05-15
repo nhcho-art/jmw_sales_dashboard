@@ -570,39 +570,45 @@ async function loadData(manual=false){
       D26=json.data.data2026||[];
       D25=json.data.data2025||[];
 
-      // ★ 목표 데이터 갱신: target > 0 이면 무조건 시트 데이터로 교체
+      // ★ 목표(tgt) 갱신: 파싱된 값이 충분히 큰 경우(10억 이상)만 신뢰
+      // Apps Script 파싱이 엉뚱한 작은 값을 가져올 수 있으므로 검증 필수
       if(json.data.target?.monthly?.length>0){
         const tm=json.data.target.monthly;
-        TGT.monthly=TGT.monthly.map(t=>{
-          const found=tm.find(x=>x.month===t.m);
-          if(found){
-            return {
-              ...t,
-              tgt: found.target > 0 ? found.target : t.tgt,   // 목표 > 0 이면 교체
-              act: found.actual >= 0 ? found.actual : t.act    // 실적 >= 0 이면 교체 (0도 유효)
-            };
-          }
-          return t;
-        });
+        const parsedH1Tgt=tm.slice(0,6).reduce((s,m)=>s+(m.target||0),0);
+        // 상반기 목표 합계가 100억 이상일 때만 파싱값 사용 (엉뚱한 값 방어)
+        if(parsedH1Tgt>10000000000){
+          TGT.monthly=TGT.monthly.map(t=>{
+            const found=tm.find(x=>x.month===t.m);
+            if(found && found.target>1000000000){ // 월 목표 10억 이상만 교체
+              return {...t, tgt: found.target};
+            }
+            return t;
+          });
+          TGT.h1tgt=parsedH1Tgt;
+        }
+        // 파싱 실패 or 값이 너무 작으면 → TGT 폴백값 그대로 유지
       }
-      // 상반기 목표 교체
-      if(json.data.target?.h1?.target>0) TGT.h1tgt=json.data.target.h1.target;
 
-      // 당월실적(DATA)로 현재월 실적 보완
-      if(json.data.dataCurrent?.length>0){
+      // ★ 실적(act): 항상 D26(2026년 DATA)에서 월별 합산 — 가장 정확한 소스
+      TGT.monthly=TGT.monthly.map(t=>{
+        const monthSales=D26
+          .filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===t.m && (r.year||2026)===2026)
+          .reduce((s,r)=>s+(r.sales||0),0);
+        // 당월(5월)은 dataCurrent로 보완
         const now=new Date();
         const curMonth=now.getMonth()+1;
-        const curSales=json.data.dataCurrent
-          .filter(r=>r.month===curMonth)
-          .reduce((s,r)=>s+(r.sales||0),0);
-        if(curSales>0){
-          const idx=TGT.monthly.findIndex(m=>m.m===curMonth);
-          if(idx>=0) TGT.monthly[idx].act=curSales;
+        if(t.m===curMonth && json.data.dataCurrent?.length>0){
+          const curSales=json.data.dataCurrent
+            .filter(r=>r.month===curMonth)
+            .reduce((s,r)=>s+(r.sales||0),0);
+          // dataCurrent와 D26 중 더 큰 값 사용 (더 최신 데이터)
+          return {...t, act: Math.max(monthSales, curSales)};
         }
-      }
+        return {...t, act: monthSales};
+      });
 
-      // h1act 재계산 (항상 monthly 합산 기준)
-      TGT.h1act=TGT.monthly.reduce((s,m)=>s+(m.act||0),0);
+      // ★ h1act: monthly act 합산으로 재계산
+      TGT.h1act=TGT.monthly.slice(0,6).reduce((s,m)=>s+(m.act||0),0);
 
       const now=new Date();
       document.getElementById('sb-updated').textContent='갱신: '+now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
