@@ -227,6 +227,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <div class="rate-track"><div class="rate-fill" id="p0-m-bar" style="width:0%"><span class="rate-lbl" id="p0-m-bar-lbl"></span></div></div>
             <div class="rate-ticks"><span class="rate-tick">0%</span><span class="rate-tick">25%</span><span class="rate-tick">50%</span><span class="rate-tick">75%</span><span class="rate-tick">100%</span></div>
           </div>
+
+          <!-- 당월 일별 매출 추이 -->
+          <div style="margin-bottom:16px;">
+            <div style="margin-bottom:8px;">
+              <div class="rate-title">📈 당월 일별 매출 추이</div>
+            </div>
+            <div style="position:relative;height:180px;"><canvas id="ch-daily"></canvas></div>
+          </div>
+
           <div class="sim-box">
             <div class="sim-title">📐 당월 매출 시뮬레이션</div>
             <div class="sim-grid">
@@ -569,6 +578,7 @@ async function loadData(manual=false){
     if(json.status==='ok'){
       D26=json.data.data2026||[];
       D25=json.data.data2025||[];
+      window._dataCurrent = json.data.dataCurrent || [];
 
       // ★ 목표(tgt) 갱신: 파싱된 값이 충분히 큰 경우(10억 이상)만 신뢰
       // Apps Script 파싱이 엉뚱한 작은 값을 가져올 수 있으므로 검증 필수
@@ -733,6 +743,114 @@ function renderPage0(){
   setTimeout(()=>{ fillEl.style.width=Math.min(pct,100)+'%'; },200);
 
   renderYoYMainChart();
+  renderDailyChart();
+}
+
+// ── 당월 일별 매출 추이 ──────────────────────────────────────
+function renderDailyChart(){
+  const rows = window._dataCurrent || [];
+  if(!rows.length){ destroyChart('ch-daily'); return; }
+
+  // 일별 합산
+  const dayMap = {};
+  rows.forEach(r => {
+    const d = r.day || 0;
+    if(!d) return;
+    dayMap[d] = (dayMap[d] || 0) + (r.sales || 0);
+  });
+
+  const days = Object.keys(dayMap).map(Number).sort((a,b)=>a-b);
+  if(!days.length){ destroyChart('ch-daily'); return; }
+  const vals = days.map(d => dayMap[d]);
+
+  // 선형 추세선 계산 (최소제곱법)
+  const n = days.length;
+  const sumX = days.reduce((s,x)=>s+x, 0);
+  const sumY = vals.reduce((s,y)=>s+y, 0);
+  const sumXY = days.reduce((s,x,i)=>s+x*vals[i], 0);
+  const sumX2 = days.reduce((s,x)=>s+x*x, 0);
+  const slope = (n*sumXY - sumX*sumY) / (n*sumX2 - sumX*sumX);
+  const intercept = (sumY - slope*sumX) / n;
+  const trendVals = days.map(d => Math.max(slope*d + intercept, 0));
+
+  // 라벨 플러그인 (포인트 위 금액 표시)
+  const labelPlugin = {
+    id:'dailyLabel',
+    afterDatasetsDraw(chart){
+      const {ctx} = chart;
+      ctx.save();
+      const meta = chart.getDatasetMeta(0);
+      meta.data.forEach((pt, i) => {
+        const v = vals[i];
+        if(!v) return;
+        const label = f억(v);
+        ctx.fillStyle = '#1D4ED8';
+        ctx.font = 'bold 11px "JetBrains Mono",monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, pt.x, pt.y - 10);
+      });
+      ctx.restore();
+    }
+  };
+
+  destroyChart('ch-daily');
+  charts['ch-daily'] = new Chart(document.getElementById('ch-daily'), {
+    type: 'line',
+    plugins: [labelPlugin],
+    data: {
+      labels: days.map(d => d+'일'),
+      datasets: [
+        {
+          label: '일별 매출',
+          data: vals,
+          borderColor: '#2563EB',
+          backgroundColor: 'rgba(37,99,235,0.08)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#2563EB',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.3,
+          fill: true,
+          order: 1,
+        },
+        {
+          label: '추세선',
+          data: trendVals,
+          borderColor: '#F43F5E',
+          borderWidth: 2,
+          borderDash: [5, 4],
+          pointRadius: 0,
+          tension: 0,
+          fill: false,
+          order: 2,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: { top: 24, right: 10 } },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 11 }, boxWidth: 14, usePointStyle: true }
+        },
+        tooltip: {
+          callbacks: { label: ctx => ctx.dataset.label + ': ' + f억(ctx.raw) }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 11 }, color: '#64748B' }
+        },
+        y: {
+          grid: { color: 'rgba(0,0,0,.04)' },
+          ticks: { font: { size: 11 }, color: '#64748B', callback: v => f억(v) }
+        }
+      }
+    }
+  });
 }
 
 function renderYoYMainChart(){
