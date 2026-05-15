@@ -18,8 +18,6 @@
   --sb-w:220px;--sh:0 1px 4px rgba(0,0,0,.08),0 6px 20px rgba(0,0,0,.05);
 }
 body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;display:flex;min-height:100vh;overflow-x:hidden;}
-
-/* SIDEBAR */
 .sidebar{width:var(--sb-w);min-height:100vh;background:var(--navy);display:flex;flex-direction:column;position:fixed;top:0;left:0;z-index:100;}
 .sb-logo{padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,.1);}
 .sb-logo .brand{font-size:17px;font-weight:800;color:#fff;display:flex;align-items:center;gap:9px;}
@@ -39,33 +37,23 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .sb-kpi-l{font-size:9px;color:rgba(255,255,255,.35);display:block;margin-top:2px;}
 .sb-updated{font-size:10px;color:rgba(255,255,255,.22);text-align:center;font-family:'JetBrains Mono',monospace;}
 .sb-auto{font-size:9px;color:rgba(255,255,255,.18);text-align:center;margin-top:3px;font-family:'JetBrains Mono',monospace;}
-
-/* MAIN */
 .main{margin-left:var(--sb-w);flex:1;display:flex;flex-direction:column;}
 .topbar{background:var(--card);border-bottom:2px solid var(--border);padding:0 28px;display:flex;align-items:center;gap:10px;height:56px;position:sticky;top:0;z-index:50;box-shadow:var(--sh);}
 .topbar-title{font-size:15px;font-weight:800;color:var(--text);flex:1;}
 .topbar-title span{color:var(--text3);font-weight:400;font-size:12px;margin-left:6px;}
-
-/* 기간 필터 탭 */
 .period-bar{background:var(--card);border-bottom:1.5px solid var(--border);padding:0 28px;display:flex;align-items:center;gap:4px;height:44px;}
 .ptab{padding:5px 14px;border-radius:20px;border:1.5px solid transparent;font-size:13px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;background:transparent;color:var(--text3);transition:all .15s;}
 .ptab:hover{background:#F1F5F9;color:var(--text2);}
 .ptab.on{background:var(--blue);color:#fff;border-color:var(--blue);}
 .period-label{font-size:12px;color:var(--text3);margin-left:auto;font-family:'JetBrains Mono',monospace;}
-
 .tbtn{padding:6px 14px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;font-weight:600;}
 .tbtn.primary{background:var(--navy);color:#fff;border-color:var(--navy);}
-
 .pg{display:none;padding:24px 28px 60px;}
 .pg.on{display:block;}
-
-/* CARDS */
 .card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;box-shadow:var(--sh);}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;}
 .full{margin-bottom:18px;}
 .card-inner{padding:20px 22px;}
-
-/* PERF CARD */
 .perf-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;box-shadow:var(--sh);overflow:hidden;margin-bottom:18px;}
 .perf-hd{padding:14px 22px 12px;background:#F8FAFC;border-bottom:1.5px solid var(--border);}
 .perf-hd-title{font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;}
@@ -75,8 +63,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .badge-teal{background:rgba(13,148,136,.12);color:#0D7A70;}
 .badge-amber{background:rgba(217,119,6,.12);color:#B45309;}
 .perf-body{padding:18px 22px;}
-
-/* KPI 3칸 */
 .kpi3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px;}
 .kpi3-item{padding:13px 15px;border-right:1.5px solid var(--border);}
 .kpi3-item:last-child{border-right:none;}
@@ -88,8 +74,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .kpi3-val.green{color:var(--green);}
 .kpi3-val.red{color:var(--red);}
 .kpi3-unit{font-size:11px;color:var(--text3);margin-top:3px;}
-
-/* 달성율 바 */
 .rate-wrap{margin-bottom:16px;}
 .rate-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
 .rate-track{height:30px;background:#EEF2F7;border-radius:8px;overflow:hidden;position:relative;border:1px solid var(--border2);}
@@ -97,8 +81,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .rate-lbl{font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;}
 .rate-ticks{display:flex;justify-content:space-between;margin-top:4px;}
 .rate-tick{font-size:10px;color:var(--text4);font-family:'JetBrains Mono',monospace;}
-
-/* 시뮬레이션 */
 .sim-box{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;}
 .sim-title{padding:9px 14px;background:#EEF2F7;border-bottom:1.5px solid var(--border);font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;}
 .sim-grid{display:grid;grid-template-columns:repeat(6,1fr);}
@@ -109,19 +91,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .sim-val.hl-blue{color:var(--blue);}
 .sim-val.hl-green{color:var(--green);}
 .sim-val.hl-red{color:var(--red);}
-
-/* 월별 미니 바 */
 .month-sec{margin-top:16px;}
 .month-sec-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
-.mb-row{display:grid;grid-template-columns:32px 1fr 58px 40px;gap:5px;align-items:center;margin-bottom:6px;}
+.mb-row{display:grid;grid-template-columns:32px 1fr 58px 50px;gap:5px;align-items:center;margin-bottom:6px;}
 .mb-lbl{font-size:12px;font-weight:700;color:var(--text2);font-family:'JetBrains Mono',monospace;}
 .mb-track{position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);}
 .mb-fill-tgt{position:absolute;top:0;left:0;height:100%;background:rgba(203,213,225,.4);border-radius:4px;}
 .mb-fill-act{position:absolute;top:0;left:0;height:100%;border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);}
 .mb-val{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;text-align:right;}
 .mb-pct{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;text-align:right;}
-
-/* ════ G.I BAR ════ */
 .gi-wrap{background:#1A2942;border:1.5px solid #2D4A6E;border-radius:14px;padding:20px 24px;margin-bottom:18px;box-shadow:0 4px 20px rgba(15,30,60,.18);}
 .gi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
 .gi-top-left .gi-title{font-size:14px;font-weight:800;color:#fff;}
@@ -129,26 +107,18 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .gi-pct-big{font-size:42px;font-weight:800;color:#fff;font-family:'JetBrains Mono',monospace;line-height:1;text-align:right;}
 .gi-pct-big span{font-size:18px;font-weight:500;color:rgba(255,255,255,.45);}
 .gi-gap-note{font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;text-align:right;font-family:'JetBrains Mono',monospace;}
-
-/* 구간 라벨 */
 .gi-gauge-area{margin-bottom:8px;}
 .gi-zone-labels{position:relative;height:32px;margin-bottom:2px;}
 .gi-zone-pin{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;bottom:0;}
 .gi-zone-pin .z-pct{font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;}
 .gi-zone-pin .z-name{font-size:9px;font-weight:600;font-family:'JetBrains Mono',monospace;opacity:.75;}
 .gi-zone-pin .z-arrow{font-size:11px;line-height:1;}
-
-/* 트랙 */
 .gi-track{height:26px;border-radius:13px;overflow:hidden;position:relative;background:rgba(255,255,255,.07);}
 .gi-fill{height:100%;border-radius:13px;background:linear-gradient(90deg,#1D4ED8 0%,#2563EB 25%,#06B6D4 45%,#10B981 60%,#84CC16 72%,#FACC15 82%,#F97316 90%,#EF4444 100%);transition:width 1.3s cubic-bezier(.4,0,.2,1);position:relative;}
 .gi-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:4px;background:rgba(255,255,255,.85);border-radius:2px;box-shadow:0 0 12px rgba(255,255,255,.6);}
 .gi-divider{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.35);pointer-events:none;}
-
-/* 하단 눈금 */
 .gi-scale{display:flex;position:relative;margin-top:5px;}
 .gi-scale-txt{font-size:10px;color:rgba(255,255,255,.28);font-family:'JetBrains Mono',monospace;position:absolute;transform:translateX(-50%);}
-
-/* YoY 섹션 */
 .yoy-wrap{background:var(--card);border:1.5px solid var(--border);border-radius:14px;box-shadow:var(--sh);overflow:hidden;margin-bottom:18px;}
 .yoy-hd{padding:14px 22px 12px;background:#F8FAFC;border-bottom:1.5px solid var(--border);}
 .yoy-hd-title{font-size:15px;font-weight:800;color:var(--text);}
@@ -157,8 +127,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .yoy-legend{display:flex;gap:18px;margin-bottom:14px;}
 .yoy-legend-item{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text2);}
 .yoy-legend-dot{width:13px;height:13px;border-radius:3px;}
-
-/* 공통 */
 .tbl{width:100%;border-collapse:collapse;font-size:13px;}
 .tbl th{background:#F1F5F9;font-weight:700;font-size:11px;padding:9px 13px;text-align:left;color:var(--text3);border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.4px;}
 .tbl td{padding:9px 13px;border-bottom:1.5px solid var(--border2);}
@@ -200,7 +168,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="brand"><span class="dot"></span>JMW SALES</div>
-    <div class="sub">Sales Dashboard v4.0</div>
+    <div class="sub">Sales Dashboard v4.1</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">실적 현황</div>
@@ -228,7 +196,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <button class="tbtn primary" onclick="loadData(true)">🔄 지금 갱신</button>
   </div>
 
-  <!-- 기간 필터 -->
   <div class="period-bar">
     <button class="ptab" onclick="setPeriod('month',this)">📅 당월</button>
     <button class="ptab" onclick="setPeriod('q1',this)">Q1 (1~3월)</button>
@@ -241,14 +208,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
   <div id="banner"></div>
 
-  <!-- PAGE 0: 전체 실적 요약 -->
+  <!-- PAGE 0 -->
   <div class="pg on" id="p0">
     <div class="g2">
-      <!-- 당월 -->
       <div class="perf-card">
         <div class="perf-hd">
           <div class="perf-hd-title">📅 당월 목표 대비 실적현황 <span class="badge badge-blue" id="p0-badge-m">2026년 5월</span></div>
-          <div class="perf-hd-sub" id="p0-m-days">13일 경과 · 잔여 18일</div>
+          <div class="perf-hd-sub" id="p0-m-days">로딩 중...</div>
         </div>
         <div class="perf-body">
           <div class="kpi3">
@@ -275,11 +241,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         </div>
       </div>
 
-      <!-- 상반기 -->
       <div class="perf-card">
         <div class="perf-hd">
           <div class="perf-hd-title">📆 상반기 목표 대비 실적현황 <span class="badge badge-teal">2026년 1~6월</span></div>
-          <div class="perf-hd-sub" id="p0-h1-sub">목표 21,974억 기준 · G.I BAR 연동</div>
+          <div class="perf-hd-sub" id="p0-h1-sub">로딩 중...</div>
         </div>
         <div class="perf-body">
           <div class="kpi3">
@@ -305,7 +270,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       <div class="gi-top">
         <div class="gi-top-left">
           <div class="gi-title">📊 G.I BAR — 상반기 진척률</div>
-          <div class="gi-sub" id="gi-sub">상반기 목표 21,974,128,497원 · 구간별 달성시 보상 지급</div>
+          <div class="gi-sub" id="gi-sub">로딩 중...</div>
         </div>
         <div>
           <div class="gi-pct-big" id="gi-pct">—<span>%</span></div>
@@ -363,9 +328,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div style="position:relative;height:280px"><canvas id="ch-yoy-main"></canvas></div>
       </div>
     </div>
-  </div><!-- /p0 -->
+  </div>
 
-  <!-- PAGE 1: 팀별 실적 -->
+  <!-- PAGE 1 -->
   <div class="pg" id="p1">
     <div class="sec-title">🏢 팀별 실적 <span class="tag" id="p1-period-tag">기간 선택</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;" id="team-cards"></div>
@@ -389,7 +354,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div></div>
   </div>
 
-  <!-- PAGE 2: 채널별 실적 -->
+  <!-- PAGE 2 -->
   <div class="pg" id="p2">
     <div class="sec-title">🛒 채널별 실적 <span class="tag" id="p2-period-tag">기간 선택</span></div>
     <div class="g2">
@@ -420,7 +385,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div></div>
   </div>
 
-  <!-- PAGE 3: 품목별 실적 -->
+  <!-- PAGE 3 -->
   <div class="pg" id="p3">
     <div class="sec-title">📦 품목별 실적 <span class="tag" id="p3-period-tag">기간 선택</span></div>
     <div class="g2">
@@ -444,7 +409,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div></div>
   </div>
 
-  <!-- PAGE 4: 전년 동기 대비 -->
+  <!-- PAGE 4 -->
   <div class="pg" id="p4">
     <div class="sec-title">📈 전년 동기 대비 <span class="tag">2025 vs 2026</span></div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;">
@@ -472,7 +437,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div>
   </div>
 
-  <!-- PAGE 5: TOP 10 -->
+  <!-- PAGE 5 -->
   <div class="pg" id="p5">
     <div class="sec-title">🏆 TOP 10 랭킹 <span class="tag" id="p5-period-tag">기간 선택</span></div>
     <div class="g2" style="margin-bottom:18px">
@@ -501,13 +466,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </div></div>
   </div>
 
-</div><!-- /main -->
+</div>
 
 <script>
 // ════════════════════════════════════════════
-//  ★ Apps Script 배포 URL
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDPGid3L7pOoFOBPyJSsoOIzg_UZiFl7u1YQQPq-0-ioZAPXegYAoKIGxdfqpq75e_zg/exec';
-//  ★ 자동 갱신 주기 (밀리초) — 10분 = 600000
 const AUTO_REFRESH_MS = 600000;
 // ════════════════════════════════════════════
 
@@ -524,8 +487,7 @@ function deptBadge(d){
   return m[d]||'b-gray';
 }
 
-// ★ 수정1: TGT 초기값 — 5월 목표 실제값(3,453,165,000)으로, 실적은 0으로
-//   매일 API에서 자동 갱신되므로 여기 숫자는 API 실패시 폴백값
+// ★ TGT: API에서 항상 덮어씀. 여기는 API 완전 실패시 최후 폴백
 const TGT = {
   h1tgt: 21974128497,
   h1act: 0,
@@ -534,7 +496,7 @@ const TGT = {
     {m:2, tgt:2633625784,  act:2629426277},
     {m:3, tgt:2756655335,  act:2715859066},
     {m:4, tgt:3096315144,  act:2690420688},
-    {m:5, tgt:3453165000,  act:0}, // ★ 수정: 실제 목표값, 실적은 API에서 채움
+    {m:5, tgt:3453165000,  act:0},
     {m:6, tgt:7427333450,  act:0},
   ],
 };
@@ -543,15 +505,17 @@ let D26=[],D25=[];
 let charts={};
 let currentPeriod='year';
 
-// ── 포맷 ──
+// ── ★ 포맷 함수 수정: 반올림 없이 소수점 1자리 유지 ──────────
 const f억=v=>{
   if(v===null||v===undefined)return'—';
   const a=Math.abs(v),s=v<0?'-':'';
-  if(a>=1e8)return s+(a/1e8).toFixed(1)+'억';
-  if(a>=1e4)return s+Math.round(a/1e4).toLocaleString()+'만';
+  if(a>=1e8)return s+(a/1e8).toFixed(1)+'억';       // 1억 이상: 소수점 1자리
+  if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만'; // 1만 이상
   return v.toLocaleString();
 };
-const fPct=v=>(!v&&v!==0)||isNaN(v)||!isFinite(v)?'—':(v*100).toFixed(1)+'%';
+// ★ 달성율: 소수점 1자리 (반올림으로 100% 오표시 방지)
+const fRate=v=>(!v&&v!==0)||isNaN(v)||!isFinite(v)?'—':(v*100).toFixed(1);
+const fPct=v=>fRate(v)+'%';
 const fNum=v=>Math.round(v||0).toLocaleString();
 
 // ── 기간 필터 ──
@@ -583,7 +547,6 @@ function filterByPeriod(rows, year=2026){
   });
 }
 
-// ── 배너 ──
 function banner(msg,type='blue'){
   const b=document.getElementById('banner');
   const C={blue:['#EFF6FF','#1D4ED8','#BFDBFE'],green:['#F0FDF4','#15803D','#BBF7D0'],red:['#FEF2F2','#B91C1C','#FECACA'],amber:['#FFFBEB','#B45309','#FDE68A']};
@@ -593,7 +556,6 @@ function banner(msg,type='blue'){
   if(type==='green')setTimeout(()=>b.style.display='none',3000);
 }
 
-// ── 데이터 로드 ──
 let autoTimer=null;
 async function loadData(manual=false){
   if(!SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE'){
@@ -608,7 +570,7 @@ async function loadData(manual=false){
       D26=json.data.data2026||[];
       D25=json.data.data2025||[];
 
-      // ★ 수정2: target.monthly 갱신 — actual=0도 유효한 값으로 처리
+      // ★ 목표 데이터 갱신: target > 0 이면 무조건 시트 데이터로 교체
       if(json.data.target?.monthly?.length>0){
         const tm=json.data.target.monthly;
         TGT.monthly=TGT.monthly.map(t=>{
@@ -616,19 +578,20 @@ async function loadData(manual=false){
           if(found){
             return {
               ...t,
-              tgt: found.target > 0 ? found.target : t.tgt,
-              act: found.actual >= 0 ? found.actual : t.act  // ★ 0도 유효한 실적
+              tgt: found.target > 0 ? found.target : t.tgt,   // 목표 > 0 이면 교체
+              act: found.actual >= 0 ? found.actual : t.act    // 실적 >= 0 이면 교체 (0도 유효)
             };
           }
           return t;
         });
       }
+      // 상반기 목표 교체
       if(json.data.target?.h1?.target>0) TGT.h1tgt=json.data.target.h1.target;
 
-      // ★ 수정3: dataCurrent(당월실적)로 5월 실적 갱신
+      // 당월실적(DATA)로 현재월 실적 보완
       if(json.data.dataCurrent?.length>0){
         const now=new Date();
-        const curMonth=now.getMonth()+1; // 현재 월 (1~12)
+        const curMonth=now.getMonth()+1;
         const curSales=json.data.dataCurrent
           .filter(r=>r.month===curMonth)
           .reduce((s,r)=>s+(r.sales||0),0);
@@ -638,7 +601,7 @@ async function loadData(manual=false){
         }
       }
 
-      // ★ 수정4: h1act를 monthly 합산으로 재계산 (항상 최신 반영)
+      // h1act 재계산 (항상 monthly 합산 기준)
       TGT.h1act=TGT.monthly.reduce((s,m)=>s+(m.act||0),0);
 
       const now=new Date();
@@ -654,19 +617,15 @@ async function loadData(manual=false){
 
 function renderAll(){renderPage0();renderPage1();renderPage2();renderPage3();renderPage4();renderPage5();}
 
-// ════════════════════════════════════════
-//  PAGE 0
-// ════════════════════════════════════════
+// ════ PAGE 0 ════
 function renderPage0(){
   const h1tgt=TGT.h1tgt, h1act=TGT.h1act, h1rate=h1tgt>0?h1act/h1tgt:0;
 
-  // 당월: 현재 월 기준으로 자동 찾기
   const now=new Date();
   const curM=now.getMonth()+1;
   const lastM=TGT.monthly.find(m=>m.m===curM)||TGT.monthly[4];
   const mAct=lastM.act, mTgt=lastM.tgt, mRate=mTgt>0?mAct/mTgt:0;
 
-  // 날짜 계산
   const year=now.getFullYear();
   const month=lastM.m-1;
   const daysInMonth=new Date(year,month+1,0).getDate();
@@ -686,16 +645,16 @@ function renderPage0(){
   const weekendNote=lastWorkDay<daysInMonth?` (월말 ${lastWorkDay+1}~${daysInMonth}일 주말 제외)`:'';
   const daysLabel=`${todayDay}일 경과 · 잔여 ${remainDays}일 · 마감 ${lastWorkDay}일${weekendNote}`;
 
-  // 사이드바
   setText('sb-monthly',f억(mAct));
-  setText('sb-rate',(h1rate*100).toFixed(1)+'%');
+  // ★ 사이드바 달성율도 소수점 1자리
+  setText('sb-rate',fRate(h1rate)+'%');
   setText('p0-badge-m','2026년 '+lastM.m+'월');
   setText('p0-m-days',daysLabel);
 
-  // 당월 KPI
   setText('p0-m-tgt',f억(mTgt));
   setText('p0-m-act',f억(mAct));
-  document.getElementById('p0-m-rate').textContent=(mRate*100).toFixed(1);
+  // ★ 달성율 소수점 1자리 표시
+  document.getElementById('p0-m-rate').textContent=fRate(mRate);
   document.getElementById('p0-m-rate').className='kpi3-val '+(mRate>=1?'green':mRate>=0.85?'amber':'blue');
 
   const mBg=mRate>=1?'#16A34A':mRate>=0.85?'#D97706':'#2563EB';
@@ -703,10 +662,10 @@ function renderPage0(){
   setTimeout(()=>{
     const b=document.getElementById('p0-m-bar');
     b.style.width=mPct+'%'; b.style.background=mBg;
-    setText('p0-m-bar-lbl',mPct>18?(mRate*100).toFixed(1)+'%':'');
+    // ★ 바 내부 텍스트도 소수점 1자리
+    setText('p0-m-bar-lbl',mPct>18?fRate(mRate)+'%':'');
   },200);
 
-  // 시뮬레이션
   setText('sim-tgt',f억(mTgt));setText('sim-act',f억(mAct));
   setText('sim-daily',f억(daily));setText('sim-remain',f억(remain));
   setText('sim-forecast',f억(forecast));
@@ -714,25 +673,34 @@ function renderPage0(){
   gEl.textContent=(simGap>=0?'+':'')+f억(simGap);
   gEl.className='sim-val '+(simGap>=0?'hl-green':'hl-red');
 
-  // 상반기 KPI
   setText('p0-h1-tgt',f억(h1tgt));
   setText('p0-h1-act',f억(h1act));
-  setText('p0-h1-rate',(h1rate*100).toFixed(1));
+  // ★ 상반기 달성율 소수점 1자리
+  setText('p0-h1-rate',fRate(h1rate));
+
+  // ★ 상반기 sub 텍스트: API에서 받은 목표값으로 동적 표시
+  const h1TgtOk=h1tgt>0;
+  setText('p0-h1-sub', h1TgtOk
+    ? `목표 ${f억(h1tgt)} 기준 · G.I BAR 연동`
+    : '목표 데이터 로딩 중...'
+  );
 
   const h1Pct=Math.min(h1rate*100,100);
   const h1Bg=h1rate>=1?'#16A34A':h1rate>=0.9?'#0D9488':h1rate>=0.85?'#D97706':'#2563EB';
   setTimeout(()=>{
     const b=document.getElementById('p0-h1-bar');
     b.style.width=h1Pct+'%'; b.style.background=h1Bg;
-    setText('p0-h1-bar-lbl',h1Pct>18?(h1rate*100).toFixed(1)+'%':'');
+    setText('p0-h1-bar-lbl',h1Pct>18?fRate(h1rate)+'%':'');
   },200);
 
-  // 월별 미니 바
+  // 월별 미니바: ★ 달성율 소수점 1자리
   const maxT=Math.max(...TGT.monthly.map(m=>m.tgt),1);
   document.getElementById('p0-month-bars').innerHTML=TGT.monthly.map(m=>{
     const pt=m.tgt/maxT*100, pa=m.act>0?Math.min(m.act/maxT*100,pt):0;
     const r=m.tgt>0&&m.act>0?m.act/m.tgt:null;
     const bc=!r?'#94A3B8':r>=1?'#16A34A':r>=0.85?'#D97706':'#2563EB';
+    // ★ 달성율 소수점 1자리 (반올림 100% 오표시 방지)
+    const rStr=r!==null?(r*100).toFixed(1)+'%':'—';
     return `<div class="mb-row">
       <span class="mb-lbl">${m.m}월</span>
       <div class="mb-track">
@@ -740,7 +708,7 @@ function renderPage0(){
         <div class="mb-fill-act" style="width:${pa.toFixed(1)}%;background:${bc}"></div>
       </div>
       <span class="mb-val" style="color:${m.act>0?'var(--text)':'#94A3B8'}">${m.act>0?f억(m.act):'—'}</span>
-      <span class="mb-pct" style="color:${bc}">${r!==null?(r*100).toFixed(0)+'%':'—'}</span>
+      <span class="mb-pct" style="color:${bc}">${rStr}</span>
     </div>`;
   }).join('');
 
@@ -749,7 +717,11 @@ function renderPage0(){
   document.getElementById('gi-pct').innerHTML=pct.toFixed(1)+'<span>%</span>';
   const gapAmt=h1tgt-h1act;
   setText('gi-gap',gapAmt>0?`100% 달성까지 ${f억(gapAmt)} 남음`:'🎉 상반기 목표 달성!');
-  setText('gi-sub',`상반기 목표 ${h1tgt.toLocaleString()}원 · 구간별 달성시 보상 지급`);
+  // ★ G.I BAR sub도 API 데이터로 동적 표시
+  setText('gi-sub',h1TgtOk
+    ? `상반기 목표 ${h1tgt.toLocaleString()}원 · 구간별 달성시 보상 지급`
+    : '목표 데이터 로딩 중...'
+  );
   const fillEl=document.getElementById('gi-fill');
   fillEl.innerHTML=`<span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;white-space:nowrap;">${f억(h1act)}</span>`;
   setTimeout(()=>{ fillEl.style.width=Math.min(pct,100)+'%'; },200);
@@ -829,9 +801,7 @@ function renderYoYMainChart(){
   });
 }
 
-// ════════════════════════════════════════
-//  PAGE 1
-// ════════════════════════════════════════
+// ════ PAGE 1 ════
 function renderPage1(){
   const rows=filterByPeriod(D26,2026);
   if(!rows.length){
@@ -919,9 +889,7 @@ function renderTeamChannelTable(chMap, total){
     </tr>`).join('');
 }
 
-// ════════════════════════════════════════
-//  PAGE 2
-// ════════════════════════════════════════
+// ════ PAGE 2 ════
 function renderPage2(){
   const rows=filterByPeriod(D26,2026);
   if(!rows.length) return;
@@ -970,9 +938,7 @@ function renderPage2(){
   }).join('');
 }
 
-// ════════════════════════════════════════
-//  PAGE 3
-// ════════════════════════════════════════
+// ════ PAGE 3 ════
 function renderPage3(){
   const rows=filterByPeriod(D26,2026);
   if(!rows.length) return;
@@ -1014,9 +980,7 @@ function renderPage3(){
     <td class="num">${fNum(x.qty)}</td><td class="num">${f억(x.sales)}</td><td class="num">${(x.sales/tot*100).toFixed(1)}%</td></tr>`).join('');
 }
 
-// ════════════════════════════════════════
-//  PAGE 4
-// ════════════════════════════════════════
+// ════ PAGE 4 ════
 function renderPage4(){
   const s26=m=>D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0);
   const s25=m=>D25.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2025)===2025).reduce((s,r)=>s+(r.sales||0),0);
@@ -1078,9 +1042,7 @@ function renderPage4(){
   }).join('');
 }
 
-// ════════════════════════════════════════
-//  PAGE 5
-// ════════════════════════════════════════
+// ════ PAGE 5 ════
 function renderPage5(){
   const rows=filterByPeriod(D26,2026);
   const mk=(filteredRows,id)=>{
@@ -1121,7 +1083,6 @@ function goPage(i){
   document.getElementById('topbar-title').innerHTML=TITLES[i]+' <span id="topbar-sub">'+PERIOD_LABELS[currentPeriod]+'</span>';
 }
 
-// ── 초기 로드 ──
 loadData(false);
 </script>
 </body>
