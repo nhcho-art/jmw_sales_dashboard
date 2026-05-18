@@ -353,8 +353,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div style="font-size:14px;font-weight:800;">팀별 채널 상세</div>
         <div style="display:flex;gap:5px;" id="team-filter-tabs">
           <button class="team-ftab on" onclick="setTeamFilter('all',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--blue);background:var(--blue);color:#fff;font-size:12px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">전체</button>
-          <button class="team-ftab" onclick="setTeamFilter('MD팀',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">MD팀</button>
-          <button class="team-ftab" onclick="setTeamFilter('세일즈 전략팀',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">세일즈 전략팀</button>
+          <button class="team-ftab" onclick="setTeamFilter('이커머스 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">이커머스 파트</button>
+          <button class="team-ftab" onclick="setTeamFilter('리테일 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">리테일 파트</button>
           <button class="team-ftab" onclick="setTeamFilter('해외영업팀',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">해외영업팀</button>
         </div>
       </div>
@@ -368,13 +368,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="sec-title">🛒 채널별 실적 <span class="tag" id="p2-period-tag">기간 선택</span></div>
     <div class="g2">
       <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">MD팀 채널 TOP 15</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">MD팀 기준</div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">이커머스 파트 채널 TOP 15</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">이커머스 파트 기준</div>
         <div style="position:relative;height:400px"><canvas id="ch-md"></canvas></div>
       </div></div>
       <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">세일즈 전략팀 채널 TOP 15</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">세일즈 전략팀 기준</div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">리테일 파트 채널 TOP 15</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">리테일 파트 기준</div>
         <div style="position:relative;height:400px"><canvas id="ch-sales"></canvas></div>
       </div></div>
     </div>
@@ -451,13 +451,13 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="sec-title">🏆 TOP 10 랭킹 <span class="tag" id="p5-period-tag">기간 선택</span></div>
     <div class="g2" style="margin-bottom:18px">
       <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🛒 MD팀 채널 TOP 10</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">MD팀 기준</div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🛒 이커머스 파트 채널 TOP 10</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">이커머스 파트 기준</div>
         <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="top-md"></tbody></table>
       </div></div>
       <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🏪 세일즈 전략팀 TOP 10</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">세일즈 전략팀 기준</div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🏪 리테일 파트 TOP 10</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">리테일 파트 기준</div>
         <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="top-sales"></tbody></table>
       </div></div>
     </div>
@@ -484,15 +484,15 @@ const AUTO_REFRESH_MS = 600000;
 // ════════════════════════════════════════════
 
 const DEPT_COLORS = {
-  'MD팀':        '#2563EB',
-  '세일즈 전략팀': '#0D9488',
+  '이커머스 파트':        '#2563EB',
+  '리테일 파트': '#0D9488',
   '영업지원팀':   '#7C3AED',
   '해외영업팀':   '#EA580C',
   '해외영업실':   '#EA580C',
 };
 function deptColor(d){ return DEPT_COLORS[d] || '#94A3B8'; }
 function deptBadge(d){
-  const m={'MD팀':'b-blue','세일즈 전략팀':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange'};
+  const m={'이커머스 파트':'b-blue','리테일 파트':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange'};
   return m[d]||'b-gray';
 }
 
@@ -1041,8 +1041,8 @@ function renderPage2(){
         scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#64748B',callback:v=>f억(v)}},y:{grid:{display:false},ticks:{font:{size:11},color:'#334155'}}}}});
   };
 
-  mkH('ch-md',   sortedGroupBy(rows.filter(r=>r.dept==='MD팀'),'channel').slice(0,15),'#2563EB');
-  mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='세일즈 전략팀'),'channel').slice(0,15),'#0D9488');
+  mkH('ch-md',   sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
+  mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='리테일 파트'),'channel').slice(0,15),'#0D9488');
 
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasWrap=document.getElementById('overseas-wrap');
@@ -1174,8 +1174,8 @@ function renderPage5(){
     const t=ch.reduce((s,[,v])=>s+v,0);
     document.getElementById(id).innerHTML=ch.map(([n,s],i)=>`<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td><td>${n}</td><td class="num">${f억(s)}</td><td class="num">${(s/t*100).toFixed(2)}%</td></tr>`).join('');
   };
-  mk(rows.filter(r=>r.dept==='MD팀'),'top-md');
-  mk(rows.filter(r=>r.dept==='세일즈 전략팀'),'top-sales');
+  mk(rows.filter(r=>r.dept==='이커머스 파트'),'top-md');
+  mk(rows.filter(r=>r.dept==='리테일 파트'),'top-sales');
 
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasTop=document.getElementById('overseas-top-wrap');
