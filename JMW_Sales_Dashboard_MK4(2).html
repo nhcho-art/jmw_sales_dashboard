@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JMW Sales Dashboard</title>
+<title>JMW Sales Dashboard v4.4</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
@@ -168,15 +168,15 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="brand"><span class="dot"></span>JMW SALES</div>
-    <div class="sub">Sales Dashboard v4.1</div>
+    <div class="sub">Sales Dashboard v4.4</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">실적 현황</div>
     <button class="nb on" onclick="goPage(0,this)"><span class="nbi">📊</span> 전체 실적 요약</button>
     <button class="nb" onclick="goPage(1,this)"><span class="nbi">🛒</span> 채널별 실적</button>
     <div class="sb-sec">비교 분석</div>
-    <button class="nb" onclick="goPage(3,this)"><span class="nbi">📈</span> 전년 동기 대비</button>
-    <button class="nb" onclick="goPage(4,this)"><span class="nbi">🏆</span> TOP 10 랭킹</button>
+    <button class="nb" onclick="goPage(2,this)"><span class="nbi">📈</span> 전년 동기 대비</button>
+    <button class="nb" onclick="goPage(3,this)"><span class="nbi">🏆</span> TOP 10 랭킹</button>
   </nav>
   <div class="sb-footer">
     <div class="sb-kpi">
@@ -1063,10 +1063,12 @@ function groupBy(rows,key){ const m={}; rows.forEach(r=>{ m[r[key]]=(m[r[key]]||
 function sortedGroupBy(rows,key){ return Object.entries(groupBy(rows,key)).sort((a,b)=>b[1]-a[1]); }
 
 const TITLES=['전체 실적 요약','채널별 실적','전년 동기 대비','TOP 10 랭킹'];
+const PAGE_RENDERS=[renderPage0,()=>renderPage1(),()=>renderPage2(),()=>renderPage3()];
 function goPage(i){
   document.querySelectorAll('.pg').forEach((p,j)=>p.classList.toggle('on',i===j));
   document.querySelectorAll('.nb').forEach((b,j)=>b.classList.toggle('on',i===j));
   document.getElementById('topbar-title').innerHTML=TITLES[i]+' <span id="topbar-sub">'+PERIOD_LABELS[currentPeriod]+'</span>';
+  if(D26.length>0 && PAGE_RENDERS[i]) PAGE_RENDERS[i]();
 }
 
 loadData(false);
