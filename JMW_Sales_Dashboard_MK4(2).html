@@ -971,61 +971,72 @@ function renderPage2(){
   const t26=cm.reduce((s,m)=>s+s26(m),0),t25=cm.reduce((s,m)=>s+s25(m),0);
   const diff=t26-t25,yr=t25>0?diff/t25:null;
   const setV=(id,v,cls)=>{ const el=document.getElementById(id); if(el){el.textContent=v;if(cls)el.className='kpi3-val '+cls;} };
+
+  // ★ 1단계: KPI 수치 즉시 표시
   setV('p4-2026',f억(t26),'blue'); setV('p4-2025',f억(t25),'red');
   setV('p4-diff',(diff>=0?'+':'')+f억(diff),diff>=0?'green':'red');
   setV('p4-rate',yr!==null?(yr>=0?'+':'-')+fPct(Math.abs(yr)):'—',yr===null?'':yr>=0?'green':'red');
-  destroyChart('ch-yoy');
-  const yoyLabelPlugin={id:'yoyP4Label',afterDatasetsDraw(chart){
-    const{ctx}=chart;
-    ctx.save();
-    chart.data.datasets.forEach((ds,di)=>{
-      chart.getDatasetMeta(di).data.forEach((bar,i)=>{
-        const v=ds.data[i];
-        if(!v||v<=0) return;
-        ctx.fillStyle=di===0?'#DC2626':'#1D4ED8';
-        ctx.font='bold 10px "JetBrains Mono",monospace'; ctx.textAlign='center';
-        ctx.fillText(f억(v),bar.x,bar.y-5);
+
+  // ★ 2단계: 차트 다음 프레임에 렌더링
+  requestAnimationFrame(()=>{
+    destroyChart('ch-yoy');
+    const yoyLabelPlugin={id:'yoyP4Label',afterDatasetsDraw(chart){
+      const{ctx}=chart;
+      ctx.save();
+      chart.data.datasets.forEach((ds,di)=>{
+        chart.getDatasetMeta(di).data.forEach((bar,i)=>{
+          const v=ds.data[i];
+          if(!v||v<=0) return;
+          ctx.fillStyle=di===0?'#DC2626':'#1D4ED8';
+          ctx.font='bold 10px "JetBrains Mono",monospace'; ctx.textAlign='center';
+          ctx.fillText(f억(v),bar.x,bar.y-5);
+        });
       });
-    });
-    const m26=chart.getDatasetMeta(1);
-    months.forEach((m,i)=>{
-      const a25=s25(m),a26=s26(m);
-      if(a25<=0||a26<=0) return;
-      const rate=(a26-a25)/a25;
-      const sign=rate>=0?'+':'-';
-      const col=rate>=0?'#16A34A':'#DC2626';
-      const bar=m26.data[i];
-      ctx.fillStyle=col; ctx.font='bold 10px "JetBrains Mono",monospace'; ctx.textAlign='center';
-      ctx.fillText(`(${sign}${Math.abs(rate*100).toFixed(2)}%)`,bar.x,bar.y-18);
-    });
-    ctx.restore();
-  }};
-  charts['ch-yoy']=new Chart(document.getElementById('ch-yoy'),{type:'bar',
-    plugins:[yoyLabelPlugin],
-    data:{labels:months.map(m=>m+'월'),datasets:[
-      {label:'2025 실적',data:months.map(s25),backgroundColor:'rgba(239,68,68,.65)',borderColor:'#DC2626',borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45},
-      {label:'2026 실적',data:months.map(s26),backgroundColor:months.map(m=>s26(m)>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:months.map(m=>s26(m)>0?'#2563EB':'#CBD5E1'),borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45}]},
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:36}},
-      plugins:{legend:{position:'bottom',labels:{font:{size:12},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}},
-      scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}});
-  const allCh=[...new Set([...D26,...D25].map(r=>r.channel))];
-  const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
-  const maxChRate=Math.max(...chY.map(x=>Math.abs(x.rate)),0.01);
-  document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
-    const sign=x.rate>=0?'+':'-';
-    const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-    const barW=Math.min(Math.abs(x.rate)/maxChRate*100,100).toFixed(1);
-    return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
-  }).join('');
-  const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
-  const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
-  const maxSkuRate=Math.max(...skY.map(x=>Math.abs(x.rate)),0.01);
-  document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
-    const sign=x.rate>=0?'+':'-';
-    const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-    const barW=Math.min(Math.abs(x.rate)/maxSkuRate*100,100).toFixed(1);
-    return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
-  }).join('');
+      const m26=chart.getDatasetMeta(1);
+      months.forEach((m,i)=>{
+        const a25=s25(m),a26=s26(m);
+        if(a25<=0||a26<=0) return;
+        const rate=(a26-a25)/a25;
+        const sign=rate>=0?'+':'-';
+        const col=rate>=0?'#16A34A':'#DC2626';
+        const bar=m26.data[i];
+        ctx.fillStyle=col; ctx.font='bold 10px "JetBrains Mono",monospace'; ctx.textAlign='center';
+        ctx.fillText(`(${sign}${Math.abs(rate*100).toFixed(2)}%)`,bar.x,bar.y-18);
+      });
+      ctx.restore();
+    }};
+    charts['ch-yoy']=new Chart(document.getElementById('ch-yoy'),{type:'bar',
+      plugins:[yoyLabelPlugin],
+      data:{labels:months.map(m=>m+'월'),datasets:[
+        {label:'2025 실적',data:months.map(s25),backgroundColor:'rgba(239,68,68,.65)',borderColor:'#DC2626',borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45},
+        {label:'2026 실적',data:months.map(s26),backgroundColor:months.map(m=>s26(m)>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:months.map(m=>s26(m)>0?'#2563EB':'#CBD5E1'),borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45}]},
+      options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:36}},
+        plugins:{legend:{position:'bottom',labels:{font:{size:12},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}});
+  });
+
+  // ★ 3단계: 채널/제품 리스트는 50ms 후 처리 (체감 속도 개선)
+  setTimeout(()=>{
+    const allCh=[...new Set([...D26,...D25].map(r=>r.channel))];
+    const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
+    const maxChRate=Math.max(...chY.map(x=>Math.abs(x.rate)),0.01);
+    document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
+      const sign=x.rate>=0?'+':'-';
+      const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
+      const barW=Math.min(Math.abs(x.rate)/maxChRate*100,100).toFixed(1);
+      return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
+    }).join('');
+
+    const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
+    const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
+    const maxSkuRate=Math.max(...skY.map(x=>Math.abs(x.rate)),0.01);
+    document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
+      const sign=x.rate>=0?'+':'-';
+      const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
+      const barW=Math.min(Math.abs(x.rate)/maxSkuRate*100,100).toFixed(1);
+      return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
+    }).join('');
+  }, 50);
 }
 
 // ════ PAGE 3 ════
