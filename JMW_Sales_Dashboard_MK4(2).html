@@ -173,12 +173,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <nav class="sb-nav">
     <div class="sb-sec">실적 현황</div>
     <button class="nb on" onclick="goPage(0,this)"><span class="nbi">📊</span> 전체 실적 요약</button>
-    <button class="nb" onclick="goPage(1,this)"><span class="nbi">🏢</span> 팀별 실적</button>
-    <button class="nb" onclick="goPage(2,this)"><span class="nbi">🛒</span> 채널별 실적</button>
-    <button class="nb" onclick="goPage(3,this)"><span class="nbi">📦</span> 품목별 실적</button>
+    <button class="nb" onclick="goPage(1,this)"><span class="nbi">🛒</span> 채널별 실적</button>
     <div class="sb-sec">비교 분석</div>
-    <button class="nb" onclick="goPage(4,this)"><span class="nbi">📈</span> 전년 동기 대비</button>
-    <button class="nb" onclick="goPage(5,this)"><span class="nbi">🏆</span> TOP 10 랭킹</button>
+    <button class="nb" onclick="goPage(3,this)"><span class="nbi">📈</span> 전년 동기 대비</button>
+    <button class="nb" onclick="goPage(4,this)"><span class="nbi">🏆</span> TOP 10 랭킹</button>
   </nav>
   <div class="sb-footer">
     <div class="sb-kpi">
@@ -341,31 +339,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 
   <!-- PAGE 1 -->
   <div class="pg" id="p1">
-    <div class="sec-title">🏢 팀별 실적 <span class="tag" id="p1-period-tag">기간 선택</span></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;" id="team-cards"></div>
-    <div class="card full"><div class="card-inner">
-      <div style="font-size:14px;font-weight:800;margin-bottom:3px;">팀별 월간 추이</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:14px;">월별 매출 스택 막대</div>
-      <div style="position:relative;height:260px"><canvas id="ch-team"></canvas></div>
-    </div></div>
-    <div class="card full"><div class="card-inner">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <div style="font-size:14px;font-weight:800;">팀별 채널 상세</div>
-        <div style="display:flex;gap:5px;" id="team-filter-tabs">
-          <button class="team-ftab on" onclick="setTeamFilter('all',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--blue);background:var(--blue);color:#fff;font-size:12px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">전체</button>
-          <button class="team-ftab" onclick="setTeamFilter('이커머스 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">이커머스 파트</button>
-          <button class="team-ftab" onclick="setTeamFilter('리테일 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">리테일 파트</button>
-          <button class="team-ftab" onclick="setTeamFilter('해외영업팀',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">해외영업팀</button>
-        </div>
-      </div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:10px;" id="team-filter-sub">전체 팀 · 매출 내림차순</div>
-      <div style="overflow-x:auto"><table class="tbl"><thead><tr><th id="tbl-team-col-dept">팀</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="tbl-team-body"></tbody></table></div>
-    </div></div>
-  </div>
-
-  <!-- PAGE 2 -->
-  <div class="pg" id="p2">
-    <div class="sec-title">🛒 채널별 실적 <span class="tag" id="p2-period-tag">기간 선택</span></div>
+    <div class="sec-title">🛒 채널별 실적 <span class="tag" id="p1-period-tag">기간 선택</span></div>
     <div class="g2">
       <div class="card"><div class="card-inner">
         <div style="font-size:14px;font-weight:800;margin-bottom:3px;">이커머스 파트 채널 TOP 15</div>
@@ -386,40 +360,24 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div></div>
     </div>
     <div class="card full"><div class="card-inner">
-      <div style="font-size:14px;font-weight:800;margin-bottom:3px;">전체 채널 목록</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">매출 내림차순 (영업지원팀 제외)</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-size:14px;font-weight:800;">전체 채널 목록</div>
+        <div style="display:flex;gap:5px;" id="channel-filter-tabs">
+          <button class="ch-ftab on" onclick="setChannelFilter('all',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--blue);background:var(--blue);color:#fff;font-size:12px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">전체</button>
+          <button class="ch-ftab" onclick="setChannelFilter('이커머스 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">이커머스 파트</button>
+          <button class="ch-ftab" onclick="setChannelFilter('리테일 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">리테일 파트</button>
+          <button class="ch-ftab" onclick="setChannelFilter('해외영업팀',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">해외영업팀</button>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;" id="channel-filter-sub">전체 팀 · 매출 내림차순 (영업지원팀 제외)</div>
       <div style="overflow-x:auto;max-height:380px;overflow-y:auto">
         <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th>팀</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="tbl-channel"></tbody></table>
       </div>
     </div></div>
   </div>
 
-  <!-- PAGE 3 -->
-  <div class="pg" id="p3">
-    <div class="sec-title">📦 품목별 실적 <span class="tag" id="p3-period-tag">기간 선택</span></div>
-    <div class="g2">
-      <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">품목군별 매출 비중</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">품번 접두어 기준 자동 분류</div>
-        <div style="position:relative;height:290px"><canvas id="ch-sku-grp"></canvas></div>
-      </div></div>
-      <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">제품 TOP 20</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">매출액 기준</div>
-        <div class="hbar-list" id="sku-hbar" style="max-height:290px;overflow-y:auto"></div>
-      </div></div>
-    </div>
-    <div class="card full"><div class="card-inner">
-      <div style="font-size:14px;font-weight:800;margin-bottom:3px;">전체 제품 실적</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">매출액 내림차순 상위 50개</div>
-      <div style="overflow-x:auto;max-height:380px;overflow-y:auto">
-        <table class="tbl"><thead><tr><th>순위</th><th>품번</th><th>품목군</th><th class="num">수량</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="tbl-sku"></tbody></table>
-      </div>
-    </div></div>
-  </div>
-
-  <!-- PAGE 4 -->
-  <div class="pg" id="p4">
+  <!-- PAGE 2 -->
+  <div class="pg" id="p2">
     <div class="sec-title">📈 전년 동기 대비 <span class="tag">2025 vs 2026</span></div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;">
       <div class="card" style="padding:16px 18px;border-top:3px solid var(--blue)"><div class="kpi3-lbl" style="margin-bottom:6px;">2026 누적</div><div class="kpi3-val blue" id="p4-2026">—</div></div>
@@ -439,16 +397,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div class="hbar-list" id="yoy-channel"></div>
       </div></div>
       <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">제품별 YoY TOP 15</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">성장율 기준</div>
+        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">전년 대비 주요 모델</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">2026 매출 기준</div>
         <div class="hbar-list" id="yoy-sku"></div>
       </div></div>
     </div>
   </div>
 
-  <!-- PAGE 5 -->
-  <div class="pg" id="p5">
-    <div class="sec-title">🏆 TOP 10 랭킹 <span class="tag" id="p5-period-tag">기간 선택</span></div>
+  <!-- PAGE 3 -->
+  <div class="pg" id="p3">
+    <div class="sec-title">🏆 TOP 10 랭킹 <span class="tag" id="p3-period-tag">기간 선택</span></div>
     <div class="g2" style="margin-bottom:18px">
       <div class="card"><div class="card-inner">
         <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🛒 이커머스 파트 채널 TOP 10</div>
@@ -541,7 +499,7 @@ function setPeriod(p,btn){
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('period-label').textContent=PERIOD_LABELS[p];
-  ['p1-period-tag','p2-period-tag','p3-period-tag','p5-period-tag'].forEach(id=>{
+  ['p1-period-tag','p3-period-tag'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.textContent=PERIOD_LABELS[p];
   });
   renderAll();
@@ -631,7 +589,7 @@ async function loadData(manual=false){
   autoTimer=setTimeout(()=>loadData(false), AUTO_REFRESH_MS);
 }
 
-function renderAll(){renderPage0();renderPage1();renderPage2();renderPage3();renderPage4();renderPage5();}
+function renderAll(){renderPage0();renderPage1();renderPage2();renderPage3();}
 
 // ════ PAGE 0 ════
 function renderPage0(){
@@ -709,19 +667,23 @@ function renderPage0(){
     setText('p0-h1-bar-lbl',h1Pct>18?fRate(h1rate)+'%':'');
   },200);
 
-  // 월별 미니바: ★ 달성율 소수점 1자리
-  const maxT=Math.max(...TGT.monthly.map(m=>m.tgt),1);
+  // 월별 미니바: 달성율 기준, 미달성 음영, 100% 초과 별도색
   document.getElementById('p0-month-bars').innerHTML=TGT.monthly.map(m=>{
-    const pt=m.tgt/maxT*100, pa=m.act>0?Math.min(m.act/maxT*100,pt):0;
     const r=m.tgt>0&&m.act>0?m.act/m.tgt:null;
-    const bc=!r?'#94A3B8':r>=1?'#16A34A':r>=0.85?'#D97706':'#2563EB';
-    // ★ 달성율 소수점 1자리 (반올림 100% 오표시 방지)
-    const rStr=r!==null?(r*100).toFixed(2)+'%':'—';
+    const ratePct=r!==null?r*100:0;
+    // 달성율 100% 기준 바 길이 계산
+    const fillPct=r!==null?Math.min(ratePct,100):0;  // 100% 캡
+    const overPct=r!==null?Math.max(ratePct-100,0):0; // 100% 초과분
+    // 색상: 초과=골드, 100%=초록, 85%이상=앰버, 미달=파랑, 데이터없음=회색
+    const bc=!r?'#94A3B8':ratePct>=100?'#16A34A':ratePct>=85?'#D97706':'#2563EB';
+    const overColor='#F59E0B'; // 100% 초과 골드
+    const rStr=r!==null?ratePct.toFixed(2)+'%':'—';
     return `<div class="mb-row">
       <span class="mb-lbl">${m.m}월</span>
-      <div class="mb-track">
-        <div class="mb-fill-tgt" style="width:${pt.toFixed(1)}%"></div>
-        <div class="mb-fill-act" style="width:${pa.toFixed(1)}%;background:${bc}"></div>
+      <div class="mb-track" style="position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);">
+        ${r!==null && ratePct<100 ? `<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>` : ''}
+        <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${bc};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
+        ${overPct>0 ? `<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:${overColor};border-radius:0 4px 4px 0;transition:width .9s;"></div>` : ''}
       </div>
       <span class="mb-val" style="color:${m.act>0?'var(--text)':'#94A3B8'}">${m.act>0?f억(m.act):'—'}</span>
       <span class="mb-pct" style="color:${bc}">${rStr}</span>
@@ -928,94 +890,6 @@ function renderYoYMainChart(){
 // ════ PAGE 1 ════
 function renderPage1(){
   const rows=filterByPeriod(D26,2026);
-  if(!rows.length){
-    document.getElementById('team-cards').innerHTML='<div style="color:var(--text3);padding:20px;grid-column:span 2">데이터 없음 (SCRIPT_URL 연결 후 갱신)</div>';
-    return;
-  }
-  const byDept={};
-  rows.forEach(r=>{ if(!byDept[r.dept]) byDept[r.dept]={sales:0,rows:[]}; byDept[r.dept].sales+=(r.sales||0); byDept[r.dept].rows.push(r); });
-  const total=Object.values(byDept).reduce((s,d)=>s+d.sales,0);
-
-  document.getElementById('team-cards').innerHTML=Object.entries(byDept).sort((a,b)=>b[1].sales-a[1].sales).map(([dept,d])=>`
-    <div class="team-card">
-      <div class="team-hd"><div class="team-dot" style="background:${deptColor(dept)}"></div>
-        <div class="team-name">${dept}</div>
-        <div class="team-sales" style="color:${deptColor(dept)}">${f억(d.sales)}</div>
-      </div>
-      <div class="team-body"><div class="hbar-list">
-        ${Object.entries(groupBy(d.rows,'channel')).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([ch,s])=>`
-          <div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${ch}</span><span class="hbar-nums">${f억(s)}</span></div>
-          <div class="hbar-track"><div class="hbar-fill" style="width:${(s/d.sales*100).toFixed(1)}%;background:${deptColor(dept)}"></div></div></div>`).join('')}
-      </div></div>
-    </div>`).join('');
-
-  const months=[...new Set(rows.map(r=>r.month||Number(String(r.ym||'').split('-')[1])||0))].filter(Boolean).sort((a,b)=>a-b);
-  const depts=Object.keys(byDept).sort((a,b)=>byDept[b].sales-byDept[a].sales);
-  destroyChart('ch-team');
-  charts['ch-team']=new Chart(document.getElementById('ch-team'),{type:'bar',
-    data:{labels:months.map(m=>m+'월'),datasets:depts.map((dept)=>({label:dept,
-      data:months.map(m=>rows.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&r.dept===dept).reduce((s,r)=>s+(r.sales||0),0)),
-      backgroundColor:deptColor(dept)+'cc',borderRadius:4}))},
-    plugins:[{id:'stackedLabel',afterDatasetsDraw(chart){
-      const{ctx,scales:{x,y}}=chart;
-      ctx.save();
-      months.forEach((m,mi)=>{
-        const t=depts.reduce((s,dept)=>s+rows.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===months[mi]&&r.dept===dept).reduce((ss,r)=>ss+(r.sales||0),0),0);
-        if(t<=0) return;
-        const xPos=x.getPixelForValue(mi);
-        const yPos=y.getPixelForValue(t)-6;
-        ctx.fillStyle='#334155'; ctx.font='bold 11px "JetBrains Mono",monospace'; ctx.textAlign='center';
-        ctx.fillText(f억(t),xPos,yPos);
-      });
-      ctx.restore();
-    }}],
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24}},
-      plugins:{legend:{position:'bottom',labels:{font:{size:12},boxWidth:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}},
-      scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{stacked:true,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}});
-
-  const chMap={};
-  rows.forEach(r=>{ const k=r.dept+'||'+r.channel; if(!chMap[k]) chMap[k]={dept:r.dept,channel:r.channel,sales:0}; chMap[k].sales+=(r.sales||0); });
-  renderTeamChannelTable(chMap, total);
-}
-
-let currentTeamFilter='all';
-function setTeamFilter(dept, btn){
-  currentTeamFilter=dept;
-  document.querySelectorAll('.team-ftab').forEach(b=>{
-    b.style.background='transparent'; b.style.color='var(--text2)'; b.style.borderColor='var(--border)';
-  });
-  btn.style.background='var(--blue)'; btn.style.color='#fff'; btn.style.borderColor='var(--blue)';
-  const deptCol=document.getElementById('tbl-team-col-dept');
-  if(deptCol) deptCol.style.display=dept==='all'?'':'none';
-  const sub=document.getElementById('team-filter-sub');
-  if(sub) sub.textContent=dept==='all'?'전체 팀 · 매출 내림차순':dept+' · 매출 내림차순';
-  if(window._teamChMap) renderTeamChannelTable(window._teamChMap, window._teamTotal);
-}
-
-function renderTeamChannelTable(chMap, total){
-  window._teamChMap=chMap; window._teamTotal=total;
-  const dept=currentTeamFilter;
-  let entries=Object.values(chMap).sort((a,b)=>b.sales-a.sales);
-  if(dept!=='all'){
-    if(dept==='해외영업팀'){
-      entries=entries.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
-    } else {
-      entries=entries.filter(r=>r.dept===dept);
-    }
-  }
-  const showDept=dept==='all';
-  document.getElementById('tbl-team-body').innerHTML=entries.slice(0,50).map(r=>`
-    <tr>
-      ${showDept?`<td><span class="bdg ${deptBadge(r.dept)}">${r.dept}</span></td>`:''}
-      <td>${r.channel}</td>
-      <td class="num">${f억(r.sales)}</td>
-      <td class="num">${(r.sales/total*100).toFixed(2)}%</td>
-    </tr>`).join('');
-}
-
-// ════ PAGE 2 ════
-function renderPage2(){
-  const rows=filterByPeriod(D26,2026);
   if(!rows.length) return;
 
   const hbarLabelPlugin={id:'hbarLabel',afterDatasetsDraw(chart){
@@ -1053,59 +927,43 @@ function renderPage2(){
     overseasWrap.style.display='none';
   }
 
-  const allCh=sortedGroupBy(rows.filter(r=>r.dept!=='영업지원팀'),'channel'), tot=allCh.reduce((s,[,v])=>s+v,0);
+  window._channelRows = rows;
+  renderChannelTable('all');
+}
+
+let currentChannelFilter='all';
+function setChannelFilter(dept, btn){
+  currentChannelFilter=dept;
+  document.querySelectorAll('.ch-ftab').forEach(b=>{
+    b.style.background='transparent'; b.style.color='var(--text2)'; b.style.borderColor='var(--border)';
+  });
+  btn.style.background='var(--blue)'; btn.style.color='#fff'; btn.style.borderColor='var(--blue)';
+  const sub=document.getElementById('channel-filter-sub');
+  if(sub) sub.textContent=dept==='all'?'전체 팀 · 매출 내림차순 (영업지원팀 제외)':dept+' · 매출 내림차순';
+  renderChannelTable(dept);
+}
+
+function renderChannelTable(dept){
+  const rows = window._channelRows || [];
+  let filtered = rows.filter(r=>r.dept!=='영업지원팀');
+  if(dept!=='all'){
+    if(dept==='해외영업팀'){
+      filtered = filtered.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
+    } else {
+      filtered = filtered.filter(r=>r.dept===dept);
+    }
+  }
+  const allCh=sortedGroupBy(filtered,'channel'), tot=allCh.reduce((s,[,v])=>s+v,0);
   document.getElementById('tbl-channel').innerHTML=allCh.map(([ch,s],i)=>{
-    const dept=rows.find(r=>r.channel===ch)?.dept||'';
+    const d=filtered.find(r=>r.channel===ch)?.dept||'';
     return `<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td>
-      <td>${ch}</td><td><span class="bdg ${deptBadge(dept)}">${dept}</span></td>
+      <td>${ch}</td><td><span class="bdg ${deptBadge(d)}">${d}</span></td>
       <td class="num">${f억(s)}</td><td class="num">${(s/tot*100).toFixed(2)}%</td></tr>`;
   }).join('');
 }
 
-// ════ PAGE 3 ════
-function renderPage3(){
-  const rows=filterByPeriod(D26,2026);
-  if(!rows.length) return;
-  const grp=sku=>{ const s=(sku||'').toUpperCase(); if(s.startsWith('MS8')||s.startsWith('STL'))return '프리미엄 드라이기'; if(s.startsWith('MCS')||s.startsWith('MCF')||s.startsWith('MC'))return '에어샷/에어원'; if(s.startsWith('MS6')||s.startsWith('MS7'))return 'AIR JET'; if(s.startsWith('M5')||s.startsWith('M7')||s.startsWith('MF'))return '스탠다드'; if(s.startsWith('SDU')||s.startsWith('SC')||s.startsWith('CTS'))return '헤어케어'; if(s.startsWith('W')||s.startsWith('WC')||s.startsWith('WN'))return '고데기'; if(s.startsWith('JBD'))return '바디드라이어'; if(s.startsWith('SP'))return '기획패키지'; if(s.startsWith('CCA')||s.startsWith('CMC')||s.startsWith('CCL'))return '케미컬/코스메틱'; return '기타'; };
-  const sm={};
-  rows.forEach(r=>{ if(!sm[r.sku]) sm[r.sku]={sku:r.sku,grp:grp(r.sku),qty:0,sales:0}; sm[r.sku].qty+=(r.qty||0); sm[r.sku].sales+=(r.sales||0); });
-  const sa=Object.values(sm).sort((a,b)=>b.sales-a.sales);
-  const tot=sa.reduce((s,x)=>s+x.sales,0);
-  const gm={}; sa.forEach(x=>{ gm[x.grp]=(gm[x.grp]||0)+x.sales; });
-  const ga=Object.entries(gm).sort((a,b)=>b[1]-a[1]);
-  const gc=['#2563EB','#0D9488','#D97706','#DC2626','#16A34A','#7C3AED','#0369A1','#BE185D','#064E3B','#78350F'];
-  destroyChart('ch-sku-grp');
-  charts['ch-sku-grp']=new Chart(document.getElementById('ch-sku-grp'),{type:'doughnut',
-    data:{labels:ga.map(([k])=>k),datasets:[{data:ga.map(([,v])=>v),backgroundColor:gc,borderWidth:2,borderColor:'#fff'}]},
-    plugins:[{id:'doughnutLabel',afterDatasetsDraw(chart){
-      const{ctx}=chart;
-      ctx.save();
-      chart.getDatasetMeta(0).data.forEach((arc,i)=>{
-        const v=ga[i][1];
-        if(v/tot<0.03) return;
-        const pct=(v/tot*100).toFixed(2)+'%';
-        const angle=(arc.startAngle+arc.endAngle)/2;
-        const r=(arc.outerRadius+arc.innerRadius)/2;
-        const x=arc.x+Math.cos(angle)*r;
-        const y=arc.y+Math.sin(angle)*r;
-        ctx.fillStyle='#fff'; ctx.font='bold 11px "JetBrains Mono",monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
-        ctx.fillText(pct,x,y);
-      });
-      ctx.restore();
-    }}],
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+f억(ctx.raw)+' ('+fPct(ctx.raw/tot)+')'}}}}});
-  document.getElementById('sku-hbar').innerHTML=sa.slice(0,20).map(x=>`
-    <div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span class="hbar-nums">${f억(x.sales)}</span></div>
-    <div class="hbar-track"><div class="hbar-fill" style="width:${(x.sales/sa[0].sales*100).toFixed(1)}%;background:#2563EB"></div></div></div>`).join('');
-  document.getElementById('tbl-sku').innerHTML=sa.slice(0,50).map((x,i)=>`
-    <tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td>
-    <td style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700">${x.sku}</td>
-    <td><span class="bdg b-gray">${x.grp}</span></td>
-    <td class="num">${fNum(x.qty)}</td><td class="num">${f억(x.sales)}</td><td class="num">${(x.sales/tot*100).toFixed(2)}%</td></tr>`).join('');
-}
-
-// ════ PAGE 4 ════
-function renderPage4(){
+// ════ PAGE 2 ════
+function renderPage2(){
   const s26=m=>D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0);
   const s25=m=>D25.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2025)===2025).reduce((s,r)=>s+(r.sales||0),0);
   const months=[...new Set([...D26,...D25].map(r=>r.month||Number(String(r.ym||'').split('-')[1])||0))].filter(Boolean).sort((a,b)=>a-b);
@@ -1115,7 +973,7 @@ function renderPage4(){
   const setV=(id,v,cls)=>{ const el=document.getElementById(id); if(el){el.textContent=v;if(cls)el.className='kpi3-val '+cls;} };
   setV('p4-2026',f억(t26),'blue'); setV('p4-2025',f억(t25),'red');
   setV('p4-diff',(diff>=0?'+':'')+f억(diff),diff>=0?'green':'red');
-  setV('p4-rate',yr!==null?(yr>=0?'+':'')+fPct(Math.abs(yr)):'—',yr===null?'':yr>=0?'green':'red');
+  setV('p4-rate',yr!==null?(yr>=0?'+':'-')+fPct(Math.abs(yr)):'—',yr===null?'':yr>=0?'green':'red');
   destroyChart('ch-yoy');
   const yoyLabelPlugin={id:'yoyP4Label',afterDatasetsDraw(chart){
     const{ctx}=chart;
@@ -1152,22 +1010,26 @@ function renderPage4(){
       scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}});
   const allCh=[...new Set([...D26,...D25].map(r=>r.channel))];
   const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
+  const maxChRate=Math.max(...chY.map(x=>Math.abs(x.rate)),0.01);
   document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
     const sign=x.rate>=0?'+':'-';
     const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-    return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.min(x.s26/chY[0].s26*100,100).toFixed(1)}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
+    const barW=Math.min(Math.abs(x.rate)/maxChRate*100,100).toFixed(1);
+    return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
   }).join('');
   const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
-  const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.rate-a.rate).slice(0,15);
+  const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
+  const maxSkuRate=Math.max(...skY.map(x=>Math.abs(x.rate)),0.01);
   document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
     const sign=x.rate>=0?'+':'-';
     const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-    return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.min(Math.abs(x.rate)*40,100).toFixed(1)}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
+    const barW=Math.min(Math.abs(x.rate)/maxSkuRate*100,100).toFixed(1);
+    return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
   }).join('');
 }
 
-// ════ PAGE 5 ════
-function renderPage5(){
+// ════ PAGE 3 ════
+function renderPage3(){
   const rows=filterByPeriod(D26,2026);
   const mk=(filteredRows,id)=>{
     const ch=sortedGroupBy(filteredRows,'channel').slice(0,10);
@@ -1200,7 +1062,7 @@ function destroyChart(id){ if(charts[id]){ charts[id].destroy(); delete charts[i
 function groupBy(rows,key){ const m={}; rows.forEach(r=>{ m[r[key]]=(m[r[key]]||0)+(r.sales||0); }); return m; }
 function sortedGroupBy(rows,key){ return Object.entries(groupBy(rows,key)).sort((a,b)=>b[1]-a[1]); }
 
-const TITLES=['전체 실적 요약','팀별 실적','채널별 실적','품목별 실적','전년 동기 대비','TOP 10 랭킹'];
+const TITLES=['전체 실적 요약','채널별 실적','전년 동기 대비','TOP 10 랭킹'];
 function goPage(i){
   document.querySelectorAll('.pg').forEach((p,j)=>p.classList.toggle('on',i===j));
   document.querySelectorAll('.nb').forEach((b,j)=>b.classList.toggle('on',i===j));
