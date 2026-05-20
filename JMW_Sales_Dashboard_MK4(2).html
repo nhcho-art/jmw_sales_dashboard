@@ -1019,21 +1019,19 @@ function renderPage2(){
   setTimeout(()=>{
     const allCh=[...new Set([...D26,...D25].map(r=>r.channel))];
     const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
-    const maxChRate=Math.max(...chY.map(x=>Math.abs(x.rate)),0.01);
     document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
       const sign=x.rate>=0?'+':'-';
       const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-      const barW=Math.min(Math.abs(x.rate)/maxChRate*100,100).toFixed(1);
+      const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
       return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
     }).join('');
 
     const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
     const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
-    const maxSkuRate=Math.max(...skY.map(x=>Math.abs(x.rate)),0.01);
     document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
       const sign=x.rate>=0?'+':'-';
       const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-      const barW=Math.min(Math.abs(x.rate)/maxSkuRate*100,100).toFixed(1);
+      const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
       return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
     }).join('');
   }, 50);
