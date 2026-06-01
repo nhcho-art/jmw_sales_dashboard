@@ -572,7 +572,6 @@ function buildMonthSelect(){
 function onMonthSelect(val){
   if(!val) return;
   selectedMonth = Number(val);
-  // 당월 모드로 전환 + 탭 UI 업데이트
   currentPeriod = 'month';
   document.querySelectorAll('.ptab').forEach(b => b.classList.remove('on'));
   PERIOD_MONTHS.month = [selectedMonth];
@@ -581,7 +580,7 @@ function onMonthSelect(val){
   ['p1-period-tag','p3-period-tag'].forEach(id => {
     const el = document.getElementById(id); if(el) el.textContent = PERIOD_LABELS.month;
   });
-  // 드롭다운 활성화 스타일
+  const sel = document.getElementById('month-select');
   if(sel){
     sel.style.background = 'var(--blue)';
     sel.style.color = '#fff';
