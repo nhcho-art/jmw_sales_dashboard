@@ -290,7 +290,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           </div>
           <div class="rate-wrap">
             <div class="rate-title">목표 대비 달성율</div>
-            <div class="rate-track"><div class="rate-fill" id="p0-m-bar" style="width:0%"><span class="rate-lbl" id="p0-m-bar-lbl"></span></div></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="rate-track" style="flex:1;"><div class="rate-fill" id="p0-m-bar" style="width:0%"><span class="rate-lbl" id="p0-m-bar-lbl"></span></div></div>
+              <span id="p0-m-bar-out" style="font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace;white-space:nowrap;display:none;"></span>
+            </div>
             <div class="rate-ticks"><span class="rate-tick">0%</span><span class="rate-tick">25%</span><span class="rate-tick">50%</span><span class="rate-tick">75%</span><span class="rate-tick">100%</span></div>
           </div>
 
@@ -859,8 +862,15 @@ function renderMonthCard(){
   const mPct=Math.min(mRate*100,100);
   setTimeout(()=>{
     const b=document.getElementById('p0-m-bar');
+    const outEl=document.getElementById('p0-m-bar-out');
     b.style.width=mPct+'%'; b.style.background=mBg;
-    setText('p0-m-bar-lbl',mPct>18?fRate(mRate)+'%':'');
+    if(mPct>=25){
+      setText('p0-m-bar-lbl',fRate(mRate)+'%');
+      if(outEl){outEl.style.display='none';}
+    } else {
+      setText('p0-m-bar-lbl','');
+      if(outEl){outEl.style.display='inline';outEl.style.color=mBg;outEl.textContent=fRate(mRate)+'%';}
+    }
   },200);
 
   // 시뮬레이션 (현재 월이면 동적, 과거 월이면 확정값 표시)
