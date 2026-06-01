@@ -972,7 +972,15 @@ function renderYoYMainChart(){
 // ════ PAGE 1 ════
 function renderPage1(){
   const rows=filterByPeriod(D26,2026);
-  if(!rows.length) return;
+
+  // 데이터 없을 때 차트 비우고 종료
+  if(!rows.length){
+    ['ch-md','ch-sales','ch-overseas'].forEach(id=>destroyChart(id));
+    document.getElementById('tbl-channel').innerHTML=`<tr><td colspan="5" style="text-align:center;color:#94A3B8;padding:24px;">선택한 기간의 데이터가 없습니다.</td></tr>`;
+    const overseasWrap=document.getElementById('overseas-wrap');
+    if(overseasWrap) overseasWrap.style.display='none';
+    return;
+  }
 
   const hbarLabelPlugin={id:'hbarLabel',afterDatasetsDraw(chart){
     const{ctx}=chart;ctx.save();
@@ -1095,6 +1103,13 @@ function renderPage2(){
 // ════ PAGE 3 ════
 function renderPage3(){
   const rows=filterByPeriod(D26,2026);
+  const emptyMsg=`<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:24px;">선택한 기간의 데이터가 없습니다.</td></tr>`;
+  if(!rows.length){
+    ['top-md','top-sales','top-overseas','top-sku'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=emptyMsg; });
+    const overseasTop=document.getElementById('overseas-top-wrap');
+    if(overseasTop) overseasTop.style.display='none';
+    return;
+  }
   const mk=(filteredRows,id)=>{
     const ch=sortedGroupBy(filteredRows,'channel').slice(0,10);
     const t=ch.reduce((s,[,v])=>s+v,0);
