@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>JMW Sales Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--blue:#2563EB;--teal:#0D9488;--amber:#D97706;
+  --red:#DC2626;--green:#16A34A;--purple:#7C3AED;--orange:#EA580C;
+  --bg:#F0F4F8;--card:#FFFFFF;--card2:#F8FAFC;
+  --border:#CBD5E1;--border2:#E2E8F0;
+  --text:#0F172A;--text2:#334155;--text3:#64748B;--text4:#94A3B8;
+  --sh:0 1px 4px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.05);
+  --tab-h:60px;
+}
+html,body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;overflow-x:hidden;}
+
+/* ── 상단 헤더 ── */
+.m-header{background:var(--navy);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.m-header-left{display:flex;align-items:center;gap:8px;}
+.m-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;box-shadow:0 0 8px rgba(37,99,235,.7);}
+.m-brand{font-size:15px;font-weight:800;color:#fff;}
+.m-sub{font-size:9px;color:rgba(255,255,255,.35);font-family:'JetBrains Mono',monospace;}
+.m-refresh{padding:6px 12px;border-radius:7px;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.8);font-size:11px;font-family:'Noto Sans KR',sans-serif;cursor:pointer;font-weight:600;}
+.m-refresh:active{background:rgba(255,255,255,.1);}
+
+/* ── KPI 상단 바 ── */
+.m-kpi-bar{background:var(--navy);padding:0 16px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.m-kpi-item{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 12px;}
+.m-kpi-v{font-size:18px;font-weight:800;color:#fff;font-family:'JetBrains Mono',monospace;display:block;}
+.m-kpi-l{font-size:10px;color:rgba(255,255,255,.4);display:block;margin-top:2px;}
+
+/* ── 기간 선택 바 ── */
+.m-period-bar{background:var(--card);border-bottom:1.5px solid var(--border);padding:8px 12px;display:flex;align-items:center;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:88px;z-index:90;}
+.m-period-bar::-webkit-scrollbar{display:none;}
+.m-ptab{padding:5px 12px;border-radius:20px;border:1.5px solid transparent;font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;background:transparent;color:var(--text3);white-space:nowrap;flex-shrink:0;}
+.m-ptab.on{background:var(--blue);color:#fff;border-color:var(--blue);}
+.m-month-sel{padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;outline:none;flex-shrink:0;}
+
+/* ── 로딩 카운트다운 ── */
+.m-loading{background:var(--navy);padding:10px 16px 14px;}
+.m-loading-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.m-loading-msg{font-size:10px;color:rgba(255,255,255,.5);font-family:'Noto Sans KR',sans-serif;}
+.m-loading-sec{font-size:11px;font-weight:700;color:rgba(255,255,255,.7);font-family:'JetBrains Mono',monospace;}
+.m-loading-track{height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+.m-loading-bar{height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 55%,#84CC16 68%,#FACC15 78%,#F97316 88%,#EF4444 100%);transition:width .9s linear;}
+
+/* ── 페이지 콘텐츠 ── */
+.m-content{padding:12px 12px calc(var(--tab-h) + 16px);}
+.m-pg{display:none;}
+.m-pg.on{display:block;}
+
+/* ── 카드 ── */
+.m-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;box-shadow:var(--sh);margin-bottom:12px;overflow:hidden;}
+.m-card-hd{padding:12px 14px 10px;background:#F8FAFC;border-bottom:1.5px solid var(--border);}
+.m-card-hd-title{font-size:13px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.m-card-hd-sub{font-size:10px;color:var(--text3);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+.m-card-body{padding:14px;}
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
+.badge-blue{background:rgba(37,99,235,.12);color:#1D4ED8;}
+.badge-teal{background:rgba(13,148,136,.12);color:#0D7A70;}
+
+/* ── KPI 3칸 ── */
+.m-kpi3{display:grid;grid-template-columns:1fr 1fr 1fr;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.m-kpi3-item{padding:10px 8px;border-right:1.5px solid var(--border);}
+.m-kpi3-item:last-child{border-right:none;}
+.m-kpi3-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.m-kpi3-val{font-size:18px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1;}
+.m-kpi3-val.blue{color:var(--blue);}
+.m-kpi3-val.teal{color:var(--teal);}
+.m-kpi3-val.amber{color:var(--amber);}
+.m-kpi3-val.green{color:var(--green);}
+.m-kpi3-val.red{color:var(--red);}
+.m-kpi3-unit{font-size:10px;color:var(--text3);margin-top:2px;}
+
+/* ── 달성율 바 ── */
+.m-rate-wrap{margin-bottom:14px;}
+.m-rate-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;}
+.m-rate-track{height:28px;background:#EEF2F7;border-radius:8px;overflow:hidden;border:1px solid var(--border2);}
+.m-rate-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width 1.1s cubic-bezier(.4,0,.2,1);}
+.m-rate-lbl{font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;}
+.m-rate-ticks{display:flex;justify-content:space-between;margin-top:3px;}
+.m-rate-tick{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;}
+
+/* ── 시뮬레이션 박스 ── */
+.m-sim-box{background:var(--card2);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.m-sim-title{padding:7px 12px;background:#EEF2F7;border-bottom:1.5px solid var(--border);font-size:10px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;}
+.m-sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.m-sim-item{padding:10px 12px;border-right:1.5px solid var(--border);border-bottom:1.5px solid var(--border);}
+.m-sim-item:nth-child(2n){border-right:none;}
+.m-sim-item:nth-child(5),.m-sim-item:nth-child(6){border-bottom:none;}
+.m-sim-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;}
+.m-sim-val{font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--text);}
+.m-sim-val.hl-blue{color:var(--blue);}
+.m-sim-val.hl-green{color:var(--green);}
+.m-sim-val.hl-red{color:var(--red);}
+
+/* ── 월별 미니바 ── */
+.m-month-sec-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;}
+.m-mb-row{display:grid;grid-template-columns:28px 1fr 52px 46px;gap:4px;align-items:center;margin-bottom:6px;}
+.m-mb-lbl{font-size:11px;font-weight:700;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+.m-mb-track{position:relative;height:14px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);}
+.m-mb-val{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;text-align:right;}
+.m-mb-pct{font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;text-align:right;}
+
+/* ── G.I BAR ── */
+.m-gi-wrap{background:#1A2942;border:1.5px solid #2D4A6E;border-radius:14px;padding:16px;margin-bottom:12px;}
+.m-gi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+.m-gi-title{font-size:13px;font-weight:800;color:#fff;}
+.m-gi-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+.m-gi-pct{font-size:36px;font-weight:800;color:#fff;font-family:'JetBrains Mono',monospace;line-height:1;text-align:right;}
+.m-gi-pct span{font-size:16px;font-weight:500;color:rgba(255,255,255,.45);}
+.m-gi-gap{font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;text-align:right;font-family:'JetBrains Mono',monospace;}
+.m-gi-track{height:20px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,.07);position:relative;}
+.m-gi-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#1D4ED8 0%,#2563EB 25%,#06B6D4 45%,#10B981 60%,#84CC16 72%,#FACC15 82%,#F97316 90%,#EF4444 100%);transition:width 1.3s cubic-bezier(.4,0,.2,1);position:relative;}
+.m-gi-fill::after{content:'';position:absolute;top:0;right:0;bottom:0;width:3px;background:rgba(255,255,255,.85);border-radius:2px;}
+.m-gi-divider{position:absolute;top:0;bottom:0;width:2px;background:rgba(255,255,255,.35);}
+.m-gi-zone-labels{position:relative;height:24px;margin-bottom:2px;}
+.m-gi-zone-pin{position:absolute;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:1px;bottom:0;}
+.m-gi-zone-pin .z-pct{font-size:10px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.m-gi-zone-pin .z-name{font-size:8px;font-weight:600;font-family:'JetBrains Mono',monospace;opacity:.75;}
+.m-gi-zone-pin .z-arrow{font-size:9px;line-height:1;}
+.m-gi-scale{position:relative;height:14px;margin-top:4px;}
+.m-gi-scale-txt{font-size:9px;color:rgba(255,255,255,.28);font-family:'JetBrains Mono',monospace;position:absolute;transform:translateX(-50%);}
+
+/* ── YoY ── */
+.m-yoy-legend{display:flex;gap:12px;margin-bottom:10px;}
+.m-yoy-legend-item{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--text2);}
+.m-yoy-legend-dot{width:11px;height:11px;border-radius:3px;}
+
+/* ── 테이블 ── */
+.m-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.m-tbl th{background:#F1F5F9;font-weight:700;font-size:10px;padding:8px 10px;text-align:left;color:var(--text3);border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.3px;}
+.m-tbl td{padding:8px 10px;border-bottom:1.5px solid var(--border2);}
+.m-tbl tr:last-child td{border-bottom:none;}
+.m-tbl td.num,.m-tbl th.num{font-family:'JetBrains Mono',monospace;font-weight:700;text-align:right;}
+.rank{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:4px;font-size:10px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.r1{background:#FEF3C7;color:#92400E;}.r2{background:#F1F5F9;color:#475569;}.r3{background:#FEE2E2;color:#991B1B;}.rn{background:#F8FAFC;color:#94A3B8;}
+.bdg{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;}
+.b-blue{background:rgba(37,99,235,.1);color:#1D4ED8;}
+.b-teal{background:rgba(13,148,136,.1);color:#0D7A70;}
+.b-gray{background:#F1F5F9;color:var(--text2);}
+.b-orange{background:rgba(234,88,12,.1);color:#C2410C;}
+.b-purple{background:rgba(124,58,237,.1);color:#6D28D9;}
+
+/* ── hbar ── */
+.m-hbar-list{display:flex;flex-direction:column;gap:8px;}
+.m-hbar-item{display:flex;flex-direction:column;gap:2px;}
+.m-hbar-top{display:flex;justify-content:space-between;align-items:baseline;}
+.m-hbar-name{font-size:12px;color:var(--text2);font-weight:600;}
+.m-hbar-track{height:5px;background:#EEF2F7;border-radius:3px;overflow:hidden;}
+.m-hbar-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+
+/* ── 섹션 타이틀 ── */
+.m-sec-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:6px;}
+.m-sec-title .tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(37,99,235,.1);color:var(--blue);}
+
+/* ── 배너 ── */
+#m-banner{position:fixed;top:0;left:0;right:0;z-index:200;padding:8px 16px;font-size:12px;display:none;align-items:center;gap:6px;}
+
+/* ── 하단 탭바 ── */
+.m-tabbar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--card);border-top:1.5px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);z-index:100;box-shadow:0 -2px 12px rgba(0,0,0,.08);}
+.m-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:transparent;cursor:pointer;color:var(--text3);font-family:'Noto Sans KR',sans-serif;padding:6px 0;}
+.m-tab.on{color:var(--blue);}
+.m-tab-icon{font-size:20px;line-height:1;}
+.m-tab-label{font-size:9px;font-weight:600;}
+
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div class="m-header">
+  <div class="m-header-left">
+    <span class="m-dot"></span>
+    <div>
+      <div class="m-brand">JMW SALES</div>
+      <div class="m-sub">Sales Dashboard v4.5</div>
+    </div>
+  </div>
+  <button class="m-refresh" onclick="loadData(true)">🔄 갱신</button>
+</div>
+
+<!-- KPI 상단 바 -->
+<div class="m-kpi-bar">
+  <div class="m-kpi-item"><span class="m-kpi-v" id="sb-monthly">—</span><span class="m-kpi-l">당월 매출</span></div>
+  <div class="m-kpi-item"><span class="m-kpi-v" id="sb-rate">—</span><span class="m-kpi-l">상반기 달성율</span></div>
+</div>
+
+<!-- 로딩 카운트다운 -->
+<div class="m-loading" id="loading-wrap">
+  <div class="m-loading-row">
+    <span class="m-loading-msg" id="loading-msg">📡 Google Sheets 연결 중...</span>
+    <span class="m-loading-sec" id="loading-sec">20s</span>
+  </div>
+  <div class="m-loading-track"><div class="m-loading-bar" id="loading-bar"></div></div>
+</div>
+
+<!-- 기간 선택 바 -->
+<div class="m-period-bar">
+  <select class="m-month-sel" id="month-select" onchange="onMonthSelect(this.value)">
+    <option value="">📅 월 선택</option>
+  </select>
+  <button class="m-ptab" onclick="setPeriod('q1',this)">Q1</button>
+  <button class="m-ptab" onclick="setPeriod('q2',this)">Q2</button>
+  <button class="m-ptab" onclick="setPeriod('h1',this)">상반기</button>
+  <button class="m-ptab" onclick="setPeriod('h2',this)">하반기</button>
+  <button class="m-ptab on" onclick="setPeriod('year',this)">연간</button>
+</div>
+
+<div id="m-banner"></div>
+
+<!-- 콘텐츠 영역 -->
+<div class="m-content">
+
+  <!-- PAGE 0: 전체 실적 요약 -->
+  <div class="m-pg on" id="p0">
+
+    <!-- 당월 카드 -->
+    <div class="m-card">
+      <div class="m-card-hd">
+        <div class="m-card-hd-title">📅 월별 목표 대비 실적 <span class="badge badge-blue" id="p0-badge-m">2026년 6월</span></div>
+        <div class="m-card-hd-sub" id="p0-m-days">로딩 중...</div>
+      </div>
+      <div class="m-card-body">
+        <div class="m-kpi3">
+          <div class="m-kpi3-item"><div class="m-kpi3-lbl">📌 목표</div><div class="m-kpi3-val" id="p0-m-tgt">—</div><div class="m-kpi3-unit">원</div></div>
+          <div class="m-kpi3-item"><div class="m-kpi3-lbl">✅ 실적</div><div class="m-kpi3-val blue" id="p0-m-act">—</div><div class="m-kpi3-unit">원</div></div>
+          <div class="m-kpi3-item"><div class="m-kpi3-lbl">📊 달성율</div><div class="m-kpi3-val amber" id="p0-m-rate">—</div><div class="m-kpi3-unit">%</div></div>
+        </div>
+        <div class="m-rate-wrap">
+          <div class="m-rate-title">목표 대비 달성율</div>
+          <div class="m-rate-track"><div class="m-rate-fill" id="p0-m-bar" style="width:0%"><span class="m-rate-lbl" id="p0-m-bar-lbl"></span></div></div>
+          <div class="m-rate-ticks"><span class="m-rate-tick">0%</span><span class="m-rate-tick">25%</span><span class="m-rate-tick">50%</span><span class="m-rate-tick">75%</span><span class="m-rate-tick">100%</span></div>
+        </div>
+        <!-- 일별 차트 -->
+        <div class="m-rate-title" id="daily-chart-title" style="margin-bottom:8px;">📈 일별 매출 추이</div>
+        <div style="position:relative;height:160px;margin-bottom:14px;"><canvas id="ch-daily"></canvas></div>
+        <!-- 시뮬레이션 -->
+        <div class="m-sim-box">
+          <div class="m-sim-title">📐 매출 시뮬레이션</div>
+          <div class="m-sim-grid">
+            <div class="m-sim-item"><div class="m-sim-lbl">당월 목표</div><div class="m-sim-val" id="sim-tgt">—</div></div>
+            <div class="m-sim-item"><div class="m-sim-lbl">현재 실적</div><div class="m-sim-val hl-blue" id="sim-act">—</div></div>
+            <div class="m-sim-item"><div class="m-sim-lbl">일평균</div><div class="m-sim-val" id="sim-daily">—</div></div>
+            <div class="m-sim-item"><div class="m-sim-lbl">잔여 예상</div><div class="m-sim-val" id="sim-remain">—</div></div>
+            <div class="m-sim-item"><div class="m-sim-lbl">월말 예측</div><div class="m-sim-val" id="sim-forecast">—</div></div>
+            <div class="m-sim-item"><div class="m-sim-lbl">과부족</div><div class="m-sim-val" id="sim-gap">—</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상반기 카드 -->
+    <div class="m-card">
+      <div class="m-card-hd">
+        <div class="m-card-hd-title">📆 상반기 목표 대비 실적 <span class="badge badge-teal">1~6월</span></div>
+        <div class="m-card-hd-sub" id="p0-h1-sub">로딩 중...</div>
+      </div>
+      <div class="m-card-body">
+        <div class="m-kpi3">
+          <div class="m-kpi3-item"><div class="m-kpi3-lbl">📌 목표</div><div class="m-kpi3-val" id="p0-h1-tgt">—</div><div class="m-kpi3-unit">원</div></div>
+          <div class="m-kpi3-item"><div class="m-kpi3-lbl">✅ 실적</div><div class="m-kpi3-val teal" id="p0-h1-act">—</div><div class="m-kpi3-unit">원</div></div>
+          <div class="m-kpi3-item"><div class="m-kpi3-lbl">📊 달성율</div><div class="m-kpi3-val teal" id="p0-h1-rate">—</div><div class="m-kpi3-unit">%</div></div>
+        </div>
+        <div class="m-rate-wrap">
+          <div class="m-rate-title">목표 대비 달성율</div>
+          <div class="m-rate-track"><div class="m-rate-fill" id="p0-h1-bar" style="width:0%"><span class="m-rate-lbl" id="p0-h1-bar-lbl"></span></div></div>
+          <div class="m-rate-ticks"><span class="m-rate-tick">0%</span><span class="m-rate-tick">25%</span><span class="m-rate-tick">50%</span><span class="m-rate-tick">75%</span><span class="m-rate-tick">100%</span></div>
+        </div>
+        <div class="m-month-sec-title">월별 실적 현황 (목표 대비)</div>
+        <div id="p0-month-bars"></div>
+      </div>
+    </div>
+
+    <!-- G.I BAR -->
+    <div class="m-gi-wrap">
+      <div class="m-gi-top">
+        <div>
+          <div class="m-gi-title">📊 G.I BAR — 상반기 진척률</div>
+          <div class="m-gi-sub" id="gi-sub">로딩 중...</div>
+        </div>
+        <div>
+          <div class="m-gi-pct" id="gi-pct">—<span>%</span></div>
+          <div class="m-gi-gap" id="gi-gap">—</div>
+        </div>
+      </div>
+      <div class="m-gi-zone-labels">
+        <div class="m-gi-zone-pin" style="left:85%">
+          <span class="z-pct" style="color:rgba(250,204,21,.95)">85%</span>
+          <span class="z-name" style="color:rgba(250,204,21,.7)">1구간</span>
+          <span class="z-arrow" style="color:rgba(250,204,21,.6)">▼</span>
+        </div>
+        <div class="m-gi-zone-pin" style="left:90%">
+          <span class="z-pct" style="color:rgba(16,185,129,.95)">90%</span>
+          <span class="z-name" style="color:rgba(16,185,129,.7)">2구간</span>
+          <span class="z-arrow" style="color:rgba(16,185,129,.6)">▼</span>
+        </div>
+        <div class="m-gi-zone-pin" style="left:99%">
+          <span class="z-pct" style="color:rgba(255,255,255,.6)">100%</span>
+          <span class="z-name" style="color:rgba(255,255,255,.4)">3구간</span>
+          <span class="z-arrow" style="color:rgba(255,255,255,.35)">▼</span>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <div class="m-gi-track">
+          <div class="m-gi-fill" id="gi-fill" style="width:0%"></div>
+          <div class="m-gi-divider" style="left:85%"></div>
+          <div class="m-gi-divider" style="left:90%"></div>
+        </div>
+      </div>
+      <div class="m-gi-scale">
+        <span class="m-gi-scale-txt" style="left:0%;transform:none;">0%</span>
+        <span class="m-gi-scale-txt" style="left:50%">50%</span>
+        <span class="m-gi-scale-txt" style="left:85%;color:rgba(250,204,21,.5)">85%</span>
+        <span class="m-gi-scale-txt" style="left:90%;color:rgba(16,185,129,.5)">90%</span>
+        <span class="m-gi-scale-txt" style="left:100%;transform:translateX(-100%)">100%</span>
+      </div>
+    </div>
+
+    <!-- YoY 차트 -->
+    <div class="m-card">
+      <div class="m-card-hd">
+        <div class="m-card-hd-title">📊 2025 vs 2026 월별 비교</div>
+        <div class="m-card-hd-sub">전년 동기 대비 · 막대 위 증감율</div>
+      </div>
+      <div class="m-card-body">
+        <div class="m-yoy-legend">
+          <div class="m-yoy-legend-item"><div class="m-yoy-legend-dot" style="background:#EF4444;opacity:.7"></div><span>2025년</span></div>
+          <div class="m-yoy-legend-item"><div class="m-yoy-legend-dot" style="background:#2563EB;opacity:.8"></div><span>2026년</span></div>
+        </div>
+        <div style="position:relative;height:220px;"><canvas id="ch-yoy-main"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 1: 채널별 실적 -->
+  <div class="m-pg" id="p1">
+    <div class="m-sec-title">🛒 채널별 실적 <span class="tag" id="p1-period-tag">기간 선택</span></div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:3px;">이커머스 파트 TOP 15</div>
+        <div style="position:relative;height:340px;"><canvas id="ch-md"></canvas></div>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:3px;">리테일 파트 TOP 15</div>
+        <div style="position:relative;height:340px;"><canvas id="ch-sales"></canvas></div>
+      </div>
+    </div>
+    <div id="overseas-wrap" style="display:none;">
+      <div class="m-card">
+        <div class="m-card-body">
+          <div style="font-size:13px;font-weight:800;margin-bottom:3px;">🌏 해외영업팀 TOP 15</div>
+          <div style="position:relative;height:340px;"><canvas id="ch-overseas"></canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:10px;">전체 채널 목록</div>
+        <div style="overflow-x:auto;">
+          <table class="m-tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출</th><th class="num">비중</th></tr></thead><tbody id="tbl-channel"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: 전년 동기 대비 -->
+  <div class="m-pg" id="p2">
+    <div class="m-sec-title">📈 전년 동기 대비 <span class="tag">2025 vs 2026</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div class="m-card" style="padding:14px;border-top:3px solid var(--blue)"><div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">2026 누적</div><div class="m-kpi3-val blue" id="p4-2026">—</div></div>
+      <div class="m-card" style="padding:14px;border-top:3px solid #EF4444"><div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">2025 동기</div><div class="m-kpi3-val red" id="p4-2025">—</div></div>
+      <div class="m-card" style="padding:14px;border-top:3px solid var(--green)"><div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">증감액</div><div class="m-kpi3-val" id="p4-diff">—</div></div>
+      <div class="m-card" style="padding:14px;border-top:3px solid var(--green)"><div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">YoY 성장율</div><div class="m-kpi3-val" id="p4-rate">—</div></div>
+    </div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:3px;">월별 전년 동기 대비</div>
+        <div style="position:relative;height:220px;"><canvas id="ch-yoy"></canvas></div>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:10px;">채널별 YoY</div>
+        <div class="m-hbar-list" id="yoy-channel"></div>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:10px;">전년 대비 주요 모델</div>
+        <div class="m-hbar-list" id="yoy-sku"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: TOP 10 랭킹 -->
+  <div class="m-pg" id="p3">
+    <div class="m-sec-title">🏆 TOP 10 랭킹 <span class="tag" id="p3-period-tag">기간 선택</span></div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:10px;">🛒 이커머스 파트 TOP 10</div>
+        <table class="m-tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출</th><th class="num">비중</th></tr></thead><tbody id="top-md"></tbody></table>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:10px;">🏪 리테일 파트 TOP 10</div>
+        <table class="m-tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출</th><th class="num">비중</th></tr></thead><tbody id="top-sales"></tbody></table>
+      </div>
+    </div>
+    <div id="overseas-top-wrap" style="display:none;">
+      <div class="m-card">
+        <div class="m-card-body">
+          <div style="font-size:13px;font-weight:800;margin-bottom:10px;">🌏 해외영업팀 TOP 10</div>
+          <table class="m-tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출</th><th class="num">비중</th></tr></thead><tbody id="top-overseas"></tbody></table>
+        </div>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-card-body">
+        <div style="font-size:13px;font-weight:800;margin-bottom:10px;">📦 제품 TOP 10</div>
+        <table class="m-tbl"><thead><tr><th>순위</th><th>품번</th><th class="num">매출</th><th class="num">비중</th></tr></thead><tbody id="top-sku"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 하단 탭바 -->
+<div class="m-tabbar">
+  <button class="m-tab on" onclick="goPage(0,this)"><span class="m-tab-icon">📊</span><span class="m-tab-label">요약</span></button>
+  <button class="m-tab" onclick="goPage(1,this)"><span class="m-tab-icon">🛒</span><span class="m-tab-label">채널별</span></button>
+  <button class="m-tab" onclick="goPage(2,this)"><span class="m-tab-icon">📈</span><span class="m-tab-label">전년대비</span></button>
+  <button class="m-tab" onclick="goPage(3,this)"><span class="m-tab-icon">🏆</span><span class="m-tab-label">TOP10</span></button>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDPGid3L7pOoFOBPyJSsoOIzg_UZiFl7u1YQQPq-0-ioZAPXegYAoKIGxdfqpq75e_zg/exec';
+const AUTO_REFRESH_MS = 600000;
+// ════════════════════════════════════════════
+
+function deptBadge(d){
+  const m={'이커머스 파트':'b-blue','리테일 파트':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange'};
+  return m[d]||'b-gray';
+}
+
+const TGT = {
+  h1tgt: 21974128497, h1act: 0,
+  monthly: [
+    {m:1,tgt:2518484217,act:2438264985},{m:2,tgt:2633625784,act:2629426277},
+    {m:3,tgt:2756655335,act:2715859066},{m:4,tgt:3096315144,act:2690420688},
+    {m:5,tgt:3453165000,act:0},{m:6,tgt:7427333450,act:0},
+  ],
+};
+
+let D26=[],D25=[],charts={},currentPeriod='year';
+let selectedMonth=new Date().getMonth()+1;
+
+// ── 포맷 ──
+const f억=v=>{
+  if(v===null||v===undefined)return'—';
+  const a=Math.abs(v),s=v<0?'-':'';
+  if(a>=1e8)return s+(a/1e8).toFixed(1)+'억';
+  if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만';
+  return v.toLocaleString();
+};
+const fRate=v=>(!v&&v!==0)||isNaN(v)||!isFinite(v)?'—':(v*100).toFixed(2);
+const fPct=v=>fRate(v)+'%';
+const fNum=v=>Math.round(v||0).toLocaleString();
+function setText(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
+function groupBy(rows,key){const m={};rows.forEach(r=>{m[r[key]]=(m[r[key]]||0)+(r.sales||0);});return m;}
+function sortedGroupBy(rows,key){return Object.entries(groupBy(rows,key)).sort((a,b)=>b[1]-a[1]);}
+
+// ── 기간 ──
+const PERIOD_MONTHS={
+  month:[new Date().getMonth()+1],
+  q1:[1,2,3],q2:[4,5,6],
+  h1:[1,2,3,4,5,6],h2:[7,8,9,10,11,12],
+  year:[1,2,3,4,5,6,7,8,9,10,11,12]
+};
+const PERIOD_LABELS={
+  month:'2026년 '+(new Date().getMonth()+1)+'월',
+  q1:'Q1 (1~3월)',q2:'Q2 (4~6월)',
+  h1:'상반기',h2:'하반기',year:'연간'
+};
+
+function setPeriod(p,btn){
+  currentPeriod=p;
+  document.querySelectorAll('.m-ptab').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  ['p1-period-tag','p3-period-tag'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.textContent=PERIOD_LABELS[p];
+  });
+  const sel=document.getElementById('month-select');
+  if(sel){sel.style.background='#fff';sel.style.color='var(--text)';sel.style.borderColor='var(--border)';sel.value='';}
+  renderAll();
+}
+
+function filterByPeriod(rows,year=2026){
+  const ms=PERIOD_MONTHS[currentPeriod]||[selectedMonth];
+  return rows.filter(r=>{
+    const m=r.month||Number(String(r.ym||'').split('-')[1])||0;
+    const y=r.year||2026;
+    return y===year&&ms.includes(m);
+  });
+}
+
+function buildMonthSelect(){
+  const sel=document.getElementById('month-select');
+  if(!sel)return;
+  const curM=new Date().getMonth()+1;
+  sel.innerHTML='<option value="">📅 월 선택</option>';
+  for(let m=1;m<=curM;m++){
+    const opt=document.createElement('option');
+    opt.value=m; opt.textContent=m+'월';
+    if(currentPeriod==='month'&&m===selectedMonth)opt.selected=true;
+    sel.appendChild(opt);
+  }
+  if(currentPeriod==='month'){sel.style.background='var(--blue)';sel.style.color='#fff';sel.style.borderColor='var(--blue)';}
+}
+
+function onMonthSelect(val){
+  if(!val)return;
+  selectedMonth=Number(val);
+  currentPeriod='month';
+  PERIOD_MONTHS.month=[selectedMonth];
+  PERIOD_LABELS.month='2026년 '+selectedMonth+'월';
+  document.querySelectorAll('.m-ptab').forEach(b=>b.classList.remove('on'));
+  ['p1-period-tag','p3-period-tag'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.textContent=PERIOD_LABELS.month;
+  });
+  const sel=document.getElementById('month-select');
+  if(sel){sel.style.background='var(--blue)';sel.style.color='#fff';sel.style.borderColor='var(--blue)';}
+  renderAll();
+}
+
+// ── 배너 ──
+function banner(msg,type='blue'){
+  const b=document.getElementById('m-banner');
+  const C={blue:['#EFF6FF','#1D4ED8','#BFDBFE'],green:['#F0FDF4','#15803D','#BBF7D0'],red:['#FEF2F2','#B91C1C','#FECACA'],amber:['#FFFBEB','#B45309','#FDE68A']};
+  const[bg,cl,br]=C[type]||C.blue;
+  b.style.cssText=`position:fixed;top:0;left:0;right:0;z-index:200;padding:8px 16px;font-size:12px;font-family:'Noto Sans KR',sans-serif;display:flex;align-items:center;gap:6px;background:${bg};color:${cl};border-bottom:2px solid ${br};`;
+  b.textContent=msg;
+  if(type==='green')setTimeout(()=>b.style.display='none',3000);
+}
+
+// ── 로딩 카운트다운 ──
+const LOADING_TOTAL=20;
+const LOADING_MSGS=[
+  {at:20,msg:'📡 Google Sheets 연결 중...'},
+  {at:17,msg:'📂 2026년 실적 데이터 로딩 중...'},
+  {at:13,msg:'📂 2025년 실적 데이터 로딩 중...'},
+  {at:9,msg:'📅 일별 매출 데이터 로딩 중...'},
+  {at:5,msg:'🎯 목표 데이터 파싱 중...'},
+  {at:2,msg:'✨ 대시보드 렌더링 중...'},
+];
+let _loadingTimer=null;
+
+function startLoadingCountdown(){
+  const wrap=document.getElementById('loading-wrap');
+  const bar=document.getElementById('loading-bar');
+  const sec=document.getElementById('loading-sec');
+  const msg=document.getElementById('loading-msg');
+  if(!wrap)return;
+  wrap.style.display='block';
+  let remaining=LOADING_TOTAL;
+  sec.textContent=remaining+'s';
+  bar.style.width='0%';
+  msg.textContent=LOADING_MSGS[0].msg;
+  if(_loadingTimer)clearInterval(_loadingTimer);
+  _loadingTimer=setInterval(()=>{
+    remaining--;
+    const pct=Math.min(((LOADING_TOTAL-remaining)/LOADING_TOTAL)*100,100);
+    bar.style.width=pct+'%';
+    sec.textContent=Math.max(remaining,0)+'s';
+    const step=LOADING_MSGS.find(m=>remaining<=m.at&&remaining>(m.at-3));
+    if(step)msg.textContent=step.msg;
+    if(remaining<=0)clearInterval(_loadingTimer);
+  },1000);
+}
+
+function stopLoadingCountdown(){
+  if(_loadingTimer){clearInterval(_loadingTimer);_loadingTimer=null;}
+  const wrap=document.getElementById('loading-wrap');
+  const bar=document.getElementById('loading-bar');
+  const msg=document.getElementById('loading-msg');
+  const sec=document.getElementById('loading-sec');
+  if(!wrap)return;
+  bar.style.width='100%';
+  msg.textContent='✅ 로딩 완료!';
+  sec.textContent='0s';
+  setTimeout(()=>{wrap.style.display='none';},1500);
+}
+
+// ── 데이터 로드 ──
+let autoTimer=null;
+async function loadData(manual=false){
+  startLoadingCountdown();
+  if(manual)banner('🔄 데이터 갱신 중...','blue');
+  try{
+    const res=await fetch(SCRIPT_URL+'?type=all&t='+Date.now());
+    const json=await res.json();
+    if(json.status==='ok'){
+      D26=json.data.data2026||[];
+      D25=json.data.data2025||[];
+      window._dataDaily=json.data.dataDaily||[];
+
+      if(json.data.target?.monthly?.length>0){
+        const tm=json.data.target.monthly;
+        const parsedH1Tgt=tm.slice(0,6).reduce((s,m)=>s+(m.target||0),0);
+        if(parsedH1Tgt>10000000000){
+          TGT.monthly=TGT.monthly.map(t=>{
+            const found=tm.find(x=>x.month===t.m);
+            if(found&&found.target>1000000000)return{...t,tgt:found.target};
+            return t;
+          });
+          TGT.h1tgt=parsedH1Tgt;
+        }
+      }
+
+      TGT.monthly=TGT.monthly.map(t=>{
+        const dailySales=(window._dataDaily||[]).filter(r=>r.month===t.m).reduce((s,r)=>s+(r.sales||0),0);
+        const d26Sales=D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===t.m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0);
+        const act=dailySales>0?dailySales:d26Sales;
+        return{...t,act};
+      });
+      TGT.h1act=TGT.monthly.slice(0,6).reduce((s,m)=>s+(m.act||0),0);
+
+      buildMonthSelect();
+      renderAll();
+      stopLoadingCountdown();
+      if(manual)banner(`✅ 갱신 완료 — 일별 ${window._dataDaily.length}건`,'green');
+    } else {banner('❌ 로드 실패: '+json.message,'red');stopLoadingCountdown();}
+  } catch(e){banner('❌ 연결 오류','red');stopLoadingCountdown();}
+  if(autoTimer)clearTimeout(autoTimer);
+  autoTimer=setTimeout(()=>loadData(false),AUTO_REFRESH_MS);
+}
+
+function renderAll(){renderPage0();renderPage1();renderPage2();renderPage3();}
+
+// ════ PAGE 0 ════
+function renderPage0(){
+  const h1tgt=TGT.h1tgt,h1act=TGT.h1act,h1rate=h1tgt>0?h1act/h1tgt:0;
+  const now=new Date();
+  const curM=now.getMonth()+1;
+  const curMonthData=TGT.monthly.find(m=>m.m===curM)||TGT.monthly[TGT.monthly.length-1];
+  setText('sb-monthly',f억(curMonthData.act));
+  setText('sb-rate',fRate(h1rate)+'%');
+
+  // 상반기
+  setText('p0-h1-tgt',f억(h1tgt));
+  setText('p0-h1-act',f억(h1act));
+  setText('p0-h1-rate',fRate(h1rate));
+  setText('p0-h1-sub',h1tgt>0?`목표 ${f억(h1tgt)} 기준 · G.I BAR 연동`:'로딩 중...');
+  const h1Pct=Math.min(h1rate*100,100);
+  const h1Bg=h1rate>=1?'#16A34A':h1rate>=0.9?'#0D9488':h1rate>=0.85?'#D97706':'#2563EB';
+  setTimeout(()=>{
+    const b=document.getElementById('p0-h1-bar');
+    b.style.width=h1Pct+'%';b.style.background=h1Bg;
+    setText('p0-h1-bar-lbl',h1Pct>18?fRate(h1rate)+'%':'');
+  },200);
+
+  // 월별 미니바
+  document.getElementById('p0-month-bars').innerHTML=TGT.monthly.map(m=>{
+    const r=m.tgt>0&&m.act>0?m.act/m.tgt:null;
+    const ratePct=r!==null?r*100:0;
+    const fillPct=r!==null?Math.min(ratePct,100):0;
+    const overPct=r!==null?Math.max(ratePct-100,0):0;
+    const bc=!r?'#94A3B8':ratePct>=100?'#16A34A':ratePct>=85?'#D97706':'#2563EB';
+    const rStr=r!==null?ratePct.toFixed(2)+'%':'—';
+    return `<div class="m-mb-row">
+      <span class="m-mb-lbl">${m.m}월</span>
+      <div class="m-mb-track">
+        ${r!==null&&ratePct<100?`<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>`:''}
+        <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${bc};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
+        ${overPct>0?`<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:#F59E0B;border-radius:0 4px 4px 0;"></div>`:''}
+      </div>
+      <span class="m-mb-val" style="color:${m.act>0?'var(--text)':'#94A3B8'}">${m.act>0?f억(m.act):'—'}</span>
+      <span class="m-mb-pct" style="color:${bc}">${rStr}</span>
+    </div>`;
+  }).join('');
+
+  // G.I BAR
+  const pct=h1rate*100;
+  document.getElementById('gi-pct').innerHTML=pct.toFixed(2)+'<span>%</span>';
+  const gapAmt=h1tgt-h1act;
+  setText('gi-gap',gapAmt>0?`달성까지 ${f억(gapAmt)} 남음`:'🎉 목표 달성!');
+  setText('gi-sub',h1tgt>0?`목표 ${h1tgt.toLocaleString()}원`:'로딩 중...');
+  const fillEl=document.getElementById('gi-fill');
+  fillEl.innerHTML=`<span style="position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;white-space:nowrap;">${f억(h1act)}</span>`;
+  setTimeout(()=>{fillEl.style.width=Math.min(pct,100)+'%';},200);
+
+  renderMonthCard();
+  renderYoYMainChart();
+}
+
+function renderMonthCard(){
+  const m=selectedMonth;
+  const mData=TGT.monthly.find(x=>x.m===m)||{m,tgt:0,act:0};
+  const mAct=mData.act,mTgt=mData.tgt,mRate=mTgt>0?mAct/mTgt:0;
+  const now=new Date();
+  const year=2026;
+  const daysInMonth=new Date(year,m,0).getDate();
+  let lastWorkDay=daysInMonth;
+  while(true){const dow=new Date(year,m-1,lastWorkDay).getDay();if(dow!==0&&dow!==6)break;lastWorkDay--;}
+  const isCurrentMonth=(now.getFullYear()===year&&now.getMonth()+1===m);
+  const todayDay=isCurrentMonth?now.getDate():lastWorkDay;
+  const remainDays=isCurrentMonth?Math.max(lastWorkDay-todayDay,0):0;
+  const daily=todayDay>0?Math.round(mAct/todayDay):0;
+  const remain=Math.round(daily*remainDays);
+  const forecast=isCurrentMonth?mAct+remain:mAct;
+  const simGap=forecast-mTgt;
+
+  setText('p0-badge-m','2026년 '+m+'월');
+  setText('p0-m-days',isCurrentMonth?`${todayDay}일 경과 · 잔여 ${remainDays}일`:`${m}월 확정 실적`);
+  setText('p0-m-tgt',f억(mTgt));
+  setText('p0-m-act',f억(mAct));
+  document.getElementById('p0-m-rate').textContent=fRate(mRate);
+  document.getElementById('p0-m-rate').className='m-kpi3-val '+(mRate>=1?'green':mRate>=0.85?'amber':'blue');
+
+  const mBg=mRate>=1?'#16A34A':mRate>=0.85?'#D97706':'#2563EB';
+  const mPct=Math.min(mRate*100,100);
+  setTimeout(()=>{
+    const b=document.getElementById('p0-m-bar');
+    b.style.width=mPct+'%';b.style.background=mBg;
+    setText('p0-m-bar-lbl',mPct>18?fRate(mRate)+'%':'');
+  },200);
+
+  setText('sim-tgt',f억(mTgt));
+  setText('sim-act',f억(mAct));
+  setText('sim-daily',f억(daily));
+  setText('sim-remain',isCurrentMonth?f억(remain):'—');
+  setText('sim-forecast',isCurrentMonth?f억(forecast):'—');
+  const gEl=document.getElementById('sim-gap');
+  if(isCurrentMonth){
+    gEl.textContent=(simGap>=0?'+':'')+f억(simGap);
+    gEl.className='m-sim-val '+(simGap>=0?'hl-green':'hl-red');
+  } else {
+    const fg=mAct-mTgt;
+    gEl.textContent=(fg>=0?'+':'')+f억(fg);
+    gEl.className='m-sim-val '+(fg>=0?'hl-green':'hl-red');
+  }
+  setText('daily-chart-title','📈 '+m+'월 일별 매출 추이');
+  renderDailyChart(m);
+}
+
+function renderDailyChart(month){
+  const rows=(window._dataDaily||[]).filter(r=>r.month===month);
+  if(!rows.length){
+    destroyChart('ch-daily');
+    const canvas=document.getElementById('ch-daily');
+    const ctx=canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#94A3B8';ctx.font='12px "Noto Sans KR",sans-serif';ctx.textAlign='center';
+    ctx.fillText(month+'월 일별 데이터 없음',canvas.width/2,canvas.height/2);
+    return;
+  }
+  const dayMap={};
+  rows.forEach(r=>{const d=r.day||0;if(!d)return;dayMap[d]=(dayMap[d]||0)+(r.sales||0);});
+  const days=Object.keys(dayMap).map(Number).sort((a,b)=>a-b);
+  const vals=days.map(d=>dayMap[d]);
+  const n=days.length;
+  const sumX=days.reduce((s,x)=>s+x,0),sumY=vals.reduce((s,y)=>s+y,0);
+  const sumXY=days.reduce((s,x,i)=>s+x*vals[i],0),sumX2=days.reduce((s,x)=>s+x*x,0);
+  const slope=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX)||0;
+  const intercept=(sumY-slope*sumX)/n||0;
+  const trendVals=days.map(d=>Math.max(slope*d+intercept,0));
+
+  // 모바일: 레이블 없이 툴팁만 (겹침 방지)
+  destroyChart('ch-daily');
+  charts['ch-daily']=new Chart(document.getElementById('ch-daily'),{
+    type:'line',
+    data:{
+      labels:days.map(d=>d+'일'),
+      datasets:[
+        {label:'일별 매출',data:vals,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.08)',borderWidth:2,pointBackgroundColor:'#2563EB',pointRadius:3,pointHoverRadius:6,tension:0.3,fill:true,order:1},
+        {label:'추세선',data:trendVals,borderColor:'#F43F5E',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:0,fill:false,order:2}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      layout:{padding:{top:8,right:8,left:4}},
+      plugins:{
+        legend:{position:'bottom',labels:{font:{size:10},boxWidth:12,usePointStyle:true}},
+        tooltip:{callbacks:{title:ctx=>ctx[0].label,label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},color:'#64748B',maxTicksLimit:10,maxRotation:0}},
+        y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:9},color:'#64748B',callback:v=>f억(v)}}
+      }
+    }
+  });
+}
+
+function renderYoYMainChart(){
+  const months=[1,2,3,4,5,6];
+  const get26=m=>D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0)||(TGT.monthly.find(x=>x.m===m)?.act||0);
+  const get25=m=>D25.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2025)===2025).reduce((s,r)=>s+(r.sales||0),0);
+  const data26=months.map(get26),data25=months.map(get25);
+
+  destroyChart('ch-yoy-main');
+  charts['ch-yoy-main']=new Chart(document.getElementById('ch-yoy-main'),{
+    type:'bar',
+    data:{labels:months.map(m=>m+'월'),datasets:[
+      {label:'2025',data:data25,backgroundColor:'rgba(239,68,68,.65)',borderColor:'#DC2626',borderWidth:1,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45},
+      {label:'2026',data:data26,backgroundColor:data26.map(v=>v>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:data26.map(v=>v>0?'#2563EB':'#CBD5E1'),borderWidth:1,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:8}},
+      plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:10},color:'#334155'}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:9},color:'#64748B',callback:v=>f억(v)}}}}
+  });
+}
+
+// ════ PAGE 1 ════
+function renderPage1(){
+  const rows=filterByPeriod(D26,2026);
+  if(!rows.length){
+    ['ch-md','ch-sales','ch-overseas'].forEach(id=>destroyChart(id));
+    document.getElementById('tbl-channel').innerHTML=`<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:20px;">데이터 없음</td></tr>`;
+    const ow=document.getElementById('overseas-wrap');if(ow)ow.style.display='none';
+    return;
+  }
+  const mkH=(id,data,col)=>{
+    destroyChart(id);
+    charts[id]=new Chart(document.getElementById(id),{type:'bar',
+      data:{labels:data.map(([k])=>k.length>12?k.slice(0,11)+'…':k),datasets:[{label:'매출',data:data.map(([,v])=>v),backgroundColor:col+'cc',borderColor:col,borderWidth:1,borderRadius:3}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:60}},
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>f억(ctx.raw)}}},
+        scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:9},color:'#64748B',callback:v=>f억(v)}},
+                y:{grid:{display:false},ticks:{font:{size:10},color:'#334155'}}}}});
+  };
+  mkH('ch-md',sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
+  mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='리테일 파트'),'channel').slice(0,15),'#0D9488');
+  const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
+  const ow=document.getElementById('overseas-wrap');
+  if(overseasRows.length>0&&ow){ow.style.display='block';mkH('ch-overseas',sortedGroupBy(overseasRows,'channel').slice(0,15),'#EA580C');}
+  else if(ow){ow.style.display='none';}
+
+  const filtered=rows.filter(r=>r.dept!=='영업지원팀');
+  const allCh=sortedGroupBy(filtered,'channel'),tot=allCh.reduce((s,[,v])=>s+v,0);
+  document.getElementById('tbl-channel').innerHTML=allCh.map(([ch,s],i)=>{
+    return `<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td>
+      <td style="font-size:11px;">${ch}</td>
+      <td class="num">${f억(s)}</td><td class="num">${(s/tot*100).toFixed(1)}%</td></tr>`;
+  }).join('');
+}
+
+// ════ PAGE 2 ════
+function renderPage2(){
+  const s26=m=>D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0);
+  const s25=m=>D25.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2025)===2025).reduce((s,r)=>s+(r.sales||0),0);
+  const months=[...new Set([...D26,...D25].map(r=>r.month||Number(String(r.ym||'').split('-')[1])||0))].filter(Boolean).sort((a,b)=>a-b);
+  const cm=months.filter(m=>s25(m)>0&&s26(m)>0);
+  const t26=cm.reduce((s,m)=>s+s26(m),0),t25=cm.reduce((s,m)=>s+s25(m),0);
+  const diff=t26-t25,yr=t25>0?diff/t25:null;
+  const setV=(id,v,cls)=>{const el=document.getElementById(id);if(el){el.textContent=v;if(cls)el.className='m-kpi3-val '+cls;}};
+  setV('p4-2026',f억(t26),'blue');setV('p4-2025',f억(t25),'red');
+  setV('p4-diff',(diff>=0?'+':'')+f억(diff),diff>=0?'green':'red');
+  setV('p4-rate',yr!==null?(yr>=0?'+':'-')+fPct(Math.abs(yr)):'—',yr===null?'':yr>=0?'green':'red');
+
+  requestAnimationFrame(()=>{
+    destroyChart('ch-yoy');
+    charts['ch-yoy']=new Chart(document.getElementById('ch-yoy'),{type:'bar',
+      data:{labels:months.map(m=>m+'월'),datasets:[
+        {label:'2025',data:months.map(s25),backgroundColor:'rgba(239,68,68,.65)',borderColor:'#DC2626',borderWidth:1,borderRadius:3,categoryPercentage:0.7,barPercentage:0.45},
+        {label:'2026',data:months.map(s26),backgroundColor:months.map(m=>s26(m)>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:months.map(m=>s26(m)>0?'#2563EB':'#CBD5E1'),borderWidth:1,borderRadius:3,categoryPercentage:0.7,barPercentage:0.45}]},
+      options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:8}},
+        plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}},
+        scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:9},callback:v=>f억(v)}}}}});
+  });
+
+  setTimeout(()=>{
+    const allCh=[...new Set([...D26,...D25].map(r=>r.channel))];
+    const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
+    document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
+      const sign=x.rate>=0?'+':'-';const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(1)}%`;const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
+      return `<div class="m-hbar-item"><div class="m-hbar-top"><span class="m-hbar-name">${x.ch}</span><span style="font-size:11px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="m-hbar-track"><div class="m-hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
+    }).join('');
+    const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
+    const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
+    document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
+      const sign=x.rate>=0?'+':'-';const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(1)}%`;const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
+      return `<div class="m-hbar-item"><div class="m-hbar-top"><span class="m-hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:11px">${x.sku}</span><span style="font-size:11px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="m-hbar-track"><div class="m-hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
+    }).join('');
+  },50);
+}
+
+// ════ PAGE 3 ════
+function renderPage3(){
+  const rows=filterByPeriod(D26,2026);
+  const emptyMsg=`<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:20px;">데이터 없음</td></tr>`;
+  if(!rows.length){
+    ['top-md','top-sales','top-overseas','top-sku'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=emptyMsg;});
+    const ot=document.getElementById('overseas-top-wrap');if(ot)ot.style.display='none';
+    return;
+  }
+  const mk=(filteredRows,id)=>{
+    const ch=sortedGroupBy(filteredRows,'channel').slice(0,10);
+    const t=ch.reduce((s,[,v])=>s+v,0);
+    document.getElementById(id).innerHTML=ch.map(([n,s],i)=>`<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td><td style="font-size:11px;">${n}</td><td class="num">${f억(s)}</td><td class="num">${(s/t*100).toFixed(1)}%</td></tr>`).join('');
+  };
+  mk(rows.filter(r=>r.dept==='이커머스 파트'),'top-md');
+  mk(rows.filter(r=>r.dept==='리테일 파트'),'top-sales');
+  const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
+  const ot=document.getElementById('overseas-top-wrap');
+  if(overseasRows.length>0&&ot){ot.style.display='block';mk(overseasRows,'top-overseas');}
+  else if(ot){ot.style.display='none';}
+
+  const sm={};
+  rows.forEach(r=>{if(!sm[r.sku])sm[r.sku]={sku:r.sku,qty:0,sales:0};sm[r.sku].qty+=(r.qty||0);sm[r.sku].sales+=(r.sales||0);});
+  const sa=Object.values(sm).sort((a,b)=>b.sales-a.sales).slice(0,10);
+  const t=sa.reduce((s,x)=>s+x.sales,0);
+  document.getElementById('top-sku').innerHTML=sa.map((x,i)=>`<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td><td style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700">${x.sku}</td><td class="num">${f억(x.sales)}</td><td class="num">${(x.sales/t*100).toFixed(1)}%</td></tr>`).join('');
+}
+
+// ── 페이지 전환 ──
+const TITLES=['전체 실적 요약','채널별 실적','전년 동기 대비','TOP 10 랭킹'];
+const PAGE_RENDERS=[renderPage0,renderPage1,renderPage2,renderPage3];
+function goPage(i,btn){
+  document.querySelectorAll('.m-pg').forEach((p,j)=>p.classList.toggle('on',i===j));
+  document.querySelectorAll('.m-tab').forEach((b,j)=>b.classList.toggle('on',i===j));
+  window.scrollTo(0,0);
+  if(D26.length>0&&PAGE_RENDERS[i])PAGE_RENDERS[i]();
+}
+
+buildMonthSelect();
+loadData(false);
+</script>
+</body>
+</html>
