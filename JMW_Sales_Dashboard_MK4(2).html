@@ -210,7 +210,9 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div>
 
   <div class="period-bar">
-    <button class="ptab" onclick="setPeriod('month',this)">📅 당월</button>
+    <select class="month-select" id="month-select" onchange="onMonthSelect(this.value)" style="padding:4px 10px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:12px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;outline:none;height:30px;">
+      <option value="6">6월</option>
+    </select>
     <button class="ptab" onclick="setPeriod('q1',this)">Q1 (1~3월)</button>
     <button class="ptab" onclick="setPeriod('q2',this)">Q2 (4~6월)</button>
     <button class="ptab" onclick="setPeriod('h1',this)">상반기</button>
@@ -230,18 +232,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <div class="perf-hd-title">
             📅 월별 목표 대비 실적현황
             <span class="badge badge-blue" id="p0-badge-m">2026년 6월</span>
-            <!-- ★ 월 선택 드롭다운 -->
-            <div class="month-select-wrap">
-              <span class="month-select-label">월 선택</span>
-              <select class="month-select" id="month-select" onchange="onMonthSelect(this.value)">
-                <option value="1">1월</option>
-                <option value="2">2월</option>
-                <option value="3">3월</option>
-                <option value="4">4월</option>
-                <option value="5">5월</option>
-                <option value="6" selected>6월</option>
-              </select>
-            </div>
           </div>
           <div class="perf-hd-sub" id="p0-m-days">로딩 중...</div>
         </div>
@@ -499,26 +489,47 @@ let currentPeriod='year';
 // ★ 선택 중인 월 (기본: 현재 월)
 let selectedMonth = new Date().getMonth()+1;
 
-// 드롭다운 옵션: 데이터 있는 월만 동적 생성
+// 드롭다운 옵션: 1~현재월 동적 생성, 디폴트는 현재월 표시만 (선택 안 된 상태)
 function buildMonthSelect(){
   const sel = document.getElementById('month-select');
   if(!sel) return;
-  // 1~현재월 옵션
   const now = new Date();
   const curM = now.getMonth()+1;
   sel.innerHTML = '';
+  // 안내 옵션
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '📅 월 선택';
+  placeholder.disabled = true;
+  placeholder.selected = (currentPeriod !== 'month');
+  sel.appendChild(placeholder);
   for(let m=1; m<=curM; m++){
     const opt = document.createElement('option');
     opt.value = m;
     opt.textContent = m+'월';
-    if(m===selectedMonth) opt.selected=true;
+    if(currentPeriod === 'month' && m === selectedMonth) opt.selected = true;
     sel.appendChild(opt);
   }
+  // 연간 등 다른 탭일 때 드롭다운 흐리게
+  sel.style.opacity = currentPeriod === 'month' ? '1' : '0.45';
 }
 
 function onMonthSelect(val){
+  if(!val) return;
   selectedMonth = Number(val);
-  renderMonthCard();
+  // 당월 모드로 전환 + 탭 UI 업데이트
+  currentPeriod = 'month';
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('on'));
+  PERIOD_MONTHS.month = [selectedMonth];
+  PERIOD_LABELS.month = '2026년 ' + selectedMonth + '월';
+  document.getElementById('period-label').textContent = PERIOD_LABELS.month;
+  ['p1-period-tag','p3-period-tag'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.textContent = PERIOD_LABELS.month;
+  });
+  // 드롭다운 활성화
+  const sel = document.getElementById('month-select');
+  if(sel) sel.style.opacity = '1';
+  renderAll();
 }
 
 const f억=v=>{
@@ -552,6 +563,12 @@ function setPeriod(p,btn){
   ['p1-period-tag','p3-period-tag'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.textContent=PERIOD_LABELS[p];
   });
+  // 드롭다운 흐리게 (월 선택 모드 아닐 때)
+  const sel=document.getElementById('month-select');
+  if(sel){
+    sel.style.opacity='0.45';
+    sel.value=''; // 안내 옵션으로 리셋
+  }
   renderAll();
 }
 
