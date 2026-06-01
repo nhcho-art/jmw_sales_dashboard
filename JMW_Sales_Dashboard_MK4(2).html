@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JMW Sales Dashboard v4.4</title>
+<title>JMW Sales Dashboard v4.5</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
@@ -56,7 +56,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .card-inner{padding:20px 22px;}
 .perf-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;box-shadow:var(--sh);overflow:hidden;margin-bottom:18px;}
 .perf-hd{padding:14px 22px 12px;background:#F8FAFC;border-bottom:1.5px solid var(--border);}
-.perf-hd-title{font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;}
+.perf-hd-title{font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .perf-hd-sub{font-size:11px;color:var(--text3);margin-top:3px;font-family:'JetBrains Mono',monospace;}
 .badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;}
 .badge-blue{background:rgba(37,99,235,.12);color:#1D4ED8;}
@@ -96,8 +96,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .mb-row{display:grid;grid-template-columns:32px 1fr 58px 50px;gap:5px;align-items:center;margin-bottom:6px;}
 .mb-lbl{font-size:12px;font-weight:700;color:var(--text2);font-family:'JetBrains Mono',monospace;}
 .mb-track{position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);}
-.mb-fill-tgt{position:absolute;top:0;left:0;height:100%;background:rgba(203,213,225,.4);border-radius:4px;}
-.mb-fill-act{position:absolute;top:0;left:0;height:100%;border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);}
 .mb-val{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;text-align:right;}
 .mb-pct{font-size:11px;font-weight:700;font-family:'JetBrains Mono',monospace;text-align:right;}
 .gi-wrap{background:#1A2942;border:1.5px solid #2D4A6E;border-radius:14px;padding:20px 24px;margin-bottom:18px;box-shadow:0 4px 20px rgba(15,30,60,.18);}
@@ -158,6 +156,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .sec-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px;}
 .sec-title .tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:rgba(37,99,235,.1);color:var(--blue);}
 #banner{position:fixed;top:56px;left:220px;right:0;z-index:200;padding:10px 24px;font-size:13px;display:none;align-items:center;gap:8px;}
+/* ★ 월 선택 드롭다운 */
+.month-select-wrap{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.month-select-label{font-size:11px;font-weight:700;color:var(--text3);}
+.month-select{padding:4px 10px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:12px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;outline:none;}
+.month-select:focus{border-color:var(--blue);}
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
@@ -168,7 +171,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="brand"><span class="dot"></span>JMW SALES</div>
-    <div class="sub">Sales Dashboard v4.4</div>
+    <div class="sub">Sales Dashboard v4.5</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">실적 현황</div>
@@ -209,9 +212,25 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <!-- PAGE 0 -->
   <div class="pg on" id="p0">
     <div class="g2">
+      <!-- 당월 카드 -->
       <div class="perf-card">
         <div class="perf-hd">
-          <div class="perf-hd-title">📅 당월 목표 대비 실적현황 <span class="badge badge-blue" id="p0-badge-m">2026년 5월</span></div>
+          <div class="perf-hd-title">
+            📅 월별 목표 대비 실적현황
+            <span class="badge badge-blue" id="p0-badge-m">2026년 6월</span>
+            <!-- ★ 월 선택 드롭다운 -->
+            <div class="month-select-wrap">
+              <span class="month-select-label">월 선택</span>
+              <select class="month-select" id="month-select" onchange="onMonthSelect(this.value)">
+                <option value="1">1월</option>
+                <option value="2">2월</option>
+                <option value="3">3월</option>
+                <option value="4">4월</option>
+                <option value="5">5월</option>
+                <option value="6" selected>6월</option>
+              </select>
+            </div>
+          </div>
           <div class="perf-hd-sub" id="p0-m-days">로딩 중...</div>
         </div>
         <div class="perf-body">
@@ -226,10 +245,10 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             <div class="rate-ticks"><span class="rate-tick">0%</span><span class="rate-tick">25%</span><span class="rate-tick">50%</span><span class="rate-tick">75%</span><span class="rate-tick">100%</span></div>
           </div>
 
-          <!-- 당월 일별 매출 추이 -->
+          <!-- ★ 일별 매출 추이 (dataDaily 기반, 월 선택 연동) -->
           <div style="margin-bottom:16px;">
             <div style="margin-bottom:8px;">
-              <div class="rate-title">📈 당월 일별 매출 추이</div>
+              <div class="rate-title" id="daily-chart-title">📈 일별 매출 추이</div>
             </div>
             <div style="position:relative;height:180px;"><canvas id="ch-daily"></canvas></div>
           </div>
@@ -248,6 +267,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         </div>
       </div>
 
+      <!-- 상반기 카드 -->
       <div class="perf-card">
         <div class="perf-hd">
           <div class="perf-hd-title">📆 상반기 목표 대비 실적현황 <span class="badge badge-teal">2026년 1~6월</span></div>
@@ -442,29 +462,21 @@ const AUTO_REFRESH_MS = 600000;
 // ════════════════════════════════════════════
 
 const DEPT_COLORS = {
-  '이커머스 파트':        '#2563EB',
-  '리테일 파트': '#0D9488',
-  '영업지원팀':   '#7C3AED',
-  '해외영업팀':   '#EA580C',
-  '해외영업실':   '#EA580C',
+  '이커머스 파트':'#2563EB','리테일 파트':'#0D9488',
+  '영업지원팀':'#7C3AED','해외영업팀':'#EA580C','해외영업실':'#EA580C',
 };
-function deptColor(d){ return DEPT_COLORS[d] || '#94A3B8'; }
+function deptColor(d){ return DEPT_COLORS[d]||'#94A3B8'; }
 function deptBadge(d){
   const m={'이커머스 파트':'b-blue','리테일 파트':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange'};
   return m[d]||'b-gray';
 }
 
-// ★ TGT: API에서 항상 덮어씀. 여기는 API 완전 실패시 최후 폴백
 const TGT = {
-  h1tgt: 21974128497,
-  h1act: 0,
+  h1tgt: 21974128497, h1act: 0,
   monthly: [
-    {m:1, tgt:2518484217,  act:2438264985},
-    {m:2, tgt:2633625784,  act:2629426277},
-    {m:3, tgt:2756655335,  act:2715859066},
-    {m:4, tgt:3096315144,  act:2690420688},
-    {m:5, tgt:3453165000,  act:0},
-    {m:6, tgt:7427333450,  act:0},
+    {m:1,tgt:2518484217,act:2438264985},{m:2,tgt:2633625784,act:2629426277},
+    {m:3,tgt:2756655335,act:2715859066},{m:4,tgt:3096315144,act:2690420688},
+    {m:5,tgt:3453165000,act:0},{m:6,tgt:7427333450,act:0},
   ],
 };
 
@@ -472,28 +484,54 @@ let D26=[],D25=[];
 let charts={};
 let currentPeriod='year';
 
-// ── ★ 포맷 함수 수정: 반올림 없이 소수점 1자리 유지 ──────────
+// ★ 선택 중인 월 (기본: 현재 월)
+let selectedMonth = new Date().getMonth()+1;
+
+// 드롭다운 옵션: 데이터 있는 월만 동적 생성
+function buildMonthSelect(){
+  const sel = document.getElementById('month-select');
+  if(!sel) return;
+  // 1~현재월 옵션
+  const now = new Date();
+  const curM = now.getMonth()+1;
+  sel.innerHTML = '';
+  for(let m=1; m<=curM; m++){
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m+'월';
+    if(m===selectedMonth) opt.selected=true;
+    sel.appendChild(opt);
+  }
+}
+
+function onMonthSelect(val){
+  selectedMonth = Number(val);
+  renderMonthCard();
+}
+
 const f억=v=>{
   if(v===null||v===undefined)return'—';
   const a=Math.abs(v),s=v<0?'-':'';
-  if(a>=1e8)return s+(a/1e8).toFixed(2)+'억';       // 1억 이상: 소수점 2자리 (13.97억)
-  if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만'; // 1만 이상
+  if(a>=1e8)return s+(a/1e8).toFixed(2)+'억';
+  if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만';
   return v.toLocaleString();
 };
-// ★ 달성율: 소수점 2자리 (반올림 100% 오표시 방지)
 const fRate=v=>(!v&&v!==0)||isNaN(v)||!isFinite(v)?'—':(v*100).toFixed(2);
 const fPct=v=>fRate(v)+'%';
 const fNum=v=>Math.round(v||0).toLocaleString();
 
-// ── 기간 필터 ──
 const PERIOD_MONTHS={
-  month:[5],q1:[1,2,3],q2:[4,5,6],
-  h1:[1,2,3,4,5,6],h2:[7,8,9,10,11,12],year:[1,2,3,4,5,6,7,8,9,10,11,12]
+  month:[new Date().getMonth()+1],
+  q1:[1,2,3],q2:[4,5,6],
+  h1:[1,2,3,4,5,6],h2:[7,8,9,10,11,12],
+  year:[1,2,3,4,5,6,7,8,9,10,11,12]
 };
 const PERIOD_LABELS={
-  month:'2026년 5월',q1:'2026년 Q1 (1~3월)',q2:'2026년 Q2 (4~6월)',
+  month:'2026년 '+(new Date().getMonth()+1)+'월',
+  q1:'2026년 Q1 (1~3월)',q2:'2026년 Q2 (4~6월)',
   h1:'2026년 상반기 (1~6월)',h2:'2026년 하반기 (7~12월)',year:'2026년 연간'
 };
+
 function setPeriod(p,btn){
   currentPeriod=p;
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
@@ -505,8 +543,8 @@ function setPeriod(p,btn){
   renderAll();
 }
 
-function filterByPeriod(rows, year=2026){
-  const ms=PERIOD_MONTHS[currentPeriod]||[5];
+function filterByPeriod(rows,year=2026){
+  const ms=PERIOD_MONTHS[currentPeriod]||[new Date().getMonth()+1];
   return rows.filter(r=>{
     const m=r.month||Number(String(r.ym||'').split('-')[1])||0;
     const y=r.year||2026;
@@ -525,10 +563,6 @@ function banner(msg,type='blue'){
 
 let autoTimer=null;
 async function loadData(manual=false){
-  if(!SCRIPT_URL||SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE'){
-    banner('⚙️ SCRIPT_URL을 입력해주세요.','amber');
-    renderPage0(); return;
-  }
   if(manual) banner('🔄 데이터 갱신 중...','blue');
   try{
     const res=await fetch(SCRIPT_URL+'?type=all&t='+Date.now());
@@ -536,129 +570,68 @@ async function loadData(manual=false){
     if(json.status==='ok'){
       D26=json.data.data2026||[];
       D25=json.data.data2025||[];
-      window._dataCurrent = json.data.dataCurrent || [];
+      window._dataCurrent = json.data.dataCurrent||[];
+      // ★ dataDaily 저장
+      window._dataDaily = json.data.dataDaily||[];
 
-      // ★ 목표(tgt) 갱신: 파싱된 값이 충분히 큰 경우(10억 이상)만 신뢰
-      // Apps Script 파싱이 엉뚱한 작은 값을 가져올 수 있으므로 검증 필수
       if(json.data.target?.monthly?.length>0){
         const tm=json.data.target.monthly;
         const parsedH1Tgt=tm.slice(0,6).reduce((s,m)=>s+(m.target||0),0);
-        // 상반기 목표 합계가 100억 이상일 때만 파싱값 사용 (엉뚱한 값 방어)
         if(parsedH1Tgt>10000000000){
           TGT.monthly=TGT.monthly.map(t=>{
             const found=tm.find(x=>x.month===t.m);
-            if(found && found.target>1000000000){ // 월 목표 10억 이상만 교체
-              return {...t, tgt: found.target};
-            }
+            if(found&&found.target>1000000000) return {...t,tgt:found.target};
             return t;
           });
           TGT.h1tgt=parsedH1Tgt;
         }
-        // 파싱 실패 or 값이 너무 작으면 → TGT 폴백값 그대로 유지
       }
 
-      // ★ 실적(act): 항상 D26(2026년 DATA)에서 월별 합산 — 가장 정확한 소스
       TGT.monthly=TGT.monthly.map(t=>{
-        const monthSales=D26
-          .filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===t.m && (r.year||2026)===2026)
+        // ★ 실적은 dataDaily 우선 사용, 없으면 D26 월합산
+        const dailySales = (window._dataDaily||[])
+          .filter(r=>r.month===t.m)
           .reduce((s,r)=>s+(r.sales||0),0);
-        // 당월(5월)은 dataCurrent로 보완
-        const now=new Date();
-        const curMonth=now.getMonth()+1;
-        if(t.m===curMonth && json.data.dataCurrent?.length>0){
-          const curSales=json.data.dataCurrent
-            .filter(r=>r.month===curMonth)
-            .reduce((s,r)=>s+(r.sales||0),0);
-          // dataCurrent와 D26 중 더 큰 값 사용 (더 최신 데이터)
-          return {...t, act: Math.max(monthSales, curSales)};
-        }
-        return {...t, act: monthSales};
+        const d26Sales = D26
+          .filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===t.m&&(r.year||2026)===2026)
+          .reduce((s,r)=>s+(r.sales||0),0);
+        // dataDaily가 있으면 우선, 없으면 D26
+        const act = dailySales > 0 ? dailySales : d26Sales;
+        return {...t, act};
       });
-
-      // ★ h1act: monthly act 합산으로 재계산
       TGT.h1act=TGT.monthly.slice(0,6).reduce((s,m)=>s+(m.act||0),0);
 
       const now=new Date();
       document.getElementById('sb-updated').textContent='갱신: '+now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+      buildMonthSelect();
       renderAll();
-      if(manual) banner(`✅ 갱신 완료 — 2026년 ${D26.length}건 · 당월실적 ${json.data.dataCurrent?.length||0}건`,'green');
-    } else { banner('❌ 로드 실패: '+json.message,'red'); renderPage0(); }
-  } catch(e){ banner('❌ 연결 오류. SCRIPT_URL 확인 후 다시 시도해주세요.','red'); renderPage0(); }
+      if(manual) banner(`✅ 갱신 완료 — 2026년 ${D26.length}건 · 일별 ${window._dataDaily.length}건`,'green');
+    } else { banner('❌ 로드 실패: '+json.message,'red'); }
+  } catch(e){ banner('❌ 연결 오류. SCRIPT_URL 확인 후 다시 시도해주세요.','red'); }
 
   if(autoTimer) clearTimeout(autoTimer);
   autoTimer=setTimeout(()=>loadData(false), AUTO_REFRESH_MS);
 }
 
-function renderAll(){renderPage0();renderPage1();renderPage2();renderPage3();}
+function renderAll(){ renderPage0(); renderPage1(); renderPage2(); renderPage3(); }
 
 // ════ PAGE 0 ════
 function renderPage0(){
   const h1tgt=TGT.h1tgt, h1act=TGT.h1act, h1rate=h1tgt>0?h1act/h1tgt:0;
 
+  // 사이드바 KPI
   const now=new Date();
   const curM=now.getMonth()+1;
-  const lastM=TGT.monthly.find(m=>m.m===curM)||TGT.monthly[4];
-  const mAct=lastM.act, mTgt=lastM.tgt, mRate=mTgt>0?mAct/mTgt:0;
-
-  const year=now.getFullYear();
-  const month=lastM.m-1;
-  const daysInMonth=new Date(year,month+1,0).getDate();
-  let lastWorkDay=daysInMonth;
-  while(true){
-    const dow=new Date(year,month,lastWorkDay).getDay();
-    if(dow!==0&&dow!==6) break;
-    lastWorkDay--;
-  }
-  const isCurrentMonth=(now.getFullYear()===year&&now.getMonth()===month);
-  const todayDay=isCurrentMonth?now.getDate():lastWorkDay;
-  const remainDays=Math.max(lastWorkDay-todayDay,0);
-  const daily=todayDay>0?Math.round(mAct/todayDay):0;
-  const remain=Math.round(daily*remainDays);
-  const forecast=mAct+remain;
-  const simGap=forecast-mTgt;
-  const weekendNote=lastWorkDay<daysInMonth?` (월말 ${lastWorkDay+1}~${daysInMonth}일 주말 제외)`:'';
-  const daysLabel=`${todayDay}일 경과 · 잔여 ${remainDays}일 · 마감 ${lastWorkDay}일${weekendNote}`;
-
-  setText('sb-monthly',f억(mAct));
-  // ★ 사이드바 달성율도 소수점 1자리
+  const curMonthData=TGT.monthly.find(m=>m.m===curM)||TGT.monthly[TGT.monthly.length-1];
+  setText('sb-monthly',f억(curMonthData.act));
   setText('sb-rate',fRate(h1rate)+'%');
-  setText('p0-badge-m','2026년 '+lastM.m+'월');
-  setText('p0-m-days',daysLabel);
 
-  setText('p0-m-tgt',f억(mTgt));
-  setText('p0-m-act',f억(mAct));
-  // ★ 달성율 소수점 1자리 표시
-  document.getElementById('p0-m-rate').textContent=fRate(mRate);
-  document.getElementById('p0-m-rate').className='kpi3-val '+(mRate>=1?'green':mRate>=0.85?'amber':'blue');
-
-  const mBg=mRate>=1?'#16A34A':mRate>=0.85?'#D97706':'#2563EB';
-  const mPct=Math.min(mRate*100,100);
-  setTimeout(()=>{
-    const b=document.getElementById('p0-m-bar');
-    b.style.width=mPct+'%'; b.style.background=mBg;
-    // ★ 바 내부 텍스트도 소수점 1자리
-    setText('p0-m-bar-lbl',mPct>18?fRate(mRate)+'%':'');
-  },200);
-
-  setText('sim-tgt',f억(mTgt));setText('sim-act',f억(mAct));
-  setText('sim-daily',f억(daily));setText('sim-remain',f억(remain));
-  setText('sim-forecast',f억(forecast));
-  const gEl=document.getElementById('sim-gap');
-  gEl.textContent=(simGap>=0?'+':'')+f억(simGap);
-  gEl.className='sim-val '+(simGap>=0?'hl-green':'hl-red');
-
+  // 상반기 카드
   setText('p0-h1-tgt',f억(h1tgt));
   setText('p0-h1-act',f억(h1act));
-  // ★ 상반기 달성율 소수점 1자리
   setText('p0-h1-rate',fRate(h1rate));
-
-  // ★ 상반기 sub 텍스트: API에서 받은 목표값으로 동적 표시
   const h1TgtOk=h1tgt>0;
-  setText('p0-h1-sub', h1TgtOk
-    ? `목표 ${f억(h1tgt)} 기준 · G.I BAR 연동`
-    : '목표 데이터 로딩 중...'
-  );
-
+  setText('p0-h1-sub', h1TgtOk ? `목표 ${f억(h1tgt)} 기준 · G.I BAR 연동` : '목표 데이터 로딩 중...');
   const h1Pct=Math.min(h1rate*100,100);
   const h1Bg=h1rate>=1?'#16A34A':h1rate>=0.9?'#0D9488':h1rate>=0.85?'#D97706':'#2563EB';
   setTimeout(()=>{
@@ -667,23 +640,21 @@ function renderPage0(){
     setText('p0-h1-bar-lbl',h1Pct>18?fRate(h1rate)+'%':'');
   },200);
 
-  // 월별 미니바: 달성율 기준, 미달성 음영, 100% 초과 별도색
+  // 월별 미니바
   document.getElementById('p0-month-bars').innerHTML=TGT.monthly.map(m=>{
     const r=m.tgt>0&&m.act>0?m.act/m.tgt:null;
     const ratePct=r!==null?r*100:0;
-    // 달성율 100% 기준 바 길이 계산
-    const fillPct=r!==null?Math.min(ratePct,100):0;  // 100% 캡
-    const overPct=r!==null?Math.max(ratePct-100,0):0; // 100% 초과분
-    // 색상: 초과=골드, 100%=초록, 85%이상=앰버, 미달=파랑, 데이터없음=회색
+    const fillPct=r!==null?Math.min(ratePct,100):0;
+    const overPct=r!==null?Math.max(ratePct-100,0):0;
     const bc=!r?'#94A3B8':ratePct>=100?'#16A34A':ratePct>=85?'#D97706':'#2563EB';
-    const overColor='#F59E0B'; // 100% 초과 골드
+    const overColor='#F59E0B';
     const rStr=r!==null?ratePct.toFixed(2)+'%':'—';
     return `<div class="mb-row">
       <span class="mb-lbl">${m.m}월</span>
       <div class="mb-track" style="position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);">
-        ${r!==null && ratePct<100 ? `<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>` : ''}
+        ${r!==null&&ratePct<100?`<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>`:''}
         <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${bc};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
-        ${overPct>0 ? `<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:${overColor};border-radius:0 4px 4px 0;transition:width .9s;"></div>` : ''}
+        ${overPct>0?`<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:${overColor};border-radius:0 4px 4px 0;"></div>`:''}
       </div>
       <span class="mb-val" style="color:${m.act>0?'var(--text)':'#94A3B8'}">${m.act>0?f억(m.act):'—'}</span>
       <span class="mb-pct" style="color:${bc}">${rStr}</span>
@@ -695,120 +666,175 @@ function renderPage0(){
   document.getElementById('gi-pct').innerHTML=pct.toFixed(2)+'<span>%</span>';
   const gapAmt=h1tgt-h1act;
   setText('gi-gap',gapAmt>0?`100% 달성까지 ${f억(gapAmt)} 남음`:'🎉 상반기 목표 달성!');
-  // ★ G.I BAR sub도 API 데이터로 동적 표시
-  setText('gi-sub',h1TgtOk
-    ? `상반기 목표 ${h1tgt.toLocaleString()}원 · 구간별 달성시 보상 지급`
-    : '목표 데이터 로딩 중...'
-  );
+  setText('gi-sub', h1TgtOk ? `상반기 목표 ${h1tgt.toLocaleString()}원 · 구간별 달성시 보상 지급` : '목표 데이터 로딩 중...');
   const fillEl=document.getElementById('gi-fill');
   fillEl.innerHTML=`<span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;white-space:nowrap;">${f억(h1act)}</span>`;
   setTimeout(()=>{ fillEl.style.width=Math.min(pct,100)+'%'; },200);
 
+  renderMonthCard();
   renderYoYMainChart();
-  renderDailyChart();
 }
 
-// ── 당월 일별 매출 추이 ──────────────────────────────────────
-function renderDailyChart(){
-  const rows = window._dataCurrent || [];
-  if(!rows.length){ destroyChart('ch-daily'); return; }
+// ★ 월 선택 카드 렌더 — selectedMonth 기준
+function renderMonthCard(){
+  const m = selectedMonth;
+  const mData = TGT.monthly.find(x=>x.m===m) || {m, tgt:0, act:0};
+  const mAct=mData.act, mTgt=mData.tgt, mRate=mTgt>0?mAct/mTgt:0;
+
+  const now=new Date();
+  const year=2026;
+  const daysInMonth=new Date(year,m,0).getDate();
+  let lastWorkDay=daysInMonth;
+  while(true){
+    const dow=new Date(year,m-1,lastWorkDay).getDay();
+    if(dow!==0&&dow!==6) break;
+    lastWorkDay--;
+  }
+  const isCurrentMonth=(now.getFullYear()===year && now.getMonth()+1===m);
+  const todayDay=isCurrentMonth?now.getDate():lastWorkDay;
+  const remainDays=isCurrentMonth?Math.max(lastWorkDay-todayDay,0):0;
+  const daily=todayDay>0?Math.round(mAct/todayDay):0;
+  const remain=Math.round(daily*remainDays);
+  const forecast=isCurrentMonth?mAct+remain:mAct;
+  const simGap=forecast-mTgt;
+
+  setText('p0-badge-m','2026년 '+m+'월');
+  const daysLabel=isCurrentMonth
+    ? `${todayDay}일 경과 · 잔여 ${remainDays}일 · 마감 ${lastWorkDay}일`
+    : `${m}월 확정 실적 · 영업일 ${lastWorkDay}일`;
+  setText('p0-m-days',daysLabel);
+  setText('p0-m-tgt',f억(mTgt));
+  setText('p0-m-act',f억(mAct));
+  document.getElementById('p0-m-rate').textContent=fRate(mRate);
+  document.getElementById('p0-m-rate').className='kpi3-val '+(mRate>=1?'green':mRate>=0.85?'amber':'blue');
+
+  const mBg=mRate>=1?'#16A34A':mRate>=0.85?'#D97706':'#2563EB';
+  const mPct=Math.min(mRate*100,100);
+  setTimeout(()=>{
+    const b=document.getElementById('p0-m-bar');
+    b.style.width=mPct+'%'; b.style.background=mBg;
+    setText('p0-m-bar-lbl',mPct>18?fRate(mRate)+'%':'');
+  },200);
+
+  // 시뮬레이션 (현재 월이면 동적, 과거 월이면 확정값 표시)
+  setText('sim-tgt',f억(mTgt));
+  setText('sim-act',f억(mAct));
+  setText('sim-daily',f억(daily));
+  setText('sim-remain',isCurrentMonth?f억(remain):'—');
+  setText('sim-forecast',isCurrentMonth?f억(forecast):'—');
+  const gEl=document.getElementById('sim-gap');
+  if(isCurrentMonth){
+    gEl.textContent=(simGap>=0?'+':'')+f억(simGap);
+    gEl.className='sim-val '+(simGap>=0?'hl-green':'hl-red');
+  } else {
+    const finalGap=mAct-mTgt;
+    gEl.textContent=(finalGap>=0?'+':'')+f억(finalGap);
+    gEl.className='sim-val '+(finalGap>=0?'hl-green':'hl-red');
+  }
+
+  // 차트 타이틀 업데이트
+  setText('daily-chart-title','📈 '+m+'월 일별 매출 추이');
+
+  renderDailyChart(m);
+}
+
+// ★ 일별 차트 — dataDaily 기반, 선택 월 필터, 레이블 개선
+function renderDailyChart(month){
+  const rows = (window._dataDaily||[]).filter(r=>r.month===month);
+
+  if(!rows.length){
+    destroyChart('ch-daily');
+    // 빈 상태 메시지
+    const canvas=document.getElementById('ch-daily');
+    const ctx=canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#94A3B8';
+    ctx.font='13px "Noto Sans KR",sans-serif';
+    ctx.textAlign='center';
+    ctx.fillText(month+'월 일별 데이터 없음',canvas.width/2,canvas.height/2);
+    return;
+  }
 
   // 일별 합산
-  const dayMap = {};
-  rows.forEach(r => {
-    const d = r.day || 0;
-    if(!d) return;
-    dayMap[d] = (dayMap[d] || 0) + (r.sales || 0);
-  });
+  const dayMap={};
+  rows.forEach(r=>{ const d=r.day||0; if(!d)return; dayMap[d]=(dayMap[d]||0)+(r.sales||0); });
+  const days=Object.keys(dayMap).map(Number).sort((a,b)=>a-b);
+  const vals=days.map(d=>dayMap[d]);
 
-  const days = Object.keys(dayMap).map(Number).sort((a,b)=>a-b);
-  if(!days.length){ destroyChart('ch-daily'); return; }
-  const vals = days.map(d => dayMap[d]);
+  // 추세선 (최소제곱법)
+  const n=days.length;
+  const sumX=days.reduce((s,x)=>s+x,0);
+  const sumY=vals.reduce((s,y)=>s+y,0);
+  const sumXY=days.reduce((s,x,i)=>s+x*vals[i],0);
+  const sumX2=days.reduce((s,x)=>s+x*x,0);
+  const slope=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX)||0;
+  const intercept=(sumY-slope*sumX)/n||0;
+  const trendVals=days.map(d=>Math.max(slope*d+intercept,0));
 
-  // 선형 추세선 계산 (최소제곱법)
-  const n = days.length;
-  const sumX = days.reduce((s,x)=>s+x, 0);
-  const sumY = vals.reduce((s,y)=>s+y, 0);
-  const sumXY = days.reduce((s,x,i)=>s+x*vals[i], 0);
-  const sumX2 = days.reduce((s,x)=>s+x*x, 0);
-  const slope = (n*sumXY - sumX*sumY) / (n*sumX2 - sumX*sumX);
-  const intercept = (sumY - slope*sumX) / n;
-  const trendVals = days.map(d => Math.max(slope*d + intercept, 0));
+  // ★ 최고/최저 인덱스 계산 (레이블 표시용)
+  const maxIdx=vals.indexOf(Math.max(...vals));
+  const minIdx=vals.indexOf(Math.min(...vals));
 
-  // 라벨 플러그인 (포인트 위 금액 표시)
-  const labelPlugin = {
+  // ★ 레이블 플러그인: 최고/최저값만 표시, 나머지는 툴팁
+  const labelPlugin={
     id:'dailyLabel',
     afterDatasetsDraw(chart){
-      const {ctx} = chart;
+      const{ctx}=chart;
       ctx.save();
-      const meta = chart.getDatasetMeta(0);
-      meta.data.forEach((pt, i) => {
-        const v = vals[i];
-        if(!v) return;
-        const label = f억(v);
-        ctx.fillStyle = '#1D4ED8';
-        ctx.font = 'bold 11px "JetBrains Mono",monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(label, pt.x, pt.y - 10);
+      const meta=chart.getDatasetMeta(0);
+      meta.data.forEach((pt,i)=>{
+        if(i!==maxIdx && i!==minIdx) return; // 최고/최저만
+        const v=vals[i];
+        const isMax=(i===maxIdx);
+        ctx.fillStyle=isMax?'#16A34A':'#DC2626';
+        ctx.font='bold 11px "JetBrains Mono",monospace';
+        ctx.textAlign='center';
+        const yOffset=isMax?-13:14;
+        ctx.fillText(f억(v),pt.x,pt.y+yOffset);
       });
       ctx.restore();
     }
   };
 
   destroyChart('ch-daily');
-  charts['ch-daily'] = new Chart(document.getElementById('ch-daily'), {
-    type: 'line',
-    plugins: [labelPlugin],
-    data: {
-      labels: days.map(d => d+'일'),
-      datasets: [
-        {
-          label: '일별 매출',
-          data: vals,
-          borderColor: '#2563EB',
-          backgroundColor: 'rgba(37,99,235,0.08)',
-          borderWidth: 2.5,
-          pointBackgroundColor: '#2563EB',
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          tension: 0.3,
-          fill: true,
-          order: 1,
-        },
-        {
-          label: '추세선',
-          data: trendVals,
-          borderColor: '#F43F5E',
-          borderWidth: 2,
-          borderDash: [5, 4],
-          pointRadius: 0,
-          tension: 0,
-          fill: false,
-          order: 2,
-        }
+  charts['ch-daily']=new Chart(document.getElementById('ch-daily'),{
+    type:'line',
+    plugins:[labelPlugin],
+    data:{
+      labels:days.map(d=>d+'일'),
+      datasets:[
+        {label:'일별 매출',data:vals,borderColor:'#2563EB',backgroundColor:'rgba(37,99,235,0.08)',
+          borderWidth:2.5,pointBackgroundColor:'#2563EB',pointRadius:4,pointHoverRadius:7,
+          tension:0.3,fill:true,order:1},
+        {label:'추세선',data:trendVals,borderColor:'#F43F5E',borderWidth:2,
+          borderDash:[5,4],pointRadius:0,tension:0,fill:false,order:2}
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      layout: { padding: { top: 24, right: 60 } },
-      plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { font: { size: 11 }, boxWidth: 14, usePointStyle: true }
-        },
-        tooltip: {
-          callbacks: { label: ctx => ctx.dataset.label + ': ' + f억(ctx.raw) }
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      layout:{padding:{top:24,right:16,left:8}},
+      plugins:{
+        legend:{position:'bottom',labels:{font:{size:11},boxWidth:14,usePointStyle:true}},
+        tooltip:{
+          callbacks:{
+            title:ctx=>ctx[0].label,
+            label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)
+          }
         }
       },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: { font: { size: 11 }, color: '#64748B' }
+      scales:{
+        x:{
+          grid:{display:false},
+          ticks:{
+            font:{size:10},color:'#64748B',
+            // ★ 데이터 많을 때 자동 스킵 (maxTicksLimit)
+            maxTicksLimit:16,
+            maxRotation:0,
+          }
         },
-        y: {
-          grid: { color: 'rgba(0,0,0,.04)' },
-          ticks: { font: { size: 11 }, color: '#64748B', callback: v => f억(v) }
+        y:{
+          grid:{color:'rgba(0,0,0,.04)'},
+          ticks:{font:{size:11},color:'#64748B',callback:v=>f억(v)}
         }
       }
     }
@@ -821,67 +847,43 @@ function renderYoYMainChart(){
     ?D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0)
     :(TGT.monthly.find(x=>x.m===m)?.act||0);
   const get25=m=>D25.length>0
-    ?D25.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2025)===2025).reduce((s,r)=>s+(r.sales||0),0)
-    :0;
-  const data26=months.map(get26), data25=months.map(get25);
+    ?D25.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2025)===2025).reduce((s,r)=>s+(r.sales||0),0):0;
+  const data26=months.map(get26),data25=months.map(get25);
 
-  const labelPlugin={
-    id:'yoyLabel',
-    afterDatasetsDraw(chart){
-      const{ctx,scales:{x,y}}=chart;
-      ctx.save();
-      chart.data.datasets.forEach((ds,di)=>{
-        const meta=chart.getDatasetMeta(di);
-        meta.data.forEach((bar,i)=>{
-          const v=ds.data[i];
-          if(!v||v<=0) return;
-          ctx.fillStyle=di===0?'#DC2626':'#1D4ED8';
-          ctx.font='bold 11px "JetBrains Mono",monospace';
-          ctx.textAlign='center';
-          ctx.fillText(f억(v),bar.x,bar.y-5);
-        });
+  const labelPlugin={id:'yoyLabel',afterDatasetsDraw(chart){
+    const{ctx}=chart;ctx.save();
+    chart.data.datasets.forEach((ds,di)=>{
+      chart.getDatasetMeta(di).data.forEach((bar,i)=>{
+        const v=ds.data[i]; if(!v||v<=0)return;
+        ctx.fillStyle=di===0?'#DC2626':'#1D4ED8';
+        ctx.font='bold 11px "JetBrains Mono",monospace';ctx.textAlign='center';
+        ctx.fillText(f억(v),bar.x,bar.y-5);
       });
-      const meta26=chart.getDatasetMeta(1);
-      months.forEach((m,i)=>{
-        const a25=data25[i],a26=data26[i];
-        if(a25<=0||a26<=0) return;
-        const rate=(a26-a25)/a25;
-        const sign=rate>=0?'+':'-';
-        const rStr=`(${sign}${Math.abs(rate*100).toFixed(2)}%)`;
-        const col=rate>=0?'#16A34A':'#DC2626';
-        const bar=meta26.data[i];
-        ctx.fillStyle=col;
-        ctx.font='bold 10px "JetBrains Mono",monospace';
-        ctx.textAlign='center';
-        ctx.fillText(rStr,bar.x,bar.y-18);
-      });
-      ctx.restore();
-    }
-  };
+    });
+    const meta26=chart.getDatasetMeta(1);
+    months.forEach((m,i)=>{
+      const a25=data25[i],a26=data26[i]; if(a25<=0||a26<=0)return;
+      const rate=(a26-a25)/a25;
+      const sign=rate>=0?'+':'-';
+      const col=rate>=0?'#16A34A':'#DC2626';
+      const bar=meta26.data[i];
+      ctx.fillStyle=col;ctx.font='bold 10px "JetBrains Mono",monospace';ctx.textAlign='center';
+      ctx.fillText(`(${sign}${Math.abs(rate*100).toFixed(2)}%)`,bar.x,bar.y-18);
+    });
+    ctx.restore();
+  }};
 
   destroyChart('ch-yoy-main');
   charts['ch-yoy-main']=new Chart(document.getElementById('ch-yoy-main'),{
-    type:'bar', plugins:[labelPlugin],
-    data:{
-      labels:months.map(m=>m+'월'),
-      datasets:[
-        {label:'2025년 실적',data:data25,backgroundColor:'rgba(239,68,68,.65)',borderColor:'#DC2626',borderWidth:1.5,borderRadius:5,categoryPercentage:0.7,barPercentage:0.45},
-        {label:'2026년 실적',data:data26,backgroundColor:data26.map(v=>v>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:data26.map(v=>v>0?'#2563EB':'#CBD5E1'),borderWidth:1.5,borderRadius:5,categoryPercentage:0.7,barPercentage:0.45},
-      ]
-    },
+    type:'bar',plugins:[labelPlugin],
+    data:{labels:months.map(m=>m+'월'),datasets:[
+      {label:'2025년 실적',data:data25,backgroundColor:'rgba(239,68,68,.65)',borderColor:'#DC2626',borderWidth:1.5,borderRadius:5,categoryPercentage:0.7,barPercentage:0.45},
+      {label:'2026년 실적',data:data26,backgroundColor:data26.map(v=>v>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:data26.map(v=>v>0?'#2563EB':'#CBD5E1'),borderWidth:1.5,borderRadius:5,categoryPercentage:0.7,barPercentage:0.45},
+    ]},
     options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:42}},
-      plugins:{
-        legend:{position:'bottom',labels:{font:{size:12},boxWidth:14,usePointStyle:true}},
-        tooltip:{callbacks:{
-          label:ctx=>ctx.dataset.label+': '+f억(ctx.raw),
-          afterBody:items=>{
-            const i=items[0].dataIndex;
-            const a25=data25[i],a26=data26[i];
-            if(a25>0&&a26>0){const r=(a26-a25)/a25;return['YoY: '+(r>=0?'+':'')+fPct(Math.abs(r))];}
-            return[];
-          }
-        }}
-      },
+      plugins:{legend:{position:'bottom',labels:{font:{size:12},boxWidth:14,usePointStyle:true}},
+        tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+f억(ctx.raw),
+          afterBody:items=>{const i=items[0].dataIndex;const a25=data25[i],a26=data26[i];if(a25>0&&a26>0){const r=(a26-a25)/a25;return['YoY: '+(r>=0?'+':'')+fPct(Math.abs(r))];}return[];}}}},
       scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#334155'}},
               y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},color:'#64748B',callback:v=>f억(v)}}}}
   });
@@ -893,12 +895,10 @@ function renderPage1(){
   if(!rows.length) return;
 
   const hbarLabelPlugin={id:'hbarLabel',afterDatasetsDraw(chart){
-    const{ctx}=chart;
-    ctx.save();
+    const{ctx}=chart;ctx.save();
     chart.getDatasetMeta(0).data.forEach((bar,i)=>{
-      const v=chart.data.datasets[0].data[i];
-      if(!v||v<=0) return;
-      ctx.fillStyle='#334155'; ctx.font='bold 11px "JetBrains Mono",monospace'; ctx.textAlign='left';
+      const v=chart.data.datasets[0].data[i]; if(!v||v<=0)return;
+      ctx.fillStyle='#334155';ctx.font='bold 11px "JetBrains Mono",monospace';ctx.textAlign='left';
       ctx.fillText(f억(v),bar.x+5,bar.y+4);
     });
     ctx.restore();
@@ -906,54 +906,43 @@ function renderPage1(){
 
   const mkH=(id,data,col)=>{
     destroyChart(id);
-    charts[id]=new Chart(document.getElementById(id),{type:'bar',
-      plugins:[hbarLabelPlugin],
+    charts[id]=new Chart(document.getElementById(id),{type:'bar',plugins:[hbarLabelPlugin],
       data:{labels:data.map(([k])=>k.length>15?k.slice(0,14)+'…':k),datasets:[{label:'매출',data:data.map(([,v])=>v),backgroundColor:col+'cc',borderColor:col,borderWidth:1,borderRadius:3}]},
-      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-        layout:{padding:{right:70}},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,layout:{padding:{right:70}},
         plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>f억(ctx.raw)}}},
         scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#64748B',callback:v=>f억(v)}},y:{grid:{display:false},ticks:{font:{size:11},color:'#334155'}}}}});
   };
 
-  mkH('ch-md',   sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
+  mkH('ch-md',sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
   mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='리테일 파트'),'channel').slice(0,15),'#0D9488');
 
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasWrap=document.getElementById('overseas-wrap');
-  if(overseasRows.length>0&&overseasWrap){
-    overseasWrap.style.display='block';
-    mkH('ch-overseas',sortedGroupBy(overseasRows,'channel').slice(0,15),'#EA580C');
-  } else if(overseasWrap){
-    overseasWrap.style.display='none';
-  }
+  if(overseasRows.length>0&&overseasWrap){ overseasWrap.style.display='block'; mkH('ch-overseas',sortedGroupBy(overseasRows,'channel').slice(0,15),'#EA580C'); }
+  else if(overseasWrap){ overseasWrap.style.display='none'; }
 
-  window._channelRows = rows;
+  window._channelRows=rows;
   renderChannelTable('all');
 }
 
 let currentChannelFilter='all';
-function setChannelFilter(dept, btn){
+function setChannelFilter(dept,btn){
   currentChannelFilter=dept;
-  document.querySelectorAll('.ch-ftab').forEach(b=>{
-    b.style.background='transparent'; b.style.color='var(--text2)'; b.style.borderColor='var(--border)';
-  });
-  btn.style.background='var(--blue)'; btn.style.color='#fff'; btn.style.borderColor='var(--blue)';
+  document.querySelectorAll('.ch-ftab').forEach(b=>{ b.style.background='transparent';b.style.color='var(--text2)';b.style.borderColor='var(--border)'; });
+  btn.style.background='var(--blue)';btn.style.color='#fff';btn.style.borderColor='var(--blue)';
   const sub=document.getElementById('channel-filter-sub');
   if(sub) sub.textContent=dept==='all'?'전체 팀 · 매출 내림차순 (영업지원팀 제외)':dept+' · 매출 내림차순';
   renderChannelTable(dept);
 }
 
 function renderChannelTable(dept){
-  const rows = window._channelRows || [];
-  let filtered = rows.filter(r=>r.dept!=='영업지원팀');
+  const rows=window._channelRows||[];
+  let filtered=rows.filter(r=>r.dept!=='영업지원팀');
   if(dept!=='all'){
-    if(dept==='해외영업팀'){
-      filtered = filtered.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
-    } else {
-      filtered = filtered.filter(r=>r.dept===dept);
-    }
+    if(dept==='해외영업팀') filtered=filtered.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
+    else filtered=filtered.filter(r=>r.dept===dept);
   }
-  const allCh=sortedGroupBy(filtered,'channel'), tot=allCh.reduce((s,[,v])=>s+v,0);
+  const allCh=sortedGroupBy(filtered,'channel'),tot=allCh.reduce((s,[,v])=>s+v,0);
   document.getElementById('tbl-channel').innerHTML=allCh.map(([ch,s],i)=>{
     const d=filtered.find(r=>r.channel===ch)?.dept||'';
     return `<tr><td><span class="rank ${i===0?'r1':i===1?'r2':i===2?'r3':'rn'}">${i+1}</span></td>
@@ -971,42 +960,33 @@ function renderPage2(){
   const t26=cm.reduce((s,m)=>s+s26(m),0),t25=cm.reduce((s,m)=>s+s25(m),0);
   const diff=t26-t25,yr=t25>0?diff/t25:null;
   const setV=(id,v,cls)=>{ const el=document.getElementById(id); if(el){el.textContent=v;if(cls)el.className='kpi3-val '+cls;} };
-
-  // ★ 1단계: KPI 수치 즉시 표시
-  setV('p4-2026',f억(t26),'blue'); setV('p4-2025',f억(t25),'red');
+  setV('p4-2026',f억(t26),'blue');setV('p4-2025',f억(t25),'red');
   setV('p4-diff',(diff>=0?'+':'')+f억(diff),diff>=0?'green':'red');
   setV('p4-rate',yr!==null?(yr>=0?'+':'-')+fPct(Math.abs(yr)):'—',yr===null?'':yr>=0?'green':'red');
 
-  // ★ 2단계: 차트 다음 프레임에 렌더링
   requestAnimationFrame(()=>{
     destroyChart('ch-yoy');
     const yoyLabelPlugin={id:'yoyP4Label',afterDatasetsDraw(chart){
-      const{ctx}=chart;
-      ctx.save();
+      const{ctx}=chart;ctx.save();
       chart.data.datasets.forEach((ds,di)=>{
         chart.getDatasetMeta(di).data.forEach((bar,i)=>{
-          const v=ds.data[i];
-          if(!v||v<=0) return;
+          const v=ds.data[i]; if(!v||v<=0)return;
           ctx.fillStyle=di===0?'#DC2626':'#1D4ED8';
-          ctx.font='bold 10px "JetBrains Mono",monospace'; ctx.textAlign='center';
+          ctx.font='bold 10px "JetBrains Mono",monospace';ctx.textAlign='center';
           ctx.fillText(f억(v),bar.x,bar.y-5);
         });
       });
       const m26=chart.getDatasetMeta(1);
       months.forEach((m,i)=>{
-        const a25=s25(m),a26=s26(m);
-        if(a25<=0||a26<=0) return;
-        const rate=(a26-a25)/a25;
-        const sign=rate>=0?'+':'-';
-        const col=rate>=0?'#16A34A':'#DC2626';
+        const a25=s25(m),a26=s26(m); if(a25<=0||a26<=0)return;
+        const rate=(a26-a25)/a25;const sign=rate>=0?'+':'-';const col=rate>=0?'#16A34A':'#DC2626';
         const bar=m26.data[i];
-        ctx.fillStyle=col; ctx.font='bold 10px "JetBrains Mono",monospace'; ctx.textAlign='center';
+        ctx.fillStyle=col;ctx.font='bold 10px "JetBrains Mono",monospace';ctx.textAlign='center';
         ctx.fillText(`(${sign}${Math.abs(rate*100).toFixed(2)}%)`,bar.x,bar.y-18);
       });
       ctx.restore();
     }};
-    charts['ch-yoy']=new Chart(document.getElementById('ch-yoy'),{type:'bar',
-      plugins:[yoyLabelPlugin],
+    charts['ch-yoy']=new Chart(document.getElementById('ch-yoy'),{type:'bar',plugins:[yoyLabelPlugin],
       data:{labels:months.map(m=>m+'월'),datasets:[
         {label:'2025 실적',data:months.map(s25),backgroundColor:'rgba(239,68,68,.65)',borderColor:'#DC2626',borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45},
         {label:'2026 실적',data:months.map(s26),backgroundColor:months.map(m=>s26(m)>0?'rgba(37,99,235,.8)':'rgba(226,232,240,.4)'),borderColor:months.map(m=>s26(m)>0?'#2563EB':'#CBD5E1'),borderWidth:1.5,borderRadius:4,categoryPercentage:0.7,barPercentage:0.45}]},
@@ -1015,26 +995,21 @@ function renderPage2(){
         scales:{x:{grid:{display:false},ticks:{font:{size:12},color:'#64748B'}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:12},color:'#64748B',callback:v=>f억(v)}}}}});
   });
 
-  // ★ 3단계: 채널/제품 리스트는 50ms 후 처리 (체감 속도 개선)
   setTimeout(()=>{
     const allCh=[...new Set([...D26,...D25].map(r=>r.channel))];
     const chY=allCh.map(ch=>({ch,s26:D26.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.channel===ch).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
     document.getElementById('yoy-channel').innerHTML=chY.map(x=>{
-      const sign=x.rate>=0?'+':'-';
-      const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-      const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
+      const sign=x.rate>=0?'+':'-';const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
       return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
     }).join('');
 
     const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
     const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
     document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
-      const sign=x.rate>=0?'+':'-';
-      const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;
-      const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
+      const sign=x.rate>=0?'+':'-';const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
       return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name" style="font-family:'JetBrains Mono',monospace;font-size:12px">${x.sku}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
     }).join('');
-  }, 50);
+  },50);
 }
 
 // ════ PAGE 3 ════
@@ -1050,15 +1025,11 @@ function renderPage3(){
 
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasTop=document.getElementById('overseas-top-wrap');
-  if(overseasRows.length>0&&overseasTop){
-    overseasTop.style.display='block';
-    mk(overseasRows,'top-overseas');
-  } else if(overseasTop){
-    overseasTop.style.display='none';
-  }
+  if(overseasRows.length>0&&overseasTop){ overseasTop.style.display='block'; mk(overseasRows,'top-overseas'); }
+  else if(overseasTop){ overseasTop.style.display='none'; }
 
   const sm={};
-  rows.forEach(r=>{ if(!sm[r.sku]) sm[r.sku]={sku:r.sku,qty:0,sales:0}; sm[r.sku].qty+=(r.qty||0); sm[r.sku].sales+=(r.sales||0); });
+  rows.forEach(r=>{ if(!sm[r.sku])sm[r.sku]={sku:r.sku,qty:0,sales:0}; sm[r.sku].qty+=(r.qty||0); sm[r.sku].sales+=(r.sales||0); });
   const grp=sku=>{ const s=(sku||'').toUpperCase(); if(s.startsWith('MS8')||s.startsWith('STL'))return '프리미엄'; if(s.startsWith('MCS')||s.startsWith('MCF')||s.startsWith('MC'))return '에어샷'; if(s.startsWith('MS6')||s.startsWith('MS7'))return 'AIR JET'; if(s.startsWith('M5')||s.startsWith('MF'))return '스탠다드'; if(s.startsWith('SDU')||s.startsWith('SC'))return '헤어케어'; if(s.startsWith('W'))return '고데기'; if(s.startsWith('JBD'))return '바디'; return '기타'; };
   const sa=Object.values(sm).sort((a,b)=>b.sales-a.sales).slice(0,10);
   const t=sa.reduce((s,x)=>s+x.sales,0);
@@ -1077,9 +1048,10 @@ function goPage(i){
   document.querySelectorAll('.pg').forEach((p,j)=>p.classList.toggle('on',i===j));
   document.querySelectorAll('.nb').forEach((b,j)=>b.classList.toggle('on',i===j));
   document.getElementById('topbar-title').innerHTML=TITLES[i]+' <span id="topbar-sub">'+PERIOD_LABELS[currentPeriod]+'</span>';
-  if(D26.length>0 && PAGE_RENDERS[i]) PAGE_RENDERS[i]();
+  if(D26.length>0&&PAGE_RENDERS[i]) PAGE_RENDERS[i]();
 }
 
+buildMonthSelect();
 loadData(false);
 </script>
 </body>
