@@ -210,7 +210,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   </div>
 
   <div class="period-bar">
-    <select class="month-select" id="month-select" onchange="onMonthSelect(this.value)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--text2);font-size:13px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;outline:none;height:34px;">
+    <select class="month-select" id="month-select" onchange="onMonthSelect(this.value)" style="padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:13px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;outline:none;height:34px;-webkit-appearance:auto;">
       <option value="6">6월</option>
     </select>
     <button class="ptab" onclick="setPeriod('q1',this)">Q1 (1~3월)</button>
@@ -510,8 +510,16 @@ function buildMonthSelect(){
     if(currentPeriod === 'month' && m === selectedMonth) opt.selected = true;
     sel.appendChild(opt);
   }
-  // 연간 등 다른 탭일 때 드롭다운 흐리게
-  sel.style.opacity = currentPeriod === 'month' ? '1' : '0.45';
+  // 활성 상태에 따라 드롭다운 스타일 전환
+  if(currentPeriod === 'month'){
+    sel.style.background = 'var(--blue)';
+    sel.style.color = '#fff';
+    sel.style.borderColor = 'var(--blue)';
+  } else {
+    sel.style.background = '#fff';
+    sel.style.color = 'var(--text)';
+    sel.style.borderColor = 'var(--border)';
+  }
 }
 
 function onMonthSelect(val){
@@ -526,9 +534,12 @@ function onMonthSelect(val){
   ['p1-period-tag','p3-period-tag'].forEach(id => {
     const el = document.getElementById(id); if(el) el.textContent = PERIOD_LABELS.month;
   });
-  // 드롭다운 활성화
-  const sel = document.getElementById('month-select');
-  if(sel) sel.style.opacity = '1';
+  // 드롭다운 활성화 스타일
+  if(sel){
+    sel.style.background = 'var(--blue)';
+    sel.style.color = '#fff';
+    sel.style.borderColor = 'var(--blue)';
+  }
   renderAll();
 }
 
@@ -566,8 +577,10 @@ function setPeriod(p,btn){
   // 드롭다운 흐리게 (월 선택 모드 아닐 때)
   const sel=document.getElementById('month-select');
   if(sel){
-    sel.style.opacity='0.45';
-    sel.value=''; // 안내 옵션으로 리셋
+    sel.style.background = '#fff';
+    sel.style.color = 'var(--text)';
+    sel.style.borderColor = 'var(--border)';
+    sel.value = '';
   }
   renderAll();
 }
