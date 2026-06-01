@@ -180,6 +180,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="sb-sec">비교 분석</div>
     <button class="nb" onclick="goPage(2,this)"><span class="nbi">📈</span> 전년 동기 대비</button>
     <button class="nb" onclick="goPage(3,this)"><span class="nbi">🏆</span> TOP 10 랭킹</button>
+
+    <!-- ★ 로딩 카운트다운 -->
+    <div id="loading-wrap" style="margin:10px 4px 0;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span id="loading-msg" style="font-size:10px;color:rgba(255,255,255,.5);font-family:'Noto Sans KR',sans-serif;line-height:1.4;flex:1;">📡 Google Sheets 연결 중...</span>
+        <span id="loading-sec" style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);font-family:'JetBrains Mono',monospace;flex-shrink:0;margin-left:6px;">20s</span>
+      </div>
+      <div style="height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;">
+        <div id="loading-bar" style="height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 55%,#84CC16 68%,#FACC15 78%,#F97316 88%,#EF4444 100%);transition:width .9s linear;"></div>
+      </div>
+    </div>
   </nav>
   <div class="sb-footer">
     <div class="sb-kpi">
@@ -189,6 +200,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <div class="sb-updated" id="sb-updated">로딩 중...</div>
     <div class="sb-auto" id="sb-auto">🔄 10분 자동 갱신</div>
   </div>
+
 </aside>
 
 <div class="main">
@@ -561,8 +573,66 @@ function banner(msg,type='blue'){
   if(type==='green')setTimeout(()=>b.style.display='none',3000);
 }
 
+// ── 로딩 카운트다운 ──────────────────────────────────────────
+const LOADING_TOTAL = 20; // 예상 로딩 시간(초)
+const LOADING_MSGS = [
+  { at: 20, msg: '📡 Google Sheets 연결 중...' },
+  { at: 17, msg: '📂 2026년 실적 데이터 로딩 중...' },
+  { at: 13, msg: '📂 2025년 실적 데이터 로딩 중...' },
+  { at:  9, msg: '📅 일별 매출 데이터 로딩 중...' },
+  { at:  5, msg: '🎯 목표 데이터 파싱 중...' },
+  { at:  2, msg: '✨ 대시보드 렌더링 중...' },
+];
+let _loadingTimer = null;
+
+function startLoadingCountdown() {
+  const wrap = document.getElementById('loading-wrap');
+  const bar  = document.getElementById('loading-bar');
+  const sec  = document.getElementById('loading-sec');
+  const msg  = document.getElementById('loading-msg');
+  if(!wrap) return;
+
+  wrap.style.display = 'block';
+  let remaining = LOADING_TOTAL;
+
+  // 즉시 첫 프레임
+  sec.textContent = remaining + 's';
+  bar.style.width = '0%';
+  msg.textContent = LOADING_MSGS[0].msg;
+
+  if(_loadingTimer) clearInterval(_loadingTimer);
+  _loadingTimer = setInterval(() => {
+    remaining--;
+    const pct = Math.min(((LOADING_TOTAL - remaining) / LOADING_TOTAL) * 100, 100);
+    bar.style.width = pct + '%';
+    sec.textContent = Math.max(remaining, 0) + 's';
+
+    // 단계별 문구 전환
+    const step = LOADING_MSGS.find(m => remaining <= m.at && remaining > (m.at - 3));
+    if(step) msg.textContent = step.msg;
+
+    if(remaining <= 0) clearInterval(_loadingTimer);
+  }, 1000);
+}
+
+function stopLoadingCountdown() {
+  if(_loadingTimer) { clearInterval(_loadingTimer); _loadingTimer = null; }
+  const wrap = document.getElementById('loading-wrap');
+  const bar  = document.getElementById('loading-bar');
+  const msg  = document.getElementById('loading-msg');
+  const sec  = document.getElementById('loading-sec');
+  if(!wrap) return;
+
+  // 완료 애니메이션 후 숨김
+  bar.style.width = '100%';
+  msg.textContent = '✅ 로딩 완료!';
+  sec.textContent = '0s';
+  setTimeout(() => { wrap.style.display = 'none'; }, 1500);
+}
+
 let autoTimer=null;
 async function loadData(manual=false){
+  startLoadingCountdown();
   if(manual) banner('🔄 데이터 갱신 중...','blue');
   try{
     const res=await fetch(SCRIPT_URL+'?type=all&t='+Date.now());
@@ -605,9 +675,10 @@ async function loadData(manual=false){
       document.getElementById('sb-updated').textContent='갱신: '+now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
       buildMonthSelect();
       renderAll();
+      stopLoadingCountdown();
       if(manual) banner(`✅ 갱신 완료 — 2026년 ${D26.length}건 · 일별 ${window._dataDaily.length}건`,'green');
-    } else { banner('❌ 로드 실패: '+json.message,'red'); }
-  } catch(e){ banner('❌ 연결 오류. SCRIPT_URL 확인 후 다시 시도해주세요.','red'); }
+    } else { banner('❌ 로드 실패: '+json.message,'red'); stopLoadingCountdown(); }
+  } catch(e){ banner('❌ 연결 오류. SCRIPT_URL 확인 후 다시 시도해주세요.','red'); stopLoadingCountdown(); }
 
   if(autoTimer) clearTimeout(autoTimer);
   autoTimer=setTimeout(()=>loadData(false), AUTO_REFRESH_MS);
