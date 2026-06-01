@@ -193,6 +193,52 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
   </nav>
+  <!-- ★ 버전 히스토리 -->
+  <div style="padding:10px 12px;border-top:1px solid rgba(255,255,255,.08);">
+    <!-- 메이저 업데이트 단독 표시 -->
+    <div style="background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.4);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
+        <span style="font-size:10px;font-weight:800;color:#60A5FA;font-family:'JetBrains Mono',monospace;">v4.5.3</span>
+        <span style="font-size:9px;background:rgba(37,99,235,.5);color:#fff;padding:1px 6px;border-radius:10px;font-weight:700;">NEW</span>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;">📱 모바일 버전 출시</div>
+    </div>
+    <div style="background:rgba(13,148,136,.15);border:1px solid rgba(13,148,136,.3);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
+        <span style="font-size:10px;font-weight:800;color:#2DD4BF;font-family:'JetBrains Mono',monospace;">v4.5</span>
+        <span style="font-size:9px;background:rgba(13,148,136,.4);color:#fff;padding:1px 6px;border-radius:10px;font-weight:700;">MAJOR</span>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;">📅 월별 선택 & 일별 DATA 연동</div>
+    </div>
+    <!-- 일반 업데이트 아코디언 -->
+    <div>
+      <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.arrow').textContent=this.nextElementSibling.style.display==='block'?'▲':'▼';" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:6px 10px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
+        <span style="font-size:10px;color:rgba(255,255,255,.5);font-weight:700;">📋 전체 업데이트 내역</span>
+        <span class="arrow" style="font-size:9px;color:rgba(255,255,255,.4);">▼</span>
+      </button>
+      <div style="display:none;margin-top:4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;">
+        <div style="font-size:9px;color:rgba(255,255,255,.35);font-family:'JetBrains Mono',monospace;line-height:1.8;">
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin-bottom:4px;">v4.5.3</div>
+          <div>· 월 선택 드롭다운 상단 이동</div>
+          <div>· 빈 데이터 처리 개선</div>
+          <div>· 로딩 카운트다운 위치 이동</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.5.2</div>
+          <div>· 로딩 카운트다운 추가</div>
+          <div>· 단계별 로딩 문구 표시</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.5.1</div>
+          <div>· 수치 소수점 1자리로 변경</div>
+          <div>· 실적 0시 달성율 바 숨김</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.5</div>
+          <div>· 2026년 월_일DATA 시트 연동</div>
+          <div>· Apps Script v3.4 업데이트</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.4</div>
+          <div>· 팀명 리네임 (이커머스/리테일)</div>
+          <div>· 채널 필터 탭 추가</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="sb-footer">
     <div class="sb-kpi">
       <div class="sb-kpi-item"><span class="sb-kpi-v" id="sb-monthly">—</span><span class="sb-kpi-l">당월 매출</span></div>
