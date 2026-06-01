@@ -595,6 +595,14 @@ function onMonthSelect(val){
 const f억=v=>{
   if(v===null||v===undefined)return'—';
   const a=Math.abs(v),s=v<0?'-':'';
+  if(a>=1e8)return s+(a/1e8).toFixed(2)+'억';
+  if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만';
+  return v.toLocaleString();
+};
+// 일별 차트 레이블 전용 (1자리 - 겹침 방지)
+const f억1=v=>{
+  if(v===null||v===undefined)return'—';
+  const a=Math.abs(v),s=v<0?'-':'';
   if(a>=1e8)return s+(a/1e8).toFixed(1)+'억';
   if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만';
   return v.toLocaleString();
@@ -941,7 +949,7 @@ function renderDailyChart(month){
         ctx.fillStyle='#1D4ED8';
         ctx.font='bold 11px "JetBrains Mono",monospace';
         ctx.textAlign='center';
-        ctx.fillText(f억(v),pt.x,pt.y-10);
+        ctx.fillText(f억1(v),pt.x,pt.y-10);
       });
       ctx.restore();
     }
