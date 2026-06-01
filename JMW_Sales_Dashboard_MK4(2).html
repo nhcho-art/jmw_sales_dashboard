@@ -771,11 +771,7 @@ function renderDailyChart(month){
   const intercept=(sumY-slope*sumX)/n||0;
   const trendVals=days.map(d=>Math.max(slope*d+intercept,0));
 
-  // ★ 최고/최저 인덱스 계산 (레이블 표시용)
-  const maxIdx=vals.indexOf(Math.max(...vals));
-  const minIdx=vals.indexOf(Math.min(...vals));
-
-  // ★ 레이블 플러그인: 최고/최저값만 표시, 나머지는 툴팁
+  // 레이블 플러그인: 모든 포인트 위에 숫자 표시
   const labelPlugin={
     id:'dailyLabel',
     afterDatasetsDraw(chart){
@@ -783,14 +779,12 @@ function renderDailyChart(month){
       ctx.save();
       const meta=chart.getDatasetMeta(0);
       meta.data.forEach((pt,i)=>{
-        if(i!==maxIdx && i!==minIdx) return; // 최고/최저만
         const v=vals[i];
-        const isMax=(i===maxIdx);
-        ctx.fillStyle=isMax?'#16A34A':'#DC2626';
+        if(!v) return;
+        ctx.fillStyle='#1D4ED8';
         ctx.font='bold 11px "JetBrains Mono",monospace';
         ctx.textAlign='center';
-        const yOffset=isMax?-13:14;
-        ctx.fillText(f억(v),pt.x,pt.y+yOffset);
+        ctx.fillText(f억(v),pt.x,pt.y-10);
       });
       ctx.restore();
     }
@@ -827,8 +821,6 @@ function renderDailyChart(month){
           grid:{display:false},
           ticks:{
             font:{size:10},color:'#64748B',
-            // ★ 데이터 많을 때 자동 스킵 (maxTicksLimit)
-            maxTicksLimit:16,
             maxRotation:0,
           }
         },
