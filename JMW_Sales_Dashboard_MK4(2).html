@@ -78,7 +78,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .rate-wrap{margin-bottom:16px;}
 .rate-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
 .rate-track{height:30px;background:#EEF2F7;border-radius:8px;overflow:hidden;position:relative;border:1px solid var(--border2);}
-.rate-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;transition:width 1.1s cubic-bezier(.4,0,.2,1);}
+.rate-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;transition:width 1.1s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%);}
 .rate-lbl{font-size:13px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;}
 .rate-ticks{display:flex;justify-content:space-between;margin-top:4px;}
 .rate-tick{font-size:10px;color:var(--text4);font-family:'JetBrains Mono',monospace;}
@@ -258,6 +258,8 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     </select>
     <button class="ptab" onclick="setPeriod('q1',this)">Q1 (1~3월)</button>
     <button class="ptab" onclick="setPeriod('q2',this)">Q2 (4~6월)</button>
+    <button class="ptab" onclick="setPeriod('q3',this)">Q3 (7~9월)</button>
+    <button class="ptab" onclick="setPeriod('q4',this)">Q4 (10~12월)</button>
     <button class="ptab" onclick="setPeriod('h1',this)">상반기</button>
     <button class="ptab" onclick="setPeriod('h2',this)">하반기</button>
     <button class="ptab on" onclick="setPeriod('year',this)">연간</button>
@@ -274,7 +276,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div class="perf-hd">
           <div class="perf-hd-title">
             📅 월별 목표 대비 실적현황
-            <span class="badge badge-blue" id="p0-badge-m">2026년 6월</span>
+            <span class="badge badge-blue" id="p0-badge-m">로딩 중...</span>
           </div>
           <div class="perf-hd-sub" id="p0-m-days">로딩 중...</div>
         </div>
@@ -624,13 +626,13 @@ const fNum=v=>Math.round(v||0).toLocaleString();
 
 const PERIOD_MONTHS={
   month:[new Date().getMonth()+1],
-  q1:[1,2,3],q2:[4,5,6],
+  q1:[1,2,3],q2:[4,5,6],q3:[7,8,9],q4:[10,11,12],
   h1:[1,2,3,4,5,6],h2:[7,8,9,10,11,12],
   year:[1,2,3,4,5,6,7,8,9,10,11,12]
 };
 const PERIOD_LABELS={
   month:'2026년 '+(new Date().getMonth()+1)+'월',
-  q1:'2026년 Q1 (1~3월)',q2:'2026년 Q2 (4~6월)',
+  q1:'2026년 Q1 (1~3월)',q2:'2026년 Q2 (4~6월)',q3:'2026년 Q3 (7~9월)',q4:'2026년 Q4 (10~12월)',
   h1:'2026년 상반기 (1~6월)',h2:'2026년 하반기 (7~12월)',year:'2026년 연간'
 };
 
@@ -790,7 +792,7 @@ function renderPage0(){
   setText('p0-yr-rate',fRate(yrRate));
   setText('p0-yr-sub', yrTgt>0 ? `연간 목표 ${f억(yrTgt)} 기준 · 누적 달성` : '목표 데이터 로딩 중...');
   const yrPct=Math.min(yrRate*100,100);
-  const yrBg=yrRate>=1?'#16A34A':yrRate>=0.9?'#0D9488':yrRate>=0.85?'#D97706':'#2563EB';
+  const yrBg='linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%)';
   setTimeout(()=>{
     const b=document.getElementById('p0-yr-bar');
     b.style.width=yrPct+'%'; b.style.background=yrBg;
@@ -806,6 +808,7 @@ function renderPage0(){
     const fillPct = r!==null ? Math.min(ratePct,100) : 0;
     const overPct = r!==null ? Math.max(ratePct-100,0) : 0;
     const bc = !r ? '#94A3B8' : ratePct>=100?'#16A34A':ratePct>=85?'#D97706':'#2563EB';
+    const barGrad = r ? 'linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%)' : '#E2E8F0';
     const rStr = r!==null ? ratePct.toFixed(2)+'%' : (hasTgt ? '0.00%' : '—');
     // 하반기 목표 미확정 표시
     const isH2NoTgt = m.m >= 7 && !hasTgt;
@@ -813,7 +816,7 @@ function renderPage0(){
       <span class="mb-lbl">${m.m}월</span>
       <div class="mb-track" style="position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);">
         ${r!==null&&ratePct<100?`<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>`:''}
-        <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${bc};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
+        <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${barGrad};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
         ${overPct>0?`<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:#F59E0B;border-radius:0 4px 4px 0;"></div>`:''}
         ${isH2NoTgt?`<div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:6px;"><span style="font-size:9px;color:#94A3B8;font-weight:600;">목표 미확정</span></div>`:''}
       </div>
@@ -880,7 +883,7 @@ function renderMonthCard(){
   document.getElementById('p0-m-rate').textContent=fRate(mRate);
   document.getElementById('p0-m-rate').className='kpi3-val '+(mRate>=1?'green':mRate>=0.85?'amber':'blue');
 
-  const mBg=mRate>=1?'#16A34A':mRate>=0.85?'#D97706':'#2563EB';
+  const mBg='linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%)';
   const mPct=Math.min(mRate*100,100);
   setTimeout(()=>{
     const b=document.getElementById('p0-m-bar');
@@ -891,7 +894,7 @@ function renderMonthCard(){
       if(outEl) outEl.style.display='none';
     } else {
       setText('p0-m-bar-lbl','');
-      if(outEl){outEl.style.display='inline';outEl.style.color=mBg;outEl.textContent=fRate(mRate)+'%';}
+      if(outEl){outEl.style.display='inline';outEl.style.color='#2563EB';outEl.textContent=fRate(mRate)+'%';}
     }
   },200);
 
@@ -988,7 +991,7 @@ function renderDailyChart(month){
 }
 
 function renderYoYMainChart(){
-  const months=[1,2,3,4,5,6];
+  const months=[1,2,3,4,5,6,7,8,9,10,11,12];
   const get26=m=>D26.length>0
     ?D26.filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===m&&(r.year||2026)===2026).reduce((s,r)=>s+(r.sales||0),0)
     :(TGT.monthly.find(x=>x.m===m)?.act||0);
@@ -1203,6 +1206,8 @@ function goPage(i){
 }
 
 buildMonthSelect();
+// ★ 초기 배지 월 세팅 (로딩 전 표시)
+setText('p0-badge-m','2026년 '+selectedMonth+'월');
 loadData(false);
 </script>
 </body>
