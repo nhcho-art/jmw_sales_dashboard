@@ -66,7 +66,7 @@ html,body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(-
 .m-rate-wrap{margin-bottom:14px;}
 .m-rate-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;}
 .m-rate-track{height:28px;background:#EEF2F7;border-radius:8px;overflow:hidden;border:1px solid var(--border2);}
-.m-rate-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width 1.1s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%);}
+.m-rate-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width 1.1s cubic-bezier(.4,0,.2,1);background:rgba(37,99,235,.85);}
 .m-rate-lbl{font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;}
 .m-rate-ticks{display:flex;justify-content:space-between;margin-top:3px;}
 .m-rate-tick{font-size:9px;color:var(--text4);font-family:'JetBrains Mono',monospace;}
@@ -616,7 +616,7 @@ function renderPage0(){
   setText('p0-yr-rate',fRate(yrRate));
   setText('p0-yr-sub',yrTgt>0?`연간 목표 ${f억(yrTgt)} 기준 · 누적 달성`:'로딩 중...');
   const yrPct=Math.min(yrRate*100,100);
-  const yrBg='linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%)';
+  const yrBg='rgba(37,99,235,.85)';
   setTimeout(()=>{
     const b=document.getElementById('p0-yr-bar');
     b.style.width=yrPct+'%';b.style.background=yrBg;
@@ -631,8 +631,8 @@ function renderPage0(){
     const ratePct=r!==null?r*100:0;
     const fillPct=r!==null?Math.min(ratePct,100):0;
     const overPct=r!==null?Math.max(ratePct-100,0):0;
-    const bc=!r?'#94A3B8':ratePct>=100?'#16A34A':ratePct>=85?'#D97706':'#2563EB';
-    const barGrad=r?'linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%)':'#E2E8F0';
+    const barGrad=r?(ratePct>=80?'rgba(220,38,38,.85)':'rgba(37,99,235,.85)'):'#E2E8F0';
+    const bc=!r?'#94A3B8':(ratePct>=80?'#DC2626':'#2563EB');
     const rStr=r!==null?ratePct.toFixed(2)+'%':(hasTgt?'0.00%':'—');
     const isH2NoTgt=m.m>=7&&!hasTgt;
     return `<div class="m-mb-row">
@@ -697,7 +697,7 @@ function renderMonthCard(){
   document.getElementById('p0-m-rate').textContent=fRate(mRate);
   document.getElementById('p0-m-rate').className='m-kpi3-val '+(mRate>=1?'green':mRate>=0.85?'amber':'blue');
 
-  const mBg='linear-gradient(90deg,#1D4ED8 0%,#2563EB 20%,#06B6D4 40%,#10B981 60%,#84CC16 75%,#FACC15 87%,#F97316 93%,#EF4444 100%)';
+  const mBg='rgba(37,99,235,.85)';
   const mPct=Math.min(mRate*100,100);
   setTimeout(()=>{
     const b=document.getElementById('p0-m-bar');
