@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JMW Sales Dashboard v4.5</title>
+<title>JMW Sales Dashboard v4.7</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){location.href='jmw_sales_dashboard_mobile.html';}</script>
 <style>
@@ -157,7 +157,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 .sec-title{font-size:16px;font-weight:800;color:var(--text);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px;}
 .sec-title .tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:rgba(37,99,235,.1);color:var(--blue);}
 #banner{position:fixed;top:56px;left:220px;right:0;z-index:200;padding:10px 24px;font-size:13px;display:none;align-items:center;gap:8px;}
-/* ★ 월 선택 드롭다운 */
 .month-select-wrap{display:flex;align-items:center;gap:8px;margin-left:auto;}
 .month-select-label{font-size:11px;font-weight:700;color:var(--text3);}
 .month-select{padding:4px 10px;border-radius:8px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:12px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;outline:none;}
@@ -172,7 +171,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="brand"><span class="dot"></span>JMW SALES</div>
-    <div class="sub">Sales Dashboard v4.5</div>
+    <div class="sub">Sales Dashboard v4.7</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">실적 현황</div>
@@ -182,7 +181,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
     <button class="nb" onclick="goPage(2,this)"><span class="nbi">📈</span> 전년 동기 대비</button>
     <button class="nb" onclick="goPage(3,this)"><span class="nbi">🏆</span> TOP 10 랭킹</button>
 
-    <!-- ★ 로딩 카운트다운 -->
     <div id="loading-wrap" style="margin:10px 4px 0;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;display:none;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
         <span id="loading-msg" style="font-size:10px;color:rgba(255,255,255,.5);font-family:'Noto Sans KR',sans-serif;line-height:1.4;flex:1;">📡 Google Sheets 연결 중...</span>
@@ -193,24 +191,22 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
   </nav>
-  <!-- ★ 버전 히스토리 -->
+
+  <!-- 버전 히스토리 -->
   <div style="padding:10px 12px;border-top:1px solid rgba(255,255,255,.08);">
-    <!-- 메이저 업데이트 단독 표시 -->
     <div style="background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.4);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
-        <span style="font-size:10px;font-weight:800;color:#60A5FA;font-family:'JetBrains Mono',monospace;">v4.6</span>
+        <span style="font-size:10px;font-weight:800;color:#60A5FA;font-family:'JetBrains Mono',monospace;">v4.7</span>
         <span style="font-size:9px;background:rgba(37,99,235,.5);color:#fff;padding:1px 6px;border-radius:10px;font-weight:700;">NEW</span>
       </div>
-      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;">📱 모바일 버전 출시</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;">📊 연간 실적 카드 · 하반기 G.I BAR</div>
     </div>
-    <div style="background:rgba(13,148,136,.15);border:1px solid rgba(13,148,136,.3);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
-        <span style="font-size:10px;font-weight:800;color:#2DD4BF;font-family:'JetBrains Mono',monospace;">v4.5</span>
-        <span style="font-size:9px;background:rgba(13,148,136,.4);color:#fff;padding:1px 6px;border-radius:10px;font-weight:700;">MAJOR</span>
+        <span style="font-size:10px;font-weight:800;color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace;">v4.6</span>
       </div>
-      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;">📅 월별 선택 & 일별 DATA 연동</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.5);font-weight:600;">📱 모바일 버전 출시</div>
     </div>
-    <!-- 일반 업데이트 아코디언 -->
     <div>
       <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.arrow').textContent=this.nextElementSibling.style.display==='block'?'▲':'▼';" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:6px 10px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
         <span style="font-size:10px;color:rgba(255,255,255,.5);font-weight:700;">📋 전체 업데이트 내역</span>
@@ -218,16 +214,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </button>
       <div style="display:none;margin-top:4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;">
         <div style="font-size:9px;color:rgba(255,255,255,.35);font-family:'JetBrains Mono',monospace;line-height:1.8;">
-          <div style="color:rgba(255,255,255,.6);font-weight:700;margin-bottom:4px;">v4.6</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin-bottom:4px;">v4.7</div>
+          <div>· 연간 목표 대비 실적 카드</div>
+          <div>· G.I BAR 하반기 전환</div>
+          <div>· 1~12월 월별 미니바 확장</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.6</div>
           <div>· 월 선택 드롭다운 상단 이동</div>
           <div>· 빈 데이터 처리 개선</div>
           <div>· 로딩 카운트다운 위치 이동</div>
           <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.5.2</div>
           <div>· 로딩 카운트다운 추가</div>
-          <div>· 단계별 로딩 문구 표시</div>
-          <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.5.1</div>
-          <div>· 수치 소수점 1자리로 변경</div>
-          <div>· 실적 0시 달성율 바 숨김</div>
           <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.5</div>
           <div>· 2026년 월_일DATA 시트 연동</div>
           <div>· Apps Script v3.4 업데이트</div>
@@ -242,17 +238,17 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <div class="sb-footer">
     <div class="sb-kpi">
       <div class="sb-kpi-item"><span class="sb-kpi-v" id="sb-monthly">—</span><span class="sb-kpi-l">당월 매출</span></div>
-      <div class="sb-kpi-item"><span class="sb-kpi-v" id="sb-rate">—</span><span class="sb-kpi-l">상반기 달성율</span></div>
+      <!-- ★ v4.7: 상반기 → 연간 달성율 -->
+      <div class="sb-kpi-item"><span class="sb-kpi-v" id="sb-rate">—</span><span class="sb-kpi-l">연간 달성율</span></div>
     </div>
     <div class="sb-updated" id="sb-updated">로딩 중...</div>
     <div class="sb-auto" id="sb-auto">🔄 10분 자동 갱신</div>
   </div>
-
 </aside>
 
 <div class="main">
   <div class="topbar">
-    <div class="topbar-title" id="topbar-title">전체 실적 요약 <span id="topbar-sub">2026년 상반기</span></div>
+    <div class="topbar-title" id="topbar-title">전체 실적 요약 <span id="topbar-sub">2026년 연간</span></div>
     <button class="tbtn primary" onclick="loadData(true)">🔄 지금 갱신</button>
   </div>
 
@@ -273,7 +269,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <!-- PAGE 0 -->
   <div class="pg on" id="p0">
     <div class="g2">
-      <!-- 당월 카드 -->
+      <!-- 당월 카드 (변경 없음) -->
       <div class="perf-card">
         <div class="perf-hd">
           <div class="perf-hd-title">
@@ -296,15 +292,12 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
             </div>
             <div class="rate-ticks"><span class="rate-tick">0%</span><span class="rate-tick">25%</span><span class="rate-tick">50%</span><span class="rate-tick">75%</span><span class="rate-tick">100%</span></div>
           </div>
-
-          <!-- ★ 일별 매출 추이 (dataDaily 기반, 월 선택 연동) -->
           <div style="margin-bottom:16px;">
             <div style="margin-bottom:8px;">
               <div class="rate-title" id="daily-chart-title">📈 일별 매출 추이</div>
             </div>
             <div style="position:relative;height:180px;"><canvas id="ch-daily"></canvas></div>
           </div>
-
           <div class="sim-box">
             <div class="sim-title">📐 당월 매출 시뮬레이션</div>
             <div class="sim-grid">
@@ -319,21 +312,21 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         </div>
       </div>
 
-      <!-- 상반기 카드 -->
+      <!-- ★ v4.7: 상반기 → 연간 목표 대비 실적 카드 -->
       <div class="perf-card">
         <div class="perf-hd">
-          <div class="perf-hd-title">📆 상반기 목표 대비 실적현황 <span class="badge badge-teal">2026년 1~6월</span></div>
-          <div class="perf-hd-sub" id="p0-h1-sub">로딩 중...</div>
+          <div class="perf-hd-title">📆 2026년 목표 대비 실적현황 <span class="badge badge-teal">2026년 연간</span></div>
+          <div class="perf-hd-sub" id="p0-yr-sub">로딩 중...</div>
         </div>
         <div class="perf-body">
           <div class="kpi3">
-            <div class="kpi3-item"><div class="kpi3-lbl">📌 목표</div><div class="kpi3-val" id="p0-h1-tgt">—</div><div class="kpi3-unit">원</div></div>
-            <div class="kpi3-item"><div class="kpi3-lbl">✅ 실적</div><div class="kpi3-val teal" id="p0-h1-act">—</div><div class="kpi3-unit">원</div></div>
-            <div class="kpi3-item"><div class="kpi3-lbl">📊 달성율</div><div class="kpi3-val teal" id="p0-h1-rate">—</div><div class="kpi3-unit">%</div></div>
+            <div class="kpi3-item"><div class="kpi3-lbl">📌 총 목표</div><div class="kpi3-val" id="p0-yr-tgt">—</div><div class="kpi3-unit">원</div></div>
+            <div class="kpi3-item"><div class="kpi3-lbl">✅ 누적 실적</div><div class="kpi3-val teal" id="p0-yr-act">—</div><div class="kpi3-unit">원</div></div>
+            <div class="kpi3-item"><div class="kpi3-lbl">📊 달성율</div><div class="kpi3-val teal" id="p0-yr-rate">—</div><div class="kpi3-unit">%</div></div>
           </div>
           <div class="rate-wrap">
             <div class="rate-title">목표 대비 달성율</div>
-            <div class="rate-track"><div class="rate-fill" id="p0-h1-bar" style="width:0%"><span class="rate-lbl" id="p0-h1-bar-lbl"></span></div></div>
+            <div class="rate-track"><div class="rate-fill" id="p0-yr-bar" style="width:0%"><span class="rate-lbl" id="p0-yr-bar-lbl"></span></div></div>
             <div class="rate-ticks"><span class="rate-tick">0%</span><span class="rate-tick">25%</span><span class="rate-tick">50%</span><span class="rate-tick">75%</span><span class="rate-tick">100%</span></div>
           </div>
           <div class="month-sec">
@@ -344,11 +337,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
 
-    <!-- G.I BAR -->
+    <!-- ★ v4.7: G.I BAR — 하반기 진척률 -->
     <div class="gi-wrap">
       <div class="gi-top">
         <div class="gi-top-left">
-          <div class="gi-title">📊 G.I BAR — 상반기 진척률</div>
+          <div class="gi-title">📊 G.I BAR — 2026 하반기 진척률</div>
           <div class="gi-sub" id="gi-sub">로딩 중...</div>
         </div>
         <div>
@@ -393,7 +386,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </div>
     </div>
 
-    <!-- 2025 vs 2026 -->
+    <!-- 2025 vs 2026 (변경 없음) -->
     <div class="yoy-wrap">
       <div class="yoy-hd">
         <div class="yoy-hd-title">📊 2025 vs 2026 월별 매출 비교</div>
@@ -523,30 +516,50 @@ function deptBadge(d){
   return m[d]||'b-gray';
 }
 
+// ★ v4.7: 1~12월 전체, 하반기(7~12)는 목표 TBD(0으로 초기화)
 const TGT = {
-  h1tgt: 21974128497, h1act: 0,
   monthly: [
-    {m:1,tgt:2518484217,act:2438264985},{m:2,tgt:2633625784,act:2629426277},
-    {m:3,tgt:2756655335,act:2715859066},{m:4,tgt:3096315144,act:2690420688},
-    {m:5,tgt:3453165000,act:0},{m:6,tgt:7427333450,act:0},
+    {m:1, tgt:2518484217,  act:2438264985},
+    {m:2, tgt:2633625784,  act:2629426277},
+    {m:3, tgt:2756655335,  act:2715859066},
+    {m:4, tgt:3096315144,  act:2690420688},
+    {m:5, tgt:3453165000,  act:0},
+    {m:6, tgt:7427333450,  act:0},
+    // ★ 하반기: 목표 확정 전 — 나중에 숫자만 교체
+    {m:7, tgt:0, act:0},
+    {m:8, tgt:0, act:0},
+    {m:9, tgt:0, act:0},
+    {m:10,tgt:0, act:0},
+    {m:11,tgt:0, act:0},
+    {m:12,tgt:0, act:0},
   ],
 };
+
+// 파생값 계산 함수
+function calcTotals(){
+  // 연간
+  TGT.yearTgt = TGT.monthly.reduce((s,m)=>s+(m.tgt||0),0);
+  TGT.yearAct = TGT.monthly.reduce((s,m)=>s+(m.act||0),0);
+  // 상반기
+  TGT.h1tgt = TGT.monthly.slice(0,6).reduce((s,m)=>s+(m.tgt||0),0);
+  TGT.h1act = TGT.monthly.slice(0,6).reduce((s,m)=>s+(m.act||0),0);
+  // ★ 하반기 (G.I BAR 기준)
+  TGT.h2tgt = TGT.monthly.slice(6,12).reduce((s,m)=>s+(m.tgt||0),0);
+  TGT.h2act = TGT.monthly.slice(6,12).reduce((s,m)=>s+(m.act||0),0);
+}
+calcTotals();
 
 let D26=[],D25=[];
 let charts={};
 let currentPeriod='year';
-
-// ★ 선택 중인 월 (기본: 현재 월)
 let selectedMonth = new Date().getMonth()+1;
 
-// 드롭다운 옵션: 1~현재월 동적 생성, 디폴트는 현재월 표시만 (선택 안 된 상태)
 function buildMonthSelect(){
   const sel = document.getElementById('month-select');
   if(!sel) return;
   const now = new Date();
   const curM = now.getMonth()+1;
   sel.innerHTML = '';
-  // 안내 옵션
   const placeholder = document.createElement('option');
   placeholder.value = '';
   placeholder.textContent = '📅 월 선택';
@@ -560,7 +573,6 @@ function buildMonthSelect(){
     if(currentPeriod === 'month' && m === selectedMonth) opt.selected = true;
     sel.appendChild(opt);
   }
-  // 활성 상태에 따라 드롭다운 스타일 전환
   if(currentPeriod === 'month'){
     sel.style.background = 'var(--blue)';
     sel.style.color = '#fff';
@@ -599,7 +611,6 @@ const f억=v=>{
   if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만';
   return v.toLocaleString();
 };
-// 일별 차트 레이블 전용 (1자리 - 겹침 방지)
 const f억1=v=>{
   if(v===null||v===undefined)return'—';
   const a=Math.abs(v),s=v<0?'-':'';
@@ -631,7 +642,6 @@ function setPeriod(p,btn){
   ['p1-period-tag','p3-period-tag'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.textContent=PERIOD_LABELS[p];
   });
-  // 드롭다운 흐리게 (월 선택 모드 아닐 때)
   const sel=document.getElementById('month-select');
   if(sel){
     sel.style.background = '#fff';
@@ -660,8 +670,7 @@ function banner(msg,type='blue'){
   if(type==='green')setTimeout(()=>b.style.display='none',3000);
 }
 
-// ── 로딩 카운트다운 ──────────────────────────────────────────
-const LOADING_TOTAL = 20; // 예상 로딩 시간(초)
+const LOADING_TOTAL = 20;
 const LOADING_MSGS = [
   { at: 20, msg: '📡 Google Sheets 연결 중...' },
   { at: 17, msg: '📂 2026년 실적 데이터 로딩 중...' },
@@ -678,26 +687,19 @@ function startLoadingCountdown() {
   const sec  = document.getElementById('loading-sec');
   const msg  = document.getElementById('loading-msg');
   if(!wrap) return;
-
   wrap.style.display = 'block';
   let remaining = LOADING_TOTAL;
-
-  // 즉시 첫 프레임
   sec.textContent = remaining + 's';
   bar.style.width = '0%';
   msg.textContent = LOADING_MSGS[0].msg;
-
   if(_loadingTimer) clearInterval(_loadingTimer);
   _loadingTimer = setInterval(() => {
     remaining--;
     const pct = Math.min(((LOADING_TOTAL - remaining) / LOADING_TOTAL) * 100, 100);
     bar.style.width = pct + '%';
     sec.textContent = Math.max(remaining, 0) + 's';
-
-    // 단계별 문구 전환
     const step = LOADING_MSGS.find(m => remaining <= m.at && remaining > (m.at - 3));
     if(step) msg.textContent = step.msg;
-
     if(remaining <= 0) clearInterval(_loadingTimer);
   }, 1000);
 }
@@ -709,8 +711,6 @@ function stopLoadingCountdown() {
   const msg  = document.getElementById('loading-msg');
   const sec  = document.getElementById('loading-sec');
   if(!wrap) return;
-
-  // 완료 애니메이션 후 숨김
   bar.style.width = '100%';
   msg.textContent = '✅ 로딩 완료!';
   sec.textContent = '0s';
@@ -728,9 +728,9 @@ async function loadData(manual=false){
       D26=json.data.data2026||[];
       D25=json.data.data2025||[];
       window._dataCurrent = json.data.dataCurrent||[];
-      // ★ dataDaily 저장
       window._dataDaily = json.data.dataDaily||[];
 
+      // 목표 데이터 갱신 (유효한 경우에만)
       if(json.data.target?.monthly?.length>0){
         const tm=json.data.target.monthly;
         const parsedH1Tgt=tm.slice(0,6).reduce((s,m)=>s+(m.target||0),0);
@@ -740,23 +740,23 @@ async function loadData(manual=false){
             if(found&&found.target>1000000000) return {...t,tgt:found.target};
             return t;
           });
-          TGT.h1tgt=parsedH1Tgt;
         }
       }
 
+      // 실적 업데이트
       TGT.monthly=TGT.monthly.map(t=>{
-        // ★ 실적은 dataDaily 우선 사용, 없으면 D26 월합산
         const dailySales = (window._dataDaily||[])
           .filter(r=>r.month===t.m)
           .reduce((s,r)=>s+(r.sales||0),0);
         const d26Sales = D26
           .filter(r=>(r.month||Number(String(r.ym||'').split('-')[1]))===t.m&&(r.year||2026)===2026)
           .reduce((s,r)=>s+(r.sales||0),0);
-        // dataDaily가 있으면 우선, 없으면 D26
         const act = dailySales > 0 ? dailySales : d26Sales;
         return {...t, act};
       });
-      TGT.h1act=TGT.monthly.slice(0,6).reduce((s,m)=>s+(m.act||0),0);
+
+      // ★ 파생값 재계산
+      calcTotals();
 
       const now=new Date();
       document.getElementById('sb-updated').textContent='갱신: '+now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
@@ -775,65 +775,79 @@ function renderAll(){ renderPage0(); renderPage1(); renderPage2(); renderPage3()
 
 // ════ PAGE 0 ════
 function renderPage0(){
-  const h1tgt=TGT.h1tgt, h1act=TGT.h1act, h1rate=h1tgt>0?h1act/h1tgt:0;
-
-  // 사이드바 KPI
+  // 사이드바 KPI — ★ 연간 달성율
   const now=new Date();
   const curM=now.getMonth()+1;
   const curMonthData=TGT.monthly.find(m=>m.m===curM)||TGT.monthly[TGT.monthly.length-1];
   setText('sb-monthly',f억(curMonthData.act));
-  setText('sb-rate',fRate(h1rate)+'%');
+  const yearRate=TGT.yearTgt>0?TGT.yearAct/TGT.yearTgt:0;
+  setText('sb-rate',fRate(yearRate)+'%');
 
-  // 상반기 카드
-  setText('p0-h1-tgt',f억(h1tgt));
-  setText('p0-h1-act',f억(h1act));
-  setText('p0-h1-rate',fRate(h1rate));
-  const h1TgtOk=h1tgt>0;
-  setText('p0-h1-sub', h1TgtOk ? `목표 ${f억(h1tgt)} 기준 · G.I BAR 연동` : '목표 데이터 로딩 중...');
-  const h1Pct=Math.min(h1rate*100,100);
-  const h1Bg=h1rate>=1?'#16A34A':h1rate>=0.9?'#0D9488':h1rate>=0.85?'#D97706':'#2563EB';
+  // ★ 연간 목표 대비 실적 카드
+  const yrTgt=TGT.yearTgt, yrAct=TGT.yearAct, yrRate=yrTgt>0?yrAct/yrTgt:0;
+  setText('p0-yr-tgt',f억(yrTgt));
+  setText('p0-yr-act',f억(yrAct));
+  setText('p0-yr-rate',fRate(yrRate));
+  setText('p0-yr-sub', yrTgt>0 ? `연간 목표 ${f억(yrTgt)} 기준 · 누적 달성` : '목표 데이터 로딩 중...');
+  const yrPct=Math.min(yrRate*100,100);
+  const yrBg=yrRate>=1?'#16A34A':yrRate>=0.9?'#0D9488':yrRate>=0.85?'#D97706':'#2563EB';
   setTimeout(()=>{
-    const b=document.getElementById('p0-h1-bar');
-    b.style.width=h1Pct+'%'; b.style.background=h1Bg;
-    setText('p0-h1-bar-lbl',h1Pct>18?fRate(h1rate)+'%':'');
+    const b=document.getElementById('p0-yr-bar');
+    b.style.width=yrPct+'%'; b.style.background=yrBg;
+    setText('p0-yr-bar-lbl',yrPct>18?fRate(yrRate)+'%':'');
   },200);
 
-  // 월별 미니바
+  // ★ 월별 미니바 — 1~12월 전체
   document.getElementById('p0-month-bars').innerHTML=TGT.monthly.map(m=>{
-    const r=m.tgt>0&&m.act>0?m.act/m.tgt:null;
-    const ratePct=r!==null?r*100:0;
-    const fillPct=r!==null?Math.min(ratePct,100):0;
-    const overPct=r!==null?Math.max(ratePct-100,0):0;
-    const bc=!r?'#94A3B8':ratePct>=100?'#16A34A':ratePct>=85?'#D97706':'#2563EB';
-    const overColor='#F59E0B';
-    const rStr=r!==null?ratePct.toFixed(2)+'%':'—';
+    const hasTgt = m.tgt > 0;
+    const hasAct = m.act > 0;
+    const r = hasTgt && hasAct ? m.act/m.tgt : null;
+    const ratePct = r!==null ? r*100 : 0;
+    const fillPct = r!==null ? Math.min(ratePct,100) : 0;
+    const overPct = r!==null ? Math.max(ratePct-100,0) : 0;
+    const bc = !r ? '#94A3B8' : ratePct>=100?'#16A34A':ratePct>=85?'#D97706':'#2563EB';
+    const rStr = r!==null ? ratePct.toFixed(2)+'%' : (hasTgt ? '0.00%' : '—');
+    // 하반기 목표 미확정 표시
+    const isH2NoTgt = m.m >= 7 && !hasTgt;
     return `<div class="mb-row">
       <span class="mb-lbl">${m.m}월</span>
       <div class="mb-track" style="position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);">
         ${r!==null&&ratePct<100?`<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>`:''}
         <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${bc};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
-        ${overPct>0?`<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:${overColor};border-radius:0 4px 4px 0;"></div>`:''}
+        ${overPct>0?`<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:#F59E0B;border-radius:0 4px 4px 0;"></div>`:''}
+        ${isH2NoTgt?`<div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:6px;"><span style="font-size:9px;color:#94A3B8;font-weight:600;">목표 미확정</span></div>`:''}
       </div>
-      <span class="mb-val" style="color:${m.act>0?'var(--text)':'#94A3B8'}">${m.act>0?f억(m.act):'—'}</span>
+      <span class="mb-val" style="color:${hasAct?'var(--text)':'#94A3B8'}">${hasAct?f억(m.act):'—'}</span>
       <span class="mb-pct" style="color:${bc}">${rStr}</span>
     </div>`;
   }).join('');
 
-  // G.I BAR
-  const pct=h1rate*100;
-  document.getElementById('gi-pct').innerHTML=pct.toFixed(2)+'<span>%</span>';
-  const gapAmt=h1tgt-h1act;
-  setText('gi-gap',gapAmt>0?`100% 달성까지 ${f억(gapAmt)} 남음`:'🎉 상반기 목표 달성!');
-  setText('gi-sub', h1TgtOk ? `상반기 목표 ${h1tgt.toLocaleString()}원 · 구간별 달성시 보상 지급` : '목표 데이터 로딩 중...');
+  // ★ G.I BAR — 하반기 진척률
+  const h2tgt=TGT.h2tgt, h2act=TGT.h2act, h2rate=h2tgt>0?h2act/h2tgt:0;
+  const giPct=h2rate*100;
+  document.getElementById('gi-pct').innerHTML=giPct.toFixed(2)+'<span>%</span>';
+  if(h2tgt>0){
+    const gapAmt=h2tgt-h2act;
+    setText('gi-gap',gapAmt>0?`100% 달성까지 ${f억(gapAmt)} 남음`:'🎉 하반기 목표 달성!');
+    setText('gi-sub',`하반기 목표 ${h2tgt.toLocaleString()}원 · 구간별 달성시 보상 지급`);
+  } else {
+    setText('gi-gap','하반기 목표 확정 후 업데이트 예정');
+    setText('gi-sub','하반기 목표 미확정 — 목표 입력 후 자동 반영');
+    document.getElementById('gi-pct').innerHTML='—<span>%</span>';
+  }
   const fillEl=document.getElementById('gi-fill');
-  fillEl.innerHTML=`<span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;white-space:nowrap;">${f억(h1act)}</span>`;
-  setTimeout(()=>{ fillEl.style.width=Math.min(pct,100)+'%'; },200);
+  if(h2tgt>0){
+    fillEl.innerHTML=`<span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:#fff;white-space:nowrap;">${f억(h2act)}</span>`;
+    setTimeout(()=>{ fillEl.style.width=Math.min(giPct,100)+'%'; },200);
+  } else {
+    fillEl.innerHTML='';
+    setTimeout(()=>{ fillEl.style.width='0%'; },200);
+  }
 
   renderMonthCard();
   renderYoYMainChart();
 }
 
-// ★ 월 선택 카드 렌더 — selectedMonth 기준
 function renderMonthCard(){
   const m = selectedMonth;
   const mData = TGT.monthly.find(x=>x.m===m) || {m, tgt:0, act:0};
@@ -900,13 +914,10 @@ function renderMonthCard(){
   renderDailyChart(m);
 }
 
-// ★ 일별 차트 — dataDaily 기반, 선택 월 필터, 레이블 개선
 function renderDailyChart(month){
   const rows = (window._dataDaily||[]).filter(r=>r.month===month);
-
   if(!rows.length){
     destroyChart('ch-daily');
-    // 빈 상태 메시지
     const canvas=document.getElementById('ch-daily');
     const ctx=canvas.getContext('2d');
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -916,14 +927,10 @@ function renderDailyChart(month){
     ctx.fillText(month+'월 일별 데이터 없음',canvas.width/2,canvas.height/2);
     return;
   }
-
-  // 일별 합산
   const dayMap={};
   rows.forEach(r=>{ const d=r.day||0; if(!d)return; dayMap[d]=(dayMap[d]||0)+(r.sales||0); });
   const days=Object.keys(dayMap).map(Number).sort((a,b)=>a-b);
   const vals=days.map(d=>dayMap[d]);
-
-  // 추세선 (최소제곱법)
   const n=days.length;
   const sumX=days.reduce((s,x)=>s+x,0);
   const sumY=vals.reduce((s,y)=>s+y,0);
@@ -933,7 +940,6 @@ function renderDailyChart(month){
   const intercept=(sumY-slope*sumX)/n||0;
   const trendVals=days.map(d=>Math.max(slope*d+intercept,0));
 
-  // 레이블 플러그인: 모든 포인트 위에 숫자 표시
   const labelPlugin={
     id:'dailyLabel',
     afterDatasetsDraw(chart){
@@ -971,25 +977,11 @@ function renderDailyChart(month){
       layout:{padding:{top:24,right:16,left:8}},
       plugins:{
         legend:{position:'bottom',labels:{font:{size:11},boxWidth:14,usePointStyle:true}},
-        tooltip:{
-          callbacks:{
-            title:ctx=>ctx[0].label,
-            label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)
-          }
-        }
+        tooltip:{callbacks:{title:ctx=>ctx[0].label,label:ctx=>ctx.dataset.label+': '+f억(ctx.raw)}}
       },
       scales:{
-        x:{
-          grid:{display:false},
-          ticks:{
-            font:{size:10},color:'#64748B',
-            maxRotation:0,
-          }
-        },
-        y:{
-          grid:{color:'rgba(0,0,0,.04)'},
-          ticks:{font:{size:11},color:'#64748B',callback:v=>f억(v)}
-        }
+        x:{grid:{display:false},ticks:{font:{size:10},color:'#64748B',maxRotation:0}},
+        y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},color:'#64748B',callback:v=>f억(v)}}
       }
     }
   });
@@ -1046,8 +1038,6 @@ function renderYoYMainChart(){
 // ════ PAGE 1 ════
 function renderPage1(){
   const rows=filterByPeriod(D26,2026);
-
-  // 데이터 없을 때 차트 비우고 종료
   if(!rows.length){
     ['ch-md','ch-sales','ch-overseas'].forEach(id=>destroyChart(id));
     document.getElementById('tbl-channel').innerHTML=`<tr><td colspan="5" style="text-align:center;color:#94A3B8;padding:24px;">선택한 기간의 데이터가 없습니다.</td></tr>`;
@@ -1055,7 +1045,6 @@ function renderPage1(){
     if(overseasWrap) overseasWrap.style.display='none';
     return;
   }
-
   const hbarLabelPlugin={id:'hbarLabel',afterDatasetsDraw(chart){
     const{ctx}=chart;ctx.save();
     chart.getDatasetMeta(0).data.forEach((bar,i)=>{
@@ -1065,7 +1054,6 @@ function renderPage1(){
     });
     ctx.restore();
   }};
-
   const mkH=(id,data,col)=>{
     destroyChart(id);
     charts[id]=new Chart(document.getElementById(id),{type:'bar',plugins:[hbarLabelPlugin],
@@ -1074,15 +1062,12 @@ function renderPage1(){
         plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>f억(ctx.raw)}}},
         scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#64748B',callback:v=>f억(v)}},y:{grid:{display:false},ticks:{font:{size:11},color:'#334155'}}}}});
   };
-
   mkH('ch-md',sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
   mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='리테일 파트'),'channel').slice(0,15),'#0D9488');
-
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasWrap=document.getElementById('overseas-wrap');
   if(overseasRows.length>0&&overseasWrap){ overseasWrap.style.display='block'; mkH('ch-overseas',sortedGroupBy(overseasRows,'channel').slice(0,15),'#EA580C'); }
   else if(overseasWrap){ overseasWrap.style.display='none'; }
-
   window._channelRows=rows;
   renderChannelTable('all');
 }
@@ -1164,7 +1149,6 @@ function renderPage2(){
       const sign=x.rate>=0?'+':'-';const pctStr=`${sign}${Math.abs(x.rate*100).toFixed(2)}%`;const barW=Math.min(Math.abs(x.rate)*100,100).toFixed(1);
       return `<div class="hbar-item"><div class="hbar-top"><span class="hbar-name">${x.ch}</span><span style="font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;color:${x.rate>=0?'#16A34A':'#DC2626'}">${pctStr}</span></div><div class="hbar-track"><div class="hbar-fill" style="width:${barW}%;background:${x.rate>=0?'#16A34A':'#DC2626'}"></div></div></div>`;
     }).join('');
-
     const allS=[...new Set([...D26,...D25].map(r=>r.sku))];
     const skY=allS.map(sku=>({sku,s26:D26.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0),s25:D25.filter(r=>r.sku===sku).reduce((s,r)=>s+(r.sales||0),0)})).filter(x=>x.s25>0&&x.s26>0).map(x=>({...x,rate:(x.s26-x.s25)/x.s25})).sort((a,b)=>b.s26-a.s26).slice(0,15);
     document.getElementById('yoy-sku').innerHTML=skY.map(x=>{
@@ -1191,12 +1175,10 @@ function renderPage3(){
   };
   mk(rows.filter(r=>r.dept==='이커머스 파트'),'top-md');
   mk(rows.filter(r=>r.dept==='리테일 파트'),'top-sales');
-
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const overseasTop=document.getElementById('overseas-top-wrap');
   if(overseasRows.length>0&&overseasTop){ overseasTop.style.display='block'; mk(overseasRows,'top-overseas'); }
   else if(overseasTop){ overseasTop.style.display='none'; }
-
   const sm={};
   rows.forEach(r=>{ if(!sm[r.sku])sm[r.sku]={sku:r.sku,qty:0,sales:0}; sm[r.sku].qty+=(r.qty||0); sm[r.sku].sales+=(r.sales||0); });
   const grp=sku=>{ const s=(sku||'').toUpperCase(); if(s.startsWith('MS8')||s.startsWith('STL'))return '프리미엄'; if(s.startsWith('MCS')||s.startsWith('MCF')||s.startsWith('MC'))return '에어샷'; if(s.startsWith('MS6')||s.startsWith('MS7'))return 'AIR JET'; if(s.startsWith('M5')||s.startsWith('MF'))return '스탠다드'; if(s.startsWith('SDU')||s.startsWith('SC'))return '헤어케어'; if(s.startsWith('W'))return '고데기'; if(s.startsWith('JBD'))return '바디'; return '기타'; };
