@@ -792,7 +792,7 @@ function renderPage0(){
   setText('p0-yr-rate',fRate(yrRate));
   setText('p0-yr-sub', yrTgt>0 ? `연간 목표 ${f억(yrTgt)} 기준 · 누적 달성` : '목표 데이터 로딩 중...');
   const yrPct=Math.min(yrRate*100,100);
-  const yrBg='rgba(37,99,235,.85)';
+  const yrBg='rgba(239,68,68,.65)';
   setTimeout(()=>{
     const b=document.getElementById('p0-yr-bar');
     b.style.width=yrPct+'%'; b.style.background=yrBg;
@@ -807,8 +807,9 @@ function renderPage0(){
     const ratePct = r!==null ? r*100 : 0;
     const fillPct = r!==null ? Math.min(ratePct,100) : 0;
     const overPct = r!==null ? Math.max(ratePct-100,0) : 0;
-    const barGrad = r ? (ratePct >= 80 ? 'rgba(220,38,38,.85)' : 'rgba(37,99,235,.85)') : '#E2E8F0';
-    const bc = !r ? '#94A3B8' : (ratePct >= 80 ? '#DC2626' : '#2563EB');
+    const curM = new Date().getMonth()+1;
+    const barGrad = r ? (m.m === curM ? 'rgba(239,68,68,.65)' : 'rgba(37,99,235,.8)') : '#E2E8F0';
+    const bc = !r ? '#94A3B8' : (m.m === curM ? '#DC2626' : '#2563EB');
     const rStr = r!==null ? ratePct.toFixed(2)+'%' : (hasTgt ? '0.00%' : '—');
     // 하반기 목표 미확정 표시
     const isH2NoTgt = m.m >= 7 && !hasTgt;
@@ -883,7 +884,7 @@ function renderMonthCard(){
   document.getElementById('p0-m-rate').textContent=fRate(mRate);
   document.getElementById('p0-m-rate').className='kpi3-val '+(mRate>=1?'green':mRate>=0.85?'amber':'blue');
 
-  const mBg='rgba(37,99,235,.85)';
+  const mBg='rgba(239,68,68,.65)';
   const mPct=Math.min(mRate*100,100);
   setTimeout(()=>{
     const b=document.getElementById('p0-m-bar');
