@@ -813,16 +813,41 @@ function renderPage0(){
     const rStr = r!==null ? ratePct.toFixed(2)+'%' : (hasTgt ? '0.00%' : '—');
     // 하반기 목표 미확정 표시
     const isH2NoTgt = m.m >= 7 && !hasTgt;
-    return `<div class="mb-row">
-      <span class="mb-lbl">${m.m}월</span>
-      <div class="mb-track" style="position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);">
-        ${r!==null&&ratePct<100?`<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>`:''}
-        <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${barGrad};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
-        ${overPct>0?`<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:#F59E0B;border-radius:0 4px 4px 0;"></div>`:''}
-        ${isH2NoTgt?`<div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:6px;"><span style="font-size:9px;color:#94A3B8;font-weight:600;">목표 미확정</span></div>`:''}
+    // ★ 6월 이미용 서브BAR
+    const BEAUTY_TGT_6 = 3426143200;
+    const is6 = m.m === 6;
+    const beautyRate = is6 && hasAct ? m.act / BEAUTY_TGT_6 : null;
+    const beautyPct = beautyRate !== null ? Math.min(beautyRate*100, 100) : 0;
+    const beautyRateStr = beautyRate !== null ? (beautyRate*100).toFixed(2)+'%' : '—';
+    const beautyBg = 'rgba(13,148,136,.8)';
+
+    return `<div style="margin-bottom:${is6?10:6}px;">
+      <div class="mb-row" style="margin-bottom:${is6?4:0}px;">
+        <span class="mb-lbl">${m.m}월</span>
+        <div class="mb-track" style="position:relative;height:16px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);">
+          ${r!==null&&ratePct<100?`<div style="position:absolute;top:0;right:0;height:100%;width:${(100-fillPct).toFixed(1)}%;background:rgba(203,213,225,0.35);border-radius:0 4px 4px 0;"></div>`:''}
+          <div style="position:absolute;top:0;left:0;height:100%;width:${fillPct.toFixed(1)}%;background:${barGrad};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
+          ${overPct>0?`<div style="position:absolute;top:0;left:100%;height:100%;width:${Math.min(overPct,20).toFixed(1)}%;background:#F59E0B;border-radius:0 4px 4px 0;"></div>`:''}
+          ${isH2NoTgt?`<div style="position:absolute;inset:0;display:flex;align-items:center;padding-left:6px;"><span style="font-size:9px;color:#94A3B8;font-weight:600;">목표 미확정</span></div>`:''}
+        </div>
+        <span class="mb-val" style="color:${hasAct?'var(--text)':'#94A3B8'}">${hasAct?f억(m.act):'—'}</span>
+        <span class="mb-pct" style="color:${bc}">${rStr}</span>
       </div>
-      <span class="mb-val" style="color:${hasAct?'var(--text)':'#94A3B8'}">${hasAct?f억(m.act):'—'}</span>
-      <span class="mb-pct" style="color:${bc}">${rStr}</span>
+      ${is6?`
+      <div class="mb-row" style="margin-bottom:3px;">
+        <span class="mb-lbl" style="font-size:9px;color:#94A3B8;">└</span>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
+            <span style="font-size:11px;font-weight:700;color:#334155;white-space:nowrap;">이미용가전 목표대비 실적현황</span>
+            <span style="font-size:9px;color:#94A3B8;font-weight:600;white-space:nowrap;">⚠ 생활가전 출시 일정 딜레이 + 하반기 목표 수정</span>
+          </div>
+          <div class="mb-track" style="position:relative;height:12px;background:#EEF2F7;border-radius:4px;overflow:hidden;border:1px solid var(--border2);">
+            <div style="position:absolute;top:0;left:0;height:100%;width:${beautyPct.toFixed(1)}%;background:${beautyBg};border-radius:4px;transition:width .9s cubic-bezier(.4,0,.2,1);"></div>
+          </div>
+        </div>
+        <span class="mb-val" style="font-size:11px;color:var(--text)">${f억(m.act)}</span>
+        <span class="mb-pct" style="color:#0D9488">${beautyRateStr}</span>
+      </div>`:''}
     </div>`;
   }).join('');
 
