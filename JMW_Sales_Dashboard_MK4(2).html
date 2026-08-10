@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JMW Sales Dashboard v4.7</title>
+<title>JMW Sales Dashboard v4.8</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){location.href='jmw_sales_dashboard_mobile.html';}</script>
 <style>
@@ -171,7 +171,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 <aside class="sidebar">
   <div class="sb-logo">
     <div class="brand"><span class="dot"></span>JMW SALES</div>
-    <div class="sub">Sales Dashboard v4.7</div>
+    <div class="sub">Sales Dashboard v4.8</div>
   </div>
   <nav class="sb-nav">
     <div class="sb-sec">실적 현황</div>
@@ -196,16 +196,16 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
   <div style="padding:10px 12px;border-top:1px solid rgba(255,255,255,.08);">
     <div style="background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.4);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
-        <span style="font-size:10px;font-weight:800;color:#60A5FA;font-family:'JetBrains Mono',monospace;">v4.7</span>
+        <span style="font-size:10px;font-weight:800;color:#60A5FA;font-family:'JetBrains Mono',monospace;">v4.8</span>
         <span style="font-size:9px;background:rgba(37,99,235,.5);color:#fff;padding:1px 6px;border-radius:10px;font-weight:700;">NEW</span>
       </div>
-      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;">📊 연간 실적 카드 · 하반기 G.I BAR</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.8);font-weight:700;">🆕 BYTULZ 채널별실적 + TOP10 추가</div>
     </div>
     <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
       <div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">
-        <span style="font-size:10px;font-weight:800;color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace;">v4.6</span>
+        <span style="font-size:10px;font-weight:800;color:rgba(255,255,255,.5);font-family:'JetBrains Mono',monospace;">v4.7</span>
       </div>
-      <div style="font-size:10px;color:rgba(255,255,255,.5);font-weight:600;">📱 모바일 버전 출시</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.5);font-weight:600;">📊 연간 실적 카드 · 하반기 G.I BAR</div>
     </div>
     <div>
       <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('.arrow').textContent=this.nextElementSibling.style.display==='block'?'▲':'▼';" style="width:100%;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:6px 10px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;">
@@ -214,7 +214,11 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
       </button>
       <div style="display:none;margin-top:4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:7px;padding:8px 10px;">
         <div style="font-size:9px;color:rgba(255,255,255,.35);font-family:'JetBrains Mono',monospace;line-height:1.8;">
-          <div style="color:rgba(255,255,255,.6);font-weight:700;margin-bottom:4px;">v4.7</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin-bottom:4px;">v4.8</div>
+          <div>· BYTULZ 채널별 실적 추가</div>
+          <div>· BYTULZ TOP 10 랭킹 추가</div>
+          <div>· 채널 필터 탭 BYTULZ 추가</div>
+          <div style="color:rgba(255,255,255,.6);font-weight:700;margin:6px 0 4px;">v4.7</div>
           <div>· 연간 목표 대비 실적 카드</div>
           <div>· G.I BAR 하반기 전환</div>
           <div>· 1~12월 월별 미니바 확장</div>
@@ -419,12 +423,23 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <div style="position:relative;height:400px"><canvas id="ch-sales"></canvas></div>
       </div></div>
     </div>
-    <div id="overseas-wrap" style="display:none;margin-bottom:18px;">
-      <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🌏 해외영업팀 채널 TOP 15</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">해외영업팀 기준</div>
-        <div style="position:relative;height:400px"><canvas id="ch-overseas"></canvas></div>
-      </div></div>
+    <div id="bytulz-overseas-wrap" style="display:none;margin-bottom:18px;">
+      <div class="g2" style="margin-bottom:0;">
+        <div id="bytulz-wrap">
+          <div class="card"><div class="card-inner">
+            <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🆕 BYTULZ 채널 TOP 15</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">BYTULZ 기준</div>
+            <div style="position:relative;height:400px"><canvas id="ch-bytulz"></canvas></div>
+          </div></div>
+        </div>
+        <div id="overseas-wrap">
+          <div class="card"><div class="card-inner">
+            <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🌏 해외영업팀 채널 TOP 15</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">해외영업팀 기준</div>
+            <div style="position:relative;height:400px"><canvas id="ch-overseas"></canvas></div>
+          </div></div>
+        </div>
+      </div>
     </div>
     <div class="card full"><div class="card-inner">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
@@ -434,6 +449,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <button class="ch-ftab" onclick="setChannelFilter('이커머스 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">이커머스 파트</button>
           <button class="ch-ftab" onclick="setChannelFilter('리테일 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">리테일 파트</button>
           <button class="ch-ftab" onclick="setChannelFilter('해외영업팀',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">해외영업팀</button>
+          <button class="ch-ftab" onclick="setChannelFilter('BYTULZ',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">BYTULZ</button>
         </div>
       </div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:12px;" id="channel-filter-sub">전체 팀 · 매출 내림차순 (영업지원팀 제외)</div>
@@ -486,12 +502,23 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
         <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="top-sales"></tbody></table>
       </div></div>
     </div>
-    <div id="overseas-top-wrap" style="display:none;margin-bottom:18px;">
-      <div class="card"><div class="card-inner">
-        <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🌏 해외영업팀 채널 TOP 10</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">해외영업팀 기준</div>
-        <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="top-overseas"></tbody></table>
-      </div></div>
+    <div id="bytulz-overseas-top-wrap" style="display:none;margin-bottom:18px;">
+      <div class="g2" style="margin-bottom:0;">
+        <div id="bytulz-top-wrap">
+          <div class="card"><div class="card-inner">
+            <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🆕 BYTULZ 채널 TOP 10</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">BYTULZ 기준</div>
+            <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="top-bytulz"></tbody></table>
+          </div></div>
+        </div>
+        <div id="overseas-top-wrap">
+          <div class="card"><div class="card-inner">
+            <div style="font-size:14px;font-weight:800;margin-bottom:3px;">🌏 해외영업팀 채널 TOP 10</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">해외영업팀 기준</div>
+            <table class="tbl"><thead><tr><th>순위</th><th>채널</th><th class="num">매출액</th><th class="num">비중</th></tr></thead><tbody id="top-overseas"></tbody></table>
+          </div></div>
+        </div>
+      </div>
     </div>
     <div class="card full"><div class="card-inner">
       <div style="font-size:14px;font-weight:800;margin-bottom:3px;">📦 제품 TOP 10</div>
@@ -511,10 +538,11 @@ const AUTO_REFRESH_MS = 600000;
 const DEPT_COLORS = {
   '이커머스 파트':'#2563EB','리테일 파트':'#0D9488',
   '영업지원팀':'#7C3AED','해외영업팀':'#EA580C','해외영업실':'#EA580C',
+  'BYTULZ':'#7C3AED',
 };
 function deptColor(d){ return DEPT_COLORS[d]||'#94A3B8'; }
 function deptBadge(d){
-  const m={'이커머스 파트':'b-blue','리테일 파트':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange'};
+  const m={'이커머스 파트':'b-blue','리테일 파트':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange','BYTULZ':'b-purple'};
   return m[d]||'b-gray';
 }
 
@@ -1068,10 +1096,10 @@ function renderYoYMainChart(){
 function renderPage1(){
   const rows=filterByPeriod(D26,2026);
   if(!rows.length){
-    ['ch-md','ch-sales','ch-overseas'].forEach(id=>destroyChart(id));
+    ['ch-md','ch-sales','ch-overseas','ch-bytulz'].forEach(id=>destroyChart(id));
     document.getElementById('tbl-channel').innerHTML=`<tr><td colspan="5" style="text-align:center;color:#94A3B8;padding:24px;">선택한 기간의 데이터가 없습니다.</td></tr>`;
-    const overseasWrap=document.getElementById('overseas-wrap');
-    if(overseasWrap) overseasWrap.style.display='none';
+    const boWrap=document.getElementById('bytulz-overseas-wrap');
+    if(boWrap) boWrap.style.display='none';
     return;
   }
   const hbarLabelPlugin={id:'hbarLabel',afterDatasetsDraw(chart){
@@ -1093,10 +1121,17 @@ function renderPage1(){
   };
   mkH('ch-md',sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
   mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='리테일 파트'),'channel').slice(0,15),'#0D9488');
+
+  const bytulzRows=rows.filter(r=>r.dept==='BYTULZ');
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
-  const overseasWrap=document.getElementById('overseas-wrap');
-  if(overseasRows.length>0&&overseasWrap){ overseasWrap.style.display='block'; mkH('ch-overseas',sortedGroupBy(overseasRows,'channel').slice(0,15),'#EA580C'); }
-  else if(overseasWrap){ overseasWrap.style.display='none'; }
+  const boWrap=document.getElementById('bytulz-overseas-wrap');
+  if((bytulzRows.length>0||overseasRows.length>0)&&boWrap){
+    boWrap.style.display='block';
+    if(bytulzRows.length>0) mkH('ch-bytulz',sortedGroupBy(bytulzRows,'channel').slice(0,15),'#7C3AED');
+    else destroyChart('ch-bytulz');
+    if(overseasRows.length>0) mkH('ch-overseas',sortedGroupBy(overseasRows,'channel').slice(0,15),'#EA580C');
+    else destroyChart('ch-overseas');
+  } else if(boWrap){ boWrap.style.display='none'; }
   window._channelRows=rows;
   renderChannelTable('all');
 }
@@ -1192,9 +1227,9 @@ function renderPage3(){
   const rows=filterByPeriod(D26,2026);
   const emptyMsg=`<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:24px;">선택한 기간의 데이터가 없습니다.</td></tr>`;
   if(!rows.length){
-    ['top-md','top-sales','top-overseas','top-sku'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=emptyMsg; });
-    const overseasTop=document.getElementById('overseas-top-wrap');
-    if(overseasTop) overseasTop.style.display='none';
+    ['top-md','top-sales','top-overseas','top-bytulz','top-sku'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML=emptyMsg; });
+    const boTopWrap=document.getElementById('bytulz-overseas-top-wrap');
+    if(boTopWrap) boTopWrap.style.display='none';
     return;
   }
   const mk=(filteredRows,id)=>{
@@ -1204,10 +1239,17 @@ function renderPage3(){
   };
   mk(rows.filter(r=>r.dept==='이커머스 파트'),'top-md');
   mk(rows.filter(r=>r.dept==='리테일 파트'),'top-sales');
+
+  const bytulzRows=rows.filter(r=>r.dept==='BYTULZ');
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
-  const overseasTop=document.getElementById('overseas-top-wrap');
-  if(overseasRows.length>0&&overseasTop){ overseasTop.style.display='block'; mk(overseasRows,'top-overseas'); }
-  else if(overseasTop){ overseasTop.style.display='none'; }
+  const boTopWrap=document.getElementById('bytulz-overseas-top-wrap');
+  if((bytulzRows.length>0||overseasRows.length>0)&&boTopWrap){
+    boTopWrap.style.display='block';
+    if(bytulzRows.length>0) mk(bytulzRows,'top-bytulz');
+    else document.getElementById('top-bytulz').innerHTML=`<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:24px;">데이터 없음</td></tr>`;
+    if(overseasRows.length>0) mk(overseasRows,'top-overseas');
+    else document.getElementById('top-overseas').innerHTML=`<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:24px;">데이터 없음</td></tr>`;
+  } else if(boTopWrap){ boTopWrap.style.display='none'; }
   const sm={};
   rows.forEach(r=>{ if(!sm[r.sku])sm[r.sku]={sku:r.sku,qty:0,sales:0}; sm[r.sku].qty+=(r.qty||0); sm[r.sku].sales+=(r.sales||0); });
   const grp=sku=>{ const s=(sku||'').toUpperCase(); if(s.startsWith('MS8')||s.startsWith('STL'))return '프리미엄'; if(s.startsWith('MCS')||s.startsWith('MCF')||s.startsWith('MC'))return '에어샷'; if(s.startsWith('MS6')||s.startsWith('MS7'))return 'AIR JET'; if(s.startsWith('M5')||s.startsWith('MF'))return '스탠다드'; if(s.startsWith('SDU')||s.startsWith('SC'))return '헤어케어'; if(s.startsWith('W'))return '고데기'; if(s.startsWith('JBD'))return '바디'; return '기타'; };
