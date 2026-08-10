@@ -449,7 +449,7 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
           <button class="ch-ftab" onclick="setChannelFilter('이커머스 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">이커머스 파트</button>
           <button class="ch-ftab" onclick="setChannelFilter('리테일 파트',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">리테일 파트</button>
           <button class="ch-ftab" onclick="setChannelFilter('해외영업팀',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">해외영업팀</button>
-          <button class="ch-ftab" onclick="setChannelFilter('BYTULZ',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">BYTULZ</button>
+          <button class="ch-ftab" onclick="setChannelFilter('Bytulz',this)" style="padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:12px;font-weight:600;font-family:'Noto Sans KR',sans-serif;cursor:pointer;">BYTULZ</button>
         </div>
       </div>
       <div style="font-size:11px;color:var(--text3);margin-bottom:12px;" id="channel-filter-sub">전체 팀 · 매출 내림차순 (영업지원팀 제외)</div>
@@ -538,11 +538,11 @@ const AUTO_REFRESH_MS = 600000;
 const DEPT_COLORS = {
   '이커머스 파트':'#2563EB','리테일 파트':'#0D9488',
   '영업지원팀':'#7C3AED','해외영업팀':'#EA580C','해외영업실':'#EA580C',
-  'BYTULZ':'#7C3AED',
+  'Bytulz':'#7C3AED',
 };
 function deptColor(d){ return DEPT_COLORS[d]||'#94A3B8'; }
 function deptBadge(d){
-  const m={'이커머스 파트':'b-blue','리테일 파트':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange','BYTULZ':'b-purple'};
+  const m={'이커머스 파트':'b-blue','리테일 파트':'b-teal','영업지원팀':'b-purple','해외영업팀':'b-orange','해외영업실':'b-orange','Bytulz':'b-purple'};
   return m[d]||'b-gray';
 }
 
@@ -1122,7 +1122,7 @@ function renderPage1(){
   mkH('ch-md',sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
   mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='리테일 파트'),'channel').slice(0,15),'#0D9488');
 
-  const bytulzRows=rows.filter(r=>r.dept==='BYTULZ');
+  const bytulzRows=rows.filter(r=>r.dept==='Bytulz');
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const boWrap=document.getElementById('bytulz-overseas-wrap');
   if((bytulzRows.length>0||overseasRows.length>0)&&boWrap){
@@ -1240,7 +1240,7 @@ function renderPage3(){
   mk(rows.filter(r=>r.dept==='이커머스 파트'),'top-md');
   mk(rows.filter(r=>r.dept==='리테일 파트'),'top-sales');
 
-  const bytulzRows=rows.filter(r=>r.dept==='BYTULZ');
+  const bytulzRows=rows.filter(r=>r.dept==='Bytulz');
   const overseasRows=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실');
   const boTopWrap=document.getElementById('bytulz-overseas-top-wrap');
   if((bytulzRows.length>0||overseasRows.length>0)&&boTopWrap){
