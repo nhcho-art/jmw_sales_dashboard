@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>JMW Sales Dashboard v4.9</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){location.href='jmw_sales_dashboard_mobile.html';}</script>
@@ -165,6 +168,19 @@ body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 </style>
+<script>
+// ── 소스 보호 ──────────────────────────────────────────────
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('dragstart',   e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  // F12
+  if(e.key === 'F12') { e.preventDefault(); return; }
+  // Ctrl+U, Ctrl+Shift+I/J/C/K, Ctrl+S
+  if(e.ctrlKey && ['u','U','s','S'].includes(e.key)) { e.preventDefault(); return; }
+  if(e.ctrlKey && e.shiftKey && ['i','I','j','J','c','C','k','K'].includes(e.key)) { e.preventDefault(); return; }
+});
+</script>
 </head>
 <body>
 
