@@ -160,7 +160,7 @@ document.addEventListener('keydown', e => {
     <span class="m-dot"></span>
     <div>
       <div class="m-brand">JMW SALES</div>
-      <div class="m-sub">Sales Dashboard v4.9</div>
+      <div class="m-sub">Sales Dashboard v5.0</div>
     </div>
   </div>
   <button class="m-refresh" onclick="loadData(true)">🔄 갱신</button>
@@ -319,6 +319,25 @@ document.addEventListener('keydown', e => {
   <!-- PAGE 1 -->
   <div class="m-pg" id="p1">
     <div class="m-sec-title">🛒 채널별 실적 <span class="tag" id="p1-period-tag">기간 선택</span></div>
+    <!-- 채널별 합계 KPI -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+      <div class="m-card" style="padding:12px;border-top:3px solid #2563EB;">
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">🛒 이커머스 파트</div>
+        <div id="kpi-ecom" style="font-size:18px;font-weight:800;color:#2563EB;">—</div>
+      </div>
+      <div class="m-card" style="padding:12px;border-top:3px solid #0D9488;">
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">🏪 리테일 파트</div>
+        <div id="kpi-retail" style="font-size:18px;font-weight:800;color:#0D9488;">—</div>
+      </div>
+      <div class="m-card" style="padding:12px;border-top:3px solid #7C3AED;">
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">🔧 Bytulz</div>
+        <div id="kpi-bytulz" style="font-size:18px;font-weight:800;color:#7C3AED;">—</div>
+      </div>
+      <div class="m-card" style="padding:12px;border-top:3px solid #EA580C;">
+        <div style="font-size:10px;color:var(--text3);font-weight:700;margin-bottom:4px;">🌏 해외영업</div>
+        <div id="kpi-overseas" style="font-size:18px;font-weight:800;color:#EA580C;">—</div>
+      </div>
+    </div>
     <div class="m-card"><div class="m-card-body">
       <div style="font-size:13px;font-weight:800;margin-bottom:3px;">이커머스 파트 TOP 15</div>
       <div style="position:relative;height:340px;"><canvas id="ch-md"></canvas></div>
@@ -454,6 +473,14 @@ const f억=v=>{
   if(a>=1e8)return s+(a/1e8).toFixed(1)+'억';
   if(a>=1e4)return s+(a/1e4).toFixed(0).toLocaleString()+'만';
   return v.toLocaleString();
+};
+const fKorean=v=>{
+  if(!v&&v!==0)return'—';
+  const a=Math.abs(v),s=v<0?'-':'';
+  if(a>=1e8)return s+(a/1e8).toFixed(2)+'억';
+  if(a>=1e7)return s+(a/1e7).toFixed(2)+'천만';
+  if(a>=1e6)return s+(a/1e6).toFixed(2)+'백만';
+  return v.toLocaleString()+'원';
 };
 const fRate=v=>(!v&&v!==0)||isNaN(v)||!isFinite(v)?'—':(v*100).toFixed(2);
 const fPct=v=>fRate(v)+'%';
@@ -856,6 +883,7 @@ function renderPage1(){
   if(!rows.length){
     ['ch-md','ch-sales','ch-overseas','ch-bytulz'].forEach(id=>destroyChart(id));
     document.getElementById('tbl-channel').innerHTML=`<tr><td colspan="4" style="text-align:center;color:#94A3B8;padding:20px;">데이터 없음</td></tr>`;
+    ['kpi-ecom','kpi-retail','kpi-bytulz','kpi-overseas'].forEach(id=>setText(id,'—'));
     const ow=document.getElementById('overseas-wrap');if(ow)ow.style.display='none';
     const bw=document.getElementById('bytulz-overseas-wrap');if(bw)bw.style.display='none';
     return;
@@ -878,6 +906,16 @@ function renderPage1(){
         scales:{x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:9},color:'#64748B',callback:v=>f억(v)}},
                 y:{grid:{display:false},ticks:{font:{size:10},color:'#334155'}}}}});
   };
+  // 채널별 합계 KPI
+  const sumDept=dept=>rows.filter(r=>r.dept===dept).reduce((s,r)=>s+(r.sales||0),0);
+  const ecomTotal=sumDept('이커머스 파트');
+  const retailTotal=sumDept('리테일 파트');
+  const bytulzTotal=sumDept('Bytulz');
+  const overseasTotal=rows.filter(r=>r.dept==='해외영업팀'||r.dept==='해외영업실').reduce((s,r)=>s+(r.sales||0),0);
+  setText('kpi-ecom',fKorean(ecomTotal));
+  setText('kpi-retail',fKorean(retailTotal));
+  setText('kpi-bytulz',bytulzTotal>0?fKorean(bytulzTotal):'—');
+  setText('kpi-overseas',overseasTotal>0?fKorean(overseasTotal):'—');
   mkH('ch-md',sortedGroupBy(rows.filter(r=>r.dept==='이커머스 파트'),'channel').slice(0,15),'#2563EB');
   mkH('ch-sales',sortedGroupBy(rows.filter(r=>r.dept==='리테일 파트'),'channel').slice(0,15),'#0D9488');
   const bytulzRows=rows.filter(r=>r.dept==='Bytulz');
